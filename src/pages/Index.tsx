@@ -1,7 +1,11 @@
 import Homepage from "./Homepage";
 
-const Index = () => {
-  return <Homepage />;
+interface IndexProps {
+  images?: Record<string, string>;
+}
+
+const Index = ({ images = {} }: IndexProps) => {
+  return <Homepage images={images} />;
 };
 
 export default Index;
