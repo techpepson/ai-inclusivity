@@ -80,7 +80,9 @@ export default {
 				'elegant': 'var(--shadow-elegant)',
 				'card': 'var(--shadow-card)',
 				'glow': 'var(--shadow-glow)',
-				'professional': 'var(--shadow-professional)'
+				'professional': 'var(--shadow-professional)',
+				'button': 'var(--shadow-button)',
+				'hover': 'var(--shadow-hover)'
 			},
 			transitionProperty: {
 				'smooth': 'var(--transition-smooth)',
