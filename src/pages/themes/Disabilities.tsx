@@ -2,6 +2,7 @@ import { Users, TrendingUp, ExternalLink, Heart } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
 
 export default function Disabilities() {
   const stories = [
@@ -59,10 +60,20 @@ export default function Disabilities() {
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-disability/10 rounded-lg mb-6">
-            <Users className="h-8 w-8 text-theme-disability" />
+          <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
+            <img 
+              src={disabilityImage} 
+              alt="Persons with Disabilities in Ghana" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20"></div>
+            <div className="absolute bottom-8 left-8 text-white">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-disability/90 rounded-lg mb-4">
+                <Users className="h-8 w-8 text-white" />
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold mb-4">Persons with Disabilities</h1>
+            </div>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">Persons with Disabilities</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Advocating for the rights, inclusion, and full participation of persons with disabilities in Ghanaian society. 
             Together, we're building a more accessible and inclusive Ghana for all.

@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProfessionalStats } from "@/components/ProfessionalStats";
 import { TestimonialSection } from "@/components/TestimonialSection";
+import heroImage from "@/assets/hero-ai-advocacy.jpg";
+import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
+import womenImage from "@/assets/women-empowerment.jpg";
+import mentalHealthImage from "@/assets/mental-health-support.jpg";
+import lgbtqImage from "@/assets/lgbtq-community.jpg";
 
 export default function Homepage() {
   const themes = [
@@ -14,6 +19,7 @@ export default function Homepage() {
       color: "bg-theme-disability",
       href: "/themes/disabilities",
       hashtags: ["#InclusionMatters", "#DisabilityRightsGH"],
+      image: disabilityImage,
     },
     {
       title: "Violence Against Women",
@@ -22,6 +28,7 @@ export default function Homepage() {
       color: "bg-theme-vaw",
       href: "/themes/vaw",
       hashtags: ["#EndVAW", "#StandWithWomen"],
+      image: womenImage,
     },
     {
       title: "Mental Health & Wellness",
@@ -30,6 +37,7 @@ export default function Homepage() {
       color: "bg-theme-mental",
       href: "/themes/mental-health",
       hashtags: ["#BreakTheStigma", "#MentalHealthAwareness"],
+      image: mentalHealthImage,
     },
     {
       title: "LGBTQ+ Communities",
@@ -38,6 +46,7 @@ export default function Homepage() {
       color: "bg-theme-lgbtq",
       href: "/themes/lgbtq",
       hashtags: ["#LGBTQRights", "#LoveIsLove"],
+      image: lgbtqImage,
     },
   ];
 
@@ -52,7 +61,14 @@ export default function Homepage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-hero py-20 lg:py-32 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-hero/90"></div>
+        <div className="absolute inset-0">
+          <img 
+            src={heroImage} 
+            alt="AI-powered advocacy for inclusive Ghana" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-hero/90"></div>
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl lg:text-6xl font-bold mb-6">
@@ -109,16 +125,20 @@ export default function Homepage() {
           <div className="grid md:grid-cols-2 gap-8">
             {themes.map((theme, index) => (
               <Card key={index} className="group hover:shadow-card transition-all duration-300 border-0 bg-gradient-card overflow-hidden">
-                <CardHeader>
-                  <div className="flex items-center space-x-4">
-                    <div className={`p-3 rounded-lg ${theme.color}`}>
-                      <theme.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl">{theme.title}</CardTitle>
-                      <CardDescription>{theme.description}</CardDescription>
-                    </div>
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={theme.image} 
+                    alt={theme.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className={`absolute top-4 left-4 p-3 rounded-lg ${theme.color}`}>
+                    <theme.icon className="h-6 w-6 text-white" />
                   </div>
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl">{theme.title}</CardTitle>
+                  <CardDescription>{theme.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">

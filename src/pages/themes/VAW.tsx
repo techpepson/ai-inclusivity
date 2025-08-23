@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import womenImage from "@/assets/women-empowerment.jpg";
 
 export default function VAW() {
   const campaigns = [
@@ -72,13 +73,23 @@ export default function VAW() {
 
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-vaw/10 rounded-lg mb-6">
-            <Shield className="h-8 w-8 text-theme-vaw" />
+          <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
+            <img 
+              src={womenImage} 
+              alt="Violence Against Women prevention in Ghana" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20"></div>
+            <div className="absolute bottom-8 left-8 text-white">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-vaw/90 rounded-lg mb-4">
+                <Shield className="h-8 w-8 text-white" />
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold mb-4">Violence Against Women</h1>
+            </div>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">Violence Against Women</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Fighting gender-based violence through awareness, advocacy, and support. Together, we're working 
-            toward a Ghana where all women can live free from violence and fear.
+            to create safe spaces and empower women across Ghana.
           </p>
         </div>
 

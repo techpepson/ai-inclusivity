@@ -2,6 +2,7 @@ import { Heart, TrendingUp, ExternalLink, Phone, Brain } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import mentalHealthImage from "@/assets/mental-health-support.jpg";
 
 export default function MentalHealth() {
   const campaigns = [
@@ -75,13 +76,23 @@ export default function MentalHealth() {
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-mental/10 rounded-lg mb-6">
-            <Heart className="h-8 w-8 text-theme-mental" />
+          <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
+            <img 
+              src={mentalHealthImage} 
+              alt="Mental Health and Wellness support in Ghana" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20"></div>
+            <div className="absolute bottom-8 left-8 text-white">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-mental/90 rounded-lg mb-4">
+                <Heart className="h-8 w-8 text-white" />
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold mb-4">Mental Health & Wellness</h1>
+            </div>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">Mental Health & Wellness</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Breaking the stigma around mental health and promoting wellness for all Ghanaians. 
-            Mental health matters, and seeking help is a sign of strength.
+            Breaking stigma and promoting mental wellness for all. Creating supportive communities 
+            where mental health is prioritized and every individual can thrive.
           </p>
         </div>
 

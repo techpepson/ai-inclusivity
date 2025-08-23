@@ -1,5 +1,7 @@
 import { Users, Target, Heart, Award } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import teamImage from "@/assets/team-collaboration.jpg";
+import missionImage from "@/assets/mission-vision.jpg";
 
 export default function About() {
   const values = [
@@ -53,7 +55,17 @@ export default function About() {
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">About AI4InclusiveGh</h1>
+          <div className="relative h-64 mb-8 rounded-lg overflow-hidden">
+            <img 
+              src={teamImage} 
+              alt="AI4InclusiveGh team collaboration" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div className="absolute bottom-6 left-6 text-white">
+              <h1 className="text-4xl lg:text-5xl font-bold mb-2">About AI4InclusiveGh</h1>
+            </div>
+          </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             We're a technology-driven advocacy platform dedicated to promoting inclusion and social justice 
             in Ghana through AI-powered social media analysis and community engagement.
@@ -62,32 +74,45 @@ export default function About() {
 
 
         {/* Mission & Vision */}
-        <div className="grid lg:grid-cols-2 gap-12 mb-20">
-          <Card className="bg-gradient-card border-0">
-            <CardHeader>
-              <CardTitle className="text-2xl">Our Mission</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg text-muted-foreground">
-                To amplify the voices of marginalized communities in Ghana by leveraging artificial intelligence 
-                and social media analytics to track conversations, identify trends, and drive policy change 
-                around disability rights, gender-based violence prevention, mental health awareness, and LGBTQ+ inclusion.
-              </p>
-            </CardContent>
-          </Card>
+        <div className="relative mb-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="relative h-96 rounded-lg overflow-hidden">
+              <img 
+                src={missionImage} 
+                alt="Our mission and vision" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent"></div>
+            </div>
+            
+            <div className="space-y-8">
+              <Card className="bg-gradient-card border-0">
+                <CardHeader>
+                  <CardTitle className="text-2xl">Our Mission</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-lg text-muted-foreground">
+                    To amplify the voices of marginalized communities in Ghana by leveraging artificial intelligence 
+                    and social media analytics to track conversations, identify trends, and drive policy change 
+                    around disability rights, gender-based violence prevention, mental health awareness, and LGBTQ+ inclusion.
+                  </p>
+                </CardContent>
+              </Card>
 
-          <Card className="bg-gradient-card border-0">
-            <CardHeader>
-              <CardTitle className="text-2xl">Our Vision</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg text-muted-foreground">
-                A Ghana where every individual, regardless of ability, gender identity, or mental health status, 
-                can participate fully in society with dignity, respect, and equal opportunities. We envision 
-                a future where data-driven advocacy creates lasting social change.
-              </p>
-            </CardContent>
-          </Card>
+              <Card className="bg-gradient-card border-0">
+                <CardHeader>
+                  <CardTitle className="text-2xl">Our Vision</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-lg text-muted-foreground">
+                    A Ghana where every individual, regardless of ability, gender identity, or mental health status, 
+                    can participate fully in society with dignity, respect, and equal opportunities. We envision 
+                    a future where data-driven advocacy creates lasting social change.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
 
         {/* Values */}

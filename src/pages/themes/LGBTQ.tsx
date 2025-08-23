@@ -2,6 +2,7 @@ import { Palette, TrendingUp, ExternalLink, Phone, Heart } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import lgbtqImage from "@/assets/lgbtq-community.jpg";
 
 export default function LGBTQ() {
   const campaigns = [
@@ -91,10 +92,20 @@ export default function LGBTQ() {
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-lgbtq/10 rounded-lg mb-6">
-            <Palette className="h-8 w-8 text-theme-lgbtq" />
+          <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
+            <img 
+              src={lgbtqImage} 
+              alt="LGBTQ+ Communities in Ghana" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20"></div>
+            <div className="absolute bottom-8 left-8 text-white">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-lgbtq/90 rounded-lg mb-4">
+                <Palette className="h-8 w-8 text-white" />
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold mb-4">LGBTQ+ Communities</h1>
+            </div>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">LGBTQ+ Communities</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Supporting inclusion, celebrating diversity, and fighting for equal rights. 
             Every person deserves to live authentically with dignity and respect.

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import analyticsImage from "@/assets/analytics-dashboard.jpg";
 
 export default function Analytics() {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
@@ -42,13 +43,23 @@ export default function Analytics() {
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
-          <div>
+        <div className="relative mb-12 rounded-lg overflow-hidden">
+          <img 
+            src={analyticsImage} 
+            alt="Analytics Dashboard" 
+            className="w-full h-64 object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
+          <div className="absolute bottom-6 left-6 text-white">
             <h1 className="text-4xl font-bold mb-2">Analytics Dashboard</h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg">
               Real-time insights from social media conversations across Ghana
             </p>
           </div>
+        </div>
+        
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
+          <div className="flex-1"></div>
           
           <div className="flex items-center space-x-4 mt-4 lg:mt-0">
             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
