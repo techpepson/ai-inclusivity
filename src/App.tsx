@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
-import Homepage from "./pages/Homepage";
+import Index from "./pages/Index";
 import About from "./pages/About";
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
@@ -28,14 +28,14 @@ const App = () => (
         <div className="min-h-screen bg-background">
           <Navigation />
           <Routes>
-            <Route path="/" element={<Homepage />} />
+            <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/get-involved" element={<GetInvolved />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/community" element={<Community />} />
-            <Route path="/themes" element={<Homepage />} />
+            <Route path="/themes" element={<Index />} />
             <Route path="/themes/disabilities" element={<Disabilities />} />
             <Route path="/themes/vaw" element={<VAW />} />
             <Route path="/themes/mental-health" element={<MentalHealth />} />
