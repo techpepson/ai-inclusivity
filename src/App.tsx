@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
-import { ImageGenerator } from "@/components/ImageGenerator";
 import Homepage from "./pages/Homepage";
 import About from "./pages/About";
 import Analytics from "./pages/Analytics";
@@ -25,31 +24,27 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <ImageGenerator>
-        {(images) => (
-          <BrowserRouter>
-            <div className="min-h-screen bg-background">
-              <Navigation />
-              <Routes>
-                <Route path="/" element={<Homepage images={images} />} />
-                <Route path="/about" element={<About images={images} />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/get-involved" element={<GetInvolved />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/themes" element={<Homepage images={images} />} />
-                <Route path="/themes/disabilities" element={<Disabilities />} />
-                <Route path="/themes/vaw" element={<VAW />} />
-                <Route path="/themes/mental-health" element={<MentalHealth />} />
-                <Route path="/themes/lgbtq" element={<LGBTQ />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </div>
-          </BrowserRouter>
-        )}
-      </ImageGenerator>
+      <BrowserRouter>
+        <div className="min-h-screen bg-background">
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/get-involved" element={<GetInvolved />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/themes" element={<Homepage />} />
+            <Route path="/themes/disabilities" element={<Disabilities />} />
+            <Route path="/themes/vaw" element={<VAW />} />
+            <Route path="/themes/mental-health" element={<MentalHealth />} />
+            <Route path="/themes/lgbtq" element={<LGBTQ />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );

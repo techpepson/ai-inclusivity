@@ -1,11 +1,7 @@
 import { Users, Target, Heart, Award } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface AboutProps {
-  images: Record<string, string>;
-}
-
-export default function About({ images }: AboutProps) {
+export default function About() {
   const values = [
     {
       icon: Heart,
@@ -64,16 +60,6 @@ export default function About({ images }: AboutProps) {
           </p>
         </div>
 
-        {/* Team Image */}
-        {images.team && (
-          <div className="mb-16">
-            <img 
-              src={images.team} 
-              alt="Our diverse team working together" 
-              className="w-full h-96 object-cover rounded-2xl shadow-card"
-            />
-          </div>
-        )}
 
         {/* Mission & Vision */}
         <div className="grid lg:grid-cols-2 gap-12 mb-20">

@@ -5,11 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ProfessionalStats } from "@/components/ProfessionalStats";
 import { TestimonialSection } from "@/components/TestimonialSection";
 
-interface HomepageProps {
-  images: Record<string, string>;
-}
-
-export default function Homepage({ images }: HomepageProps) {
+export default function Homepage() {
   const themes = [
     {
       title: "Persons with Disabilities",
@@ -56,13 +52,7 @@ export default function Homepage({ images }: HomepageProps) {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-hero py-20 lg:py-32 text-white overflow-hidden">
-        {images.hero && (
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${images.hero})` }}
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-hero/80"></div>
+        <div className="absolute inset-0 bg-gradient-hero/90"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl lg:text-6xl font-bold mb-6">
@@ -119,18 +109,6 @@ export default function Homepage({ images }: HomepageProps) {
           <div className="grid md:grid-cols-2 gap-8">
             {themes.map((theme, index) => (
               <Card key={index} className="group hover:shadow-card transition-all duration-300 border-0 bg-gradient-card overflow-hidden">
-                {images[theme.title.toLowerCase().includes('disabilities') ? 'disability' : 
-                       theme.title.toLowerCase().includes('violence') ? 'vaw' :
-                       theme.title.toLowerCase().includes('mental') ? 'mentalHealth' : 'lgbtq'] && (
-                  <div 
-                    className="h-48 bg-cover bg-center"
-                    style={{ 
-                      backgroundImage: `url(${images[theme.title.toLowerCase().includes('disabilities') ? 'disability' : 
-                                                      theme.title.toLowerCase().includes('violence') ? 'vaw' :
-                                                      theme.title.toLowerCase().includes('mental') ? 'mentalHealth' : 'lgbtq']})` 
-                    }}
-                  />
-                )}
                 <CardHeader>
                   <div className="flex items-center space-x-4">
                     <div className={`p-3 rounded-lg ${theme.color}`}>
