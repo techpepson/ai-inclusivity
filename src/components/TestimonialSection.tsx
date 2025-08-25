@@ -4,19 +4,19 @@ import { Card, CardContent } from "@/components/ui/card";
 const testimonials = [
   {
     quote: "AI4InclusiveGh has revolutionized how we track and measure advocacy impact. Their analytics help us reach the right audiences with the right message.",
-    author: "Dr. Ama Asante",
+    author: "Sarah Smith",
     role: "Director, Ghana Disability Rights Coalition",
     organization: "Policy Advocacy"
   },
   {
     quote: "The social media insights provided by this platform have been invaluable in shaping our mental health awareness campaigns across Ghana.",
-    author: "Kwame Osei",
+    author: "John Doe",
     role: "Program Manager",
     organization: "Mental Health Ghana"
   },
   {
     quote: "Working with AI4InclusiveGh has amplified our voice in fighting gender-based violence. Their data helps us understand and address the real issues.",
-    author: "Akosua Mensah",
+    author: "Jane Doe",
     role: "Executive Director",
     organization: "Women's Rights Coalition"
   }

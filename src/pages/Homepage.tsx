@@ -84,7 +84,7 @@ export default function Homepage() {
                 Explore Analytics
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 border-white text-white hover:bg-white hover:text-primary">
+              <Button size="lg" variant="outline" className="text-lg px-8 border-white text-slate-900 hover:bg-white hover:text-primary">
                 Join Community
               </Button>
             </div>
@@ -180,7 +180,7 @@ export default function Homepage() {
               </Button>
             </Link>
             <Link to="/analytics">
-              <Button size="lg" variant="outline" className="text-lg px-8 border-white text-white hover:bg-white hover:text-primary">
+              <Button size="lg" variant="outline" className="text-lg px-8 border-white text-slate-900 hover:bg-white hover:text-primary">
                 View Analytics
               </Button>
             </Link>
