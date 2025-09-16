@@ -85,7 +85,7 @@ export function Navigation() {
             ))}
             
             <Button variant="default" size="sm" className="bg-gradient-hero hover:opacity-90">
-              Get Started
+              Get In Touch
             </Button>
           </div>
 
