@@ -263,7 +263,7 @@ export default function Community() {
           <div className="max-w-2xl mx-auto">
             <Card className="bg-gradient-card border-0">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Get in Touch</CardTitle>
+                <CardTitle className="text-2xl" id="contact">Get in Touch</CardTitle>
                 <CardDescription>
                   Have a question, suggestion, or want to collaborate? We'd love to hear from you.
                 </CardDescription>

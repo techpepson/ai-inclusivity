@@ -84,9 +84,11 @@ export function Navigation() {
               </div>
             ))}
             
+            <Link to='/community/#contact'>
             <Button variant="default" size="sm" className="bg-gradient-hero hover:opacity-90">
               Get In Touch
             </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
