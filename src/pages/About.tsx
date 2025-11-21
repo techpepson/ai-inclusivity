@@ -1,53 +1,72 @@
 import { Users, Target, Heart, Award } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import teamImage from "@/assets/team-collaboration.jpg";
 import missionImage from "@/assets/mission-vision.jpg";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function About() {
   const values = [
     {
       icon: Heart,
       title: "Inclusion First",
-      description: "We believe every person deserves dignity, respect, and equal opportunities regardless of ability, gender, or identity."
+      description:
+        "We believe every person deserves dignity, respect, and equal opportunities regardless of ability, gender, or identity.",
     },
     {
       icon: Target,
       title: "Data-Driven Impact",
-      description: "We use AI and social media analytics to understand conversations and drive meaningful change."
+      description:
+        "We use AI and social media analytics to understand conversations and drive meaningful change.",
     },
     {
       icon: Users,
       title: "Community Centered",
-      description: "Our work is guided by the voices and experiences of the communities we serve."
+      description:
+        "Our work is guided by the voices and experiences of the communities we serve.",
     },
     {
       icon: Award,
       title: "Transparency",
-      description: "We operate with full transparency, sharing our findings and methodologies openly."
-    }
+      description:
+        "We operate with full transparency, sharing our findings and methodologies openly.",
+    },
   ];
 
   const team = [
     {
       name: "Dr. Ama Osei",
       role: "Executive Director",
-      description: "Social justice advocate with 15+ years experience in disability rights and policy reform."
+      description:
+        "Social justice advocate with 15+ years experience in disability rights and policy reform.",
+      image: "https://picsum.photos/id/1005/400/400",
     },
     {
       name: "Kwame Asante",
       role: "Data Science Lead",
-      description: "AI researcher specializing in social media analysis and natural language processing."
+      description:
+        "AI researcher specializing in social media analysis and natural language processing.",
+      image: "https://picsum.photos/id/1001/400/400",
     },
     {
       name: "Akosua Mensah",
       role: "Community Engagement Director",
-      description: "Mental health advocate and community organizer with grassroots experience."
+      description:
+        "Mental health advocate and community organizer with grassroots experience.",
+      image: "https://picsum.photos/id/1006/400/400",
     },
     {
       name: "Samuel Boateng",
       role: "Policy Research Manager",
-      description: "Human rights lawyer focused on LGBTQ+ advocacy and legal reform."
-    }
+      description:
+        "Human rights lawyer focused on LGBTQ+ advocacy and legal reform.",
+      image: "https://picsum.photos/id/1000/400/400",
+    },
   ];
 
   return (
@@ -56,35 +75,37 @@ export default function About() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <div className="relative h-64 mb-8 rounded-lg overflow-hidden">
-            <img 
-              src={teamImage} 
-              alt="AI4InclusiveGh team collaboration" 
+            <img
+              src={teamImage}
+              alt="AI4InclusiveGh team collaboration"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div className="absolute bottom-6 left-6 text-white">
-              <h1 className="text-4xl lg:text-5xl font-bold mb-2">About AI4InclusiveGh</h1>
+              <h1 className="text-4xl lg:text-5xl font-bold mb-2">
+                About AI4InclusiveGh
+              </h1>
             </div>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            We're a technology-driven advocacy platform dedicated to promoting inclusion and social justice 
-            in Ghana through AI-powered social media analysis and community engagement.
+            We're a technology-driven advocacy platform dedicated to promoting
+            inclusion and social justice in Ghana through AI-powered social
+            media analysis and community engagement.
           </p>
         </div>
-
 
         {/* Mission & Vision */}
         <div className="relative mb-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative h-96 rounded-lg overflow-hidden">
-              <img 
-                src={missionImage} 
-                alt="Our mission and vision" 
+              <img
+                src={missionImage}
+                alt="Our mission and vision"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent"></div>
             </div>
-            
+
             <div className="space-y-8">
               <Card className="bg-gradient-card border-0">
                 <CardHeader>
@@ -92,9 +113,12 @@ export default function About() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-lg text-muted-foreground">
-                    To amplify the voices of marginalized communities in Ghana by leveraging artificial intelligence 
-                    and social media analytics to track conversations, identify trends, and drive policy change 
-                    around disability rights, gender-based violence prevention, mental health awareness, and LGBTQ+ inclusion.
+                    To amplify the voices of marginalized communities in Ghana
+                    by leveraging artificial intelligence and social media
+                    analytics to track conversations, identify trends, and drive
+                    policy change around disability rights, gender-based
+                    violence prevention, mental health awareness, and LGBTQ+
+                    inclusion.
                   </p>
                 </CardContent>
               </Card>
@@ -105,9 +129,11 @@ export default function About() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-lg text-muted-foreground">
-                    A Ghana where every individual, regardless of ability, gender identity, or mental health status, 
-                    can participate fully in society with dignity, respect, and equal opportunities. We envision 
-                    a future where data-driven advocacy creates lasting social change.
+                    A Ghana where every individual, regardless of ability,
+                    gender identity, or mental health status, can participate
+                    fully in society with dignity, respect, and equal
+                    opportunities. We envision a future where data-driven
+                    advocacy creates lasting social change.
                   </p>
                 </CardContent>
               </Card>
@@ -120,13 +146,17 @@ export default function About() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Values</h2>
             <p className="text-lg text-muted-foreground">
-              The principles that guide our work and shape our approach to advocacy.
+              The principles that guide our work and shape our approach to
+              advocacy.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
-              <Card key={index} className="text-center bg-gradient-card border-0">
+              <Card
+                key={index}
+                className="text-center bg-gradient-card border-0"
+              >
                 <CardHeader>
                   <div className="mx-auto w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                     <value.icon className="h-6 w-6 text-primary" />
@@ -134,7 +164,9 @@ export default function About() {
                   <CardTitle className="text-xl">{value.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-base">{value.description}</CardDescription>
+                  <CardDescription className="text-base">
+                    {value.description}
+                  </CardDescription>
                 </CardContent>
               </Card>
             ))}
@@ -154,8 +186,23 @@ export default function About() {
             {team.map((member, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardHeader>
-                  <CardTitle className="text-xl">{member.name}</CardTitle>
-                  <CardDescription className="text-primary font-semibold">{member.role}</CardDescription>
+                  <div className="flex items-center gap-4">
+                    <Avatar className="h-14 w-14">
+                      <AvatarImage src={member.image} alt={member.name} />
+                      <AvatarFallback>
+                        {member.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle className="text-xl">{member.name}</CardTitle>
+                      <CardDescription className="text-primary font-semibold">
+                        {member.role}
+                      </CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">{member.description}</p>
@@ -170,7 +217,8 @@ export default function About() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Partners & Sponsors</h2>
             <p className="text-lg text-muted-foreground">
-              We collaborate with organizations that share our commitment to social justice.
+              We collaborate with organizations that share our commitment to
+              social justice.
             </p>
           </div>
 
@@ -178,16 +226,26 @@ export default function About() {
             <CardContent className="pt-6">
               <div className="grid md:grid-cols-3 gap-8 text-center">
                 <div>
-                  <h4 className="font-semibold mb-2">Ghana Federation of Disability Organizations</h4>
-                  <p className="text-sm text-muted-foreground">Policy advocacy and disability rights</p>
+                  <h4 className="font-semibold mb-2">
+                    Ghana Federation of Disability Organizations
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Policy advocacy and disability rights
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-2">Women's Rights Coalition Ghana</h4>
-                  <p className="text-sm text-muted-foreground">Gender-based violence prevention</p>
+                  <h4 className="font-semibold mb-2">
+                    Women's Rights Coalition Ghana
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Gender-based violence prevention
+                  </p>
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2">Mental Health Ghana</h4>
-                  <p className="text-sm text-muted-foreground">Mental wellness advocacy</p>
+                  <p className="text-sm text-muted-foreground">
+                    Mental wellness advocacy
+                  </p>
                 </div>
               </div>
             </CardContent>

@@ -83,7 +83,8 @@ export default function Homepage() {
             alt="AI-powered advocacy for inclusive Ghana"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-hero/90"></div>
+          <div className="absolute inset-0 bg-black/60"></div>
+          <div className="absolute inset-0 bg-gradient-hero/90 pointer-events-none"></div>
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -154,7 +155,7 @@ export default function Homepage() {
                 key={index}
                 className="group hover:shadow-card transition-all duration-300 border-0 bg-gradient-card overflow-hidden"
               >
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-60 md:h-64 lg:h-72 overflow-hidden">
                   <img
                     src={theme.image}
                     alt={theme.title}

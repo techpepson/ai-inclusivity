@@ -1,6 +1,18 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Users, Shield, Heart, Palette, BarChart3, FileText, UserPlus, BookOpen, MessageCircle } from "lucide-react";
+import {
+  Menu,
+  X,
+  Users,
+  Shield,
+  Heart,
+  Palette,
+  BarChart3,
+  FileText,
+  UserPlus,
+  BookOpen,
+  MessageCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -16,14 +28,22 @@ export function Navigation() {
       href: "/themes",
       icon: null,
       submenu: [
-        { name: "Persons with Disabilities", href: "/themes/disabilities", icon: Users },
+        {
+          name: "Persons with Disabilities",
+          href: "/themes/disabilities",
+          icon: Users,
+        },
         { name: "Violence Against Women", href: "/themes/vaw", icon: Shield },
-        { name: "Mental Health & Wellness", href: "/themes/mental-health", icon: Heart },
+        {
+          name: "Mental Health & Wellness",
+          href: "/themes/mental-health",
+          icon: Heart,
+        },
         { name: "LGBTQ+ Communities", href: "/themes/lgbtq", icon: Palette },
       ],
     },
-    { name: "Analytics", href: "/analytics", icon: BarChart3 },
-    { name: "Reports", href: "/reports", icon: FileText },
+    // { name: "Analytics", href: "/analytics", icon: BarChart3 },
+    // { name: "Reports", href: "/reports", icon: FileText },
     { name: "Get Involved", href: "/get-involved", icon: UserPlus },
     { name: "Resources", href: "/resources", icon: BookOpen },
     { name: "Community", href: "/community", icon: MessageCircle },
@@ -63,7 +83,7 @@ export function Navigation() {
                 >
                   {item.name}
                 </Link>
-                
+
                 {/* Dropdown for Themes */}
                 {item.submenu && (
                   <div className="absolute top-full left-0 mt-1 w-64 bg-popover border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
@@ -74,7 +94,9 @@ export function Navigation() {
                           to={subitem.href}
                           className="flex items-center px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
                         >
-                          {subitem.icon && <subitem.icon className="h-4 w-4 mr-3" />}
+                          {subitem.icon && (
+                            <subitem.icon className="h-4 w-4 mr-3" />
+                          )}
                           {subitem.name}
                         </Link>
                       ))}
@@ -83,11 +105,15 @@ export function Navigation() {
                 )}
               </div>
             ))}
-            
-            <Link to='/community/#contact'>
-            <Button variant="default" size="sm" className="bg-gradient-hero hover:opacity-90">
-              Get In Touch
-            </Button>
+
+            <Link to="/community/#contact">
+              <Button
+                variant="default"
+                size="sm"
+                className="bg-gradient-hero hover:opacity-90"
+              >
+                Get In Touch
+              </Button>
             </Link>
           </div>
 
@@ -120,7 +146,7 @@ export function Navigation() {
                   >
                     {item.name}
                   </Link>
-                  
+
                   {/* Mobile submenu */}
                   {item.submenu && (
                     <div className="ml-4 mt-2 space-y-1">
@@ -131,7 +157,9 @@ export function Navigation() {
                           className="flex items-center px-3 py-2 text-sm rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
                           onClick={() => setIsOpen(false)}
                         >
-                          {subitem.icon && <subitem.icon className="h-4 w-4 mr-3" />}
+                          {subitem.icon && (
+                            <subitem.icon className="h-4 w-4 mr-3" />
+                          )}
                           {subitem.name}
                         </Link>
                       ))}
