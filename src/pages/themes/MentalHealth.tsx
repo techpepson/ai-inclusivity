@@ -1,4 +1,4 @@
-import { Heart, TrendingUp, ExternalLink, Phone, Brain } from "lucide-react";
+import { Heart, TrendingUp, Phone } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,27 +11,27 @@ import { Badge } from "@/components/ui/badge";
 import mentalHealthImage from "@/assets/mental-health-support.jpg";
 
 export default function MentalHealth() {
-  const campaigns = [
+  const inspiringStories = [
     {
-      name: "#BreakTheStigma",
-      reach: "3.1M people",
-      engagement: "125k interactions",
-      description:
-        "National campaign promoting mental health awareness and reducing stigma",
+      name: "Nana Adjei",
+      story:
+        "Leads peer-run circles that help young adults speak openly about anxiety and seek professional support.",
+      impact: "450+ youth reached",
+      hashtag: "#BreakTheStigma",
     },
     {
-      name: "#MentalHealthAwareness",
-      reach: "2.4M people",
-      engagement: "98k interactions",
-      description:
-        "Educational initiative sharing mental health resources and stories",
+      name: "Selina Tetteh",
+      story:
+        "Built a telehealth check-in program connecting rural communities to licensed therapists in Accra.",
+      impact: "1,200 virtual sessions completed",
+      hashtag: "#MentalHealthAwareness",
     },
     {
-      name: "#WellnessMatters",
-      reach: "1.9M people",
-      engagement: "76k interactions",
-      description:
-        "Holistic wellness campaign focusing on mental, physical, and social health",
+      name: "Yaw Ofori",
+      story:
+        "Champions workplace mental health days and wellness policies across manufacturing firms in Tema.",
+      impact: "9 factories adopted policies",
+      hashtag: "#WellnessMatters",
     },
   ];
 
@@ -92,13 +92,6 @@ export default function MentalHealth() {
       hotline: "18555 (Toll-free)",
       email: "crisis@helpline.gh",
     },
-  ];
-
-  const mentalHealthFacts = [
-    "1 in 4 people experience mental health issues in their lifetime",
-    "Depression affects over 300 million people worldwide",
-    "Mental health conditions are treatable with proper support",
-    "Seeking help is a sign of strength, not weakness",
   ];
 
   return (
@@ -169,38 +162,10 @@ export default function MentalHealth() {
           </Card>
         </div>
 
-        {/* Mental Health Facts */}
+        {/* Trending Stories */}
         <section className="mb-16">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">
-              Understanding Mental Health
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Important facts everyone should know about mental health and
-              wellness.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {mentalHealthFacts.map((fact, index) => (
-              <Card key={index} className="bg-gradient-card border-0">
-                <CardContent className="pt-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-10 h-10 bg-theme-mental/10 rounded-full flex items-center justify-center mt-1">
-                      <Brain className="h-5 w-5 text-theme-mental" />
-                    </div>
-                    <p className="text-lg">{fact}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Trending Hashtags */}
-        <section className="mb-16">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">Trending Conversations</h2>
+            <h2 className="text-3xl font-bold mb-4">Trending Stories</h2>
             <p className="text-lg text-muted-foreground">
               Join the movement to normalize mental health discussions in Ghana.
             </p>
@@ -229,53 +194,50 @@ export default function MentalHealth() {
           </div>
         </section>
 
-        {/* Active Campaigns */}
+        {/* Inspiring Stories */}
         <section className="mb-16">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">
-              Active Awareness Campaigns
-            </h2>
+            <h2 className="text-3xl font-bold mb-4">Inspiring Stories</h2>
             <p className="text-lg text-muted-foreground">
-              Supporting mental health through education, advocacy, and
-              community building.
+              Stories of resilience and support shaping Ghana's mental health
+              movement.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {campaigns.map((campaign, index) => (
+          <div className="grid md:grid-cols-2 gap-8">
+            {inspiringStories.map((story, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardHeader>
-                  <CardTitle className="text-xl">{campaign.name}</CardTitle>
-                  <CardDescription>{campaign.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <div className="font-semibold text-theme-mental">
-                        {campaign.reach}
-                      </div>
-                      <div className="text-muted-foreground">Reach</div>
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-theme-mental/10 rounded-full flex items-center justify-center">
+                      <Heart className="h-6 w-6 text-theme-mental" />
                     </div>
                     <div>
-                      <div className="font-semibold text-theme-mental">
-                        {campaign.engagement}
-                      </div>
-                      <div className="text-muted-foreground">Engagement</div>
+                      <CardTitle className="text-xl">{story.name}</CardTitle>
+                      <Badge className="bg-theme-mental/10 text-theme-mental">
+                        {story.hashtag}
+                      </Badge>
                     </div>
                   </div>
-                  <Button variant="outline" className="w-full">
-                    Join Campaign
-                  </Button>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-muted-foreground">{story.story}</p>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <TrendingUp className="h-4 w-4 text-green-600" />
+                    <span className="font-semibold text-green-600">
+                      {story.impact}
+                    </span>
+                  </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         </section>
 
-        {/* Key Influencers */}
+        {/* Key Voices */}
         <section className="mb-16">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">Mental Health Advocates</h2>
+            <h2 className="text-3xl font-bold mb-4">Key Voices</h2>
             <p className="text-lg text-muted-foreground">
               Influential voices promoting mental wellness and breaking stigma.
             </p>
@@ -305,11 +267,11 @@ export default function MentalHealth() {
           </div>
         </section>
 
-        {/* Support Services */}
+        {/* Supporting Organizations */}
         <section className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">
-              Mental Health Support Services
+              Supporting Organizations
             </h2>
             <p className="text-lg text-muted-foreground">
               Professional help and support are available. You don't have to
@@ -351,33 +313,6 @@ export default function MentalHealth() {
               </Card>
             ))}
           </div>
-        </section>
-
-        {/* Call to Action */}
-        <section>
-          <Card className="bg-gradient-hero text-white border-0">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl">
-                Your Mental Health Matters
-              </CardTitle>
-              <CardDescription className="text-white/90">
-                Taking care of your mental health is just as important as your
-                physical health. It's okay to not be okay, and it's okay to ask
-                for help.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
-              <div className="space-y-4">
-                <div className="text-xl font-semibold">
-                  Crisis Support: 18555 (Toll-free)
-                </div>
-                <Button variant="secondary" size="lg">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Find Professional Help
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
         </section>
       </div>
     </div>

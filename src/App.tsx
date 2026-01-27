@@ -16,6 +16,7 @@ import VAW from "./pages/themes/VAW";
 import MentalHealth from "./pages/themes/MentalHealth";
 import LGBTQ from "./pages/themes/LGBTQ";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/themes/vaw" element={<VAW />} />
             <Route path="/themes/mental-health" element={<MentalHealth />} />
             <Route path="/themes/lgbtq" element={<LGBTQ />} />
+            <Route path="/login" element={<Login />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

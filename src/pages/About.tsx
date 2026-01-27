@@ -9,6 +9,92 @@ import {
 import teamImage from "@/assets/team-collaboration.jpg";
 import missionImage from "@/assets/mission-vision.jpg";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchTeamMembers,
+  fetchSponsors,
+  fetchAboutSection,
+} from "@/lib/api-client";
+import type { TeamMember, Sponsor, AboutSection } from "@/lib/types";
+
+const DEFAULT_TEAM: TeamMember[] = [
+  {
+    id: "1",
+    name: "Dr. Ama Osei",
+    role: "Executive Director",
+    description:
+      "Social justice advocate with 15+ years experience in disability rights and policy reform.",
+    profilePicture: "https://picsum.photos/id/1005/400/400",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "2",
+    name: "Kwame Asante",
+    role: "Data Science Lead",
+    description:
+      "AI researcher specializing in social media analysis and natural language processing.",
+    profilePicture: "https://picsum.photos/id/1001/400/400",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "3",
+    name: "Akosua Mensah",
+    role: "Community Engagement Director",
+    description:
+      "Mental health advocate and community organizer with grassroots experience.",
+    profilePicture: "https://picsum.photos/id/1006/400/400",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "4",
+    name: "Samuel Boateng",
+    role: "Policy Research Manager",
+    description:
+      "Human rights lawyer focused on LGBTQ+ advocacy and legal reform.",
+    profilePicture: "https://picsum.photos/id/1000/400/400",
+    createdAt: "",
+    updatedAt: "",
+  },
+];
+
+const DEFAULT_SPONSORS: Sponsor[] = [
+  {
+    id: "1",
+    name: "Ghana Federation of Disability Organizations",
+    description: "Policy advocacy and disability rights",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "2",
+    name: "Women's Rights Coalition Ghana",
+    description: "Gender-based violence prevention",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "3",
+    name: "Mental Health Ghana",
+    description: "Mental wellness advocacy",
+    createdAt: "",
+    updatedAt: "",
+  },
+];
+
+const DEFAULT_ABOUT: AboutSection = {
+  id: "",
+  description:
+    "We're a technology-driven advocacy platform dedicated to promoting inclusion and social justice in Ghana through AI-powered social media analysis and community engagement.",
+  missionDescription:
+    "To amplify the voices of marginalized communities in Ghana by leveraging artificial intelligence and social media analytics to track conversations, identify trends, and drive policy change around disability rights, gender-based violence prevention, mental health awareness, and LGBTQ+ inclusion.",
+  visionDescription:
+    "A Ghana where every individual, regardless of ability, gender identity, or mental health status, can participate fully in society with dignity, respect, and equal opportunities. We envision a future where data-driven advocacy creates lasting social change.",
+  createdAt: "",
+  updatedAt: "",
+};
 
 export default function About() {
   const values = [
@@ -38,36 +124,39 @@ export default function About() {
     },
   ];
 
-  const team = [
-    {
-      name: "Dr. Ama Osei",
-      role: "Executive Director",
-      description:
-        "Social justice advocate with 15+ years experience in disability rights and policy reform.",
-      image: "https://picsum.photos/id/1005/400/400",
-    },
-    {
-      name: "Kwame Asante",
-      role: "Data Science Lead",
-      description:
-        "AI researcher specializing in social media analysis and natural language processing.",
-      image: "https://picsum.photos/id/1001/400/400",
-    },
-    {
-      name: "Akosua Mensah",
-      role: "Community Engagement Director",
-      description:
-        "Mental health advocate and community organizer with grassroots experience.",
-      image: "https://picsum.photos/id/1006/400/400",
-    },
-    {
-      name: "Samuel Boateng",
-      role: "Policy Research Manager",
-      description:
-        "Human rights lawyer focused on LGBTQ+ advocacy and legal reform.",
-      image: "https://picsum.photos/id/1000/400/400",
-    },
-  ];
+  // Fetch team members from API
+  const { data: teamData = DEFAULT_TEAM } = useQuery({
+    queryKey: ["team-members"],
+    queryFn: () => fetchTeamMembers(),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const team = teamData && teamData.length > 0 ? teamData : DEFAULT_TEAM;
+
+  // Fetch sponsors from API
+  const { data: sponsorData = DEFAULT_SPONSORS } = useQuery({
+    queryKey: ["sponsors"],
+    queryFn: () => fetchSponsors(),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const sponsors =
+    sponsorData && sponsorData.length > 0 ? sponsorData : DEFAULT_SPONSORS;
+
+  // Fetch about section from API
+  const { data: aboutData = DEFAULT_ABOUT } = useQuery({
+    queryKey: ["about-section"],
+    queryFn: () => fetchAboutSection(),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const about = aboutData || DEFAULT_ABOUT;
 
   return (
     <div className="min-h-screen py-20">
@@ -113,12 +202,7 @@ export default function About() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-lg text-muted-foreground">
-                    To amplify the voices of marginalized communities in Ghana
-                    by leveraging artificial intelligence and social media
-                    analytics to track conversations, identify trends, and drive
-                    policy change around disability rights, gender-based
-                    violence prevention, mental health awareness, and LGBTQ+
-                    inclusion.
+                    {about.missionDescription}
                   </p>
                 </CardContent>
               </Card>
@@ -129,11 +213,7 @@ export default function About() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-lg text-muted-foreground">
-                    A Ghana where every individual, regardless of ability,
-                    gender identity, or mental health status, can participate
-                    fully in society with dignity, respect, and equal
-                    opportunities. We envision a future where data-driven
-                    advocacy creates lasting social change.
+                    {about.visionDescription}
                   </p>
                 </CardContent>
               </Card>
@@ -188,7 +268,10 @@ export default function About() {
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <Avatar className="h-14 w-14">
-                      <AvatarImage src={member.image} alt={member.name} />
+                      <AvatarImage
+                        src={member.profilePicture}
+                        alt={member.name}
+                      />
                       <AvatarFallback>
                         {member.name
                           .split(" ")
@@ -225,28 +308,26 @@ export default function About() {
           <Card className="bg-gradient-card border-0">
             <CardContent className="pt-6">
               <div className="grid md:grid-cols-3 gap-8 text-center">
-                <div>
-                  <h4 className="font-semibold mb-2">
-                    Ghana Federation of Disability Organizations
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Policy advocacy and disability rights
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">
-                    Women's Rights Coalition Ghana
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Gender-based violence prevention
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">Mental Health Ghana</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Mental wellness advocacy
-                  </p>
-                </div>
+                {sponsors.map((sponsor, index) => (
+                  <div key={index}>
+                    <h4 className="font-semibold mb-2">{sponsor.name}</h4>
+                    {sponsor.description && (
+                      <p className="text-sm text-muted-foreground">
+                        {sponsor.description}
+                      </p>
+                    )}
+                    {sponsor.website && (
+                      <a
+                        href={sponsor.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-primary hover:underline mt-2 inline-block"
+                      >
+                        Visit website
+                      </a>
+                    )}
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>

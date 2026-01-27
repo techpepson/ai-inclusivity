@@ -1,31 +1,58 @@
 import { Quote, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { fetchTestimonials } from "@/lib/api-client";
 
-const testimonials = [
+type TestimonialDisplay = {
+  id: string;
+  speaker: string;
+  role: string;
+  statement: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+const DEFAULT_TESTIMONIALS: TestimonialDisplay[] = [
   {
-    quote:
-      "AI4InclusiveGh has revolutionized how we track and measure advocacy impact. Their analytics help us reach the right audiences with the right message.",
-    author: "Johnson Acquah",
+    id: "1",
+    speaker: "Johnson Acquah",
     role: "Director, Ghana Disability Rights Coalition",
-    organization: "Policy Advocacy",
+    statement:
+      "AI4InclusiveGh has revolutionized how we track and measure advocacy impact. Their analytics help us reach the right audiences with the right message.",
+    createdAt: "",
+    updatedAt: "",
   },
   {
-    quote:
-      "The social media insights provided by this platform have been invaluable in shaping our mental health awareness campaigns across Ghana.",
-    author: "Kwame Adu",
+    id: "2",
+    speaker: "Kwame Adu",
     role: "Program Manager",
-    organization: "Mental Health Ghana",
+    statement:
+      "The social media insights provided by this platform have been invaluable in shaping our mental health awareness campaigns across Ghana.",
+    createdAt: "",
+    updatedAt: "",
   },
   {
-    quote:
-      "Working with AI4InclusiveGh has amplified our voice in fighting gender-based violence. Their data helps us understand and address the real issues.",
-    author: "Emmanuel Arthur",
+    id: "3",
+    speaker: "Emmanuel Arthur",
     role: "Executive Director",
-    organization: "Women's Rights Coalition",
+    statement:
+      "Working with AI4InclusiveGh has amplified our voice in fighting gender-based violence. Their data helps us understand and address the real issues.",
+    createdAt: "",
+    updatedAt: "",
   },
 ];
 
 export function TestimonialSection() {
+  const { data: testimonialsFromApi = [] } = useQuery({
+    queryKey: ["testimonials"],
+    queryFn: fetchTestimonials,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const testimonials: TestimonialDisplay[] =
+    testimonialsFromApi.length > 0 ? testimonialsFromApi : DEFAULT_TESTIMONIALS;
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -40,9 +67,9 @@ export function TestimonialSection() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((testimonial) => (
             <Card
-              key={index}
+              key={testimonial.id}
               className="border-0 bg-white shadow-professional hover:shadow-elegant transition-all duration-300"
             >
               <CardContent className="pt-6">
@@ -50,7 +77,7 @@ export function TestimonialSection() {
                   <div className="flex items-start space-x-1">
                     <Quote className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                     <p className="text-muted-foreground italic leading-relaxed">
-                      {testimonial.quote}
+                      {testimonial.statement}
                     </p>
                   </div>
 
@@ -60,13 +87,10 @@ export function TestimonialSection() {
                     </div>
                     <div>
                       <div className="font-semibold text-sm">
-                        {testimonial.author}
+                        {testimonial.speaker}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {testimonial.role}
-                      </div>
-                      <div className="text-xs text-primary">
-                        {testimonial.organization}
                       </div>
                     </div>
                   </div>

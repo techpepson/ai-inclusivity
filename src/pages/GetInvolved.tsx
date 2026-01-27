@@ -1,39 +1,191 @@
-import { Users, Heart, Share2, DollarSign, ArrowRight, CheckCircle } from "lucide-react";
+import {
+  Users,
+  Heart,
+  Share2,
+  DollarSign,
+  ArrowRight,
+  CheckCircle,
+} from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function GetInvolved() {
+  const [volunteerModalOpen, setVolunteerModalOpen] = useState(false);
+  const [partnerModalOpen, setPartnerModalOpen] = useState(false);
+  const [volunteerForm, setVolunteerForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    why: "",
+  });
+  const [partnerForm, setPartnerForm] = useState({
+    organizationName: "",
+    contactPerson: "",
+    email: "",
+    phone: "",
+    why: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleVolunteerInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setVolunteerForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handlePartnerInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setPartnerForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleVolunteerSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/volunteer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(volunteerForm),
+      });
+
+      if (response.ok) {
+        alert("Thank you! We'll review your application and be in touch soon.");
+        setVolunteerModalOpen(false);
+        setVolunteerForm({ name: "", email: "", phone: "", why: "" });
+      } else {
+        alert(
+          "There was an error submitting your application. Please try again.",
+        );
+      }
+    } catch (error) {
+      console.error("Error submitting volunteer form:", error);
+      alert(
+        "There was an error submitting your application. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePartnerSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/partner", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(partnerForm),
+      });
+
+      if (response.ok) {
+        alert(
+          "Thank you! We'll review your partnership proposal and be in touch soon.",
+        );
+        setPartnerModalOpen(false);
+        setPartnerForm({
+          organizationName: "",
+          contactPerson: "",
+          email: "",
+          phone: "",
+          why: "",
+        });
+      } else {
+        alert("There was an error submitting your proposal. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting partner form:", error);
+      alert("There was an error submitting your proposal. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const ways = [
     {
       icon: Users,
       title: "Become a Volunteer",
-      description: "Join our team of advocates and help amplify important conversations across Ghana.",
-      benefits: ["Flexible scheduling", "Training provided", "Networking opportunities", "Certificate of service"],
-      cta: "Apply to Volunteer"
+      description:
+        "Join our team of advocates and help amplify important conversations across Ghana.",
+      benefits: [
+        "Flexible scheduling",
+        "Training provided",
+        "Networking opportunities",
+        "Certificate of service",
+      ],
+      cta: "Apply to Volunteer",
+      action: () => setVolunteerModalOpen(true),
     },
     {
       icon: Heart,
       title: "Partner with Us",
-      description: "Organizations and institutions can collaborate with us to drive systemic change.",
-      benefits: ["Co-branded campaigns", "Data insights", "Joint advocacy", "Policy influence"],
-      cta: "Become a Partner"
+      description:
+        "Organizations and institutions can collaborate with us to drive systemic change.",
+      benefits: [
+        "Co-branded campaigns",
+        "Data insights",
+        "Joint advocacy",
+        "Policy influence",
+      ],
+      cta: "Become a Partner",
+      action: () => setPartnerModalOpen(true),
     },
-    {
-      icon: Share2,
-      title: "Amplify Our Message",
-      description: "Help spread awareness by sharing our campaigns and using our hashtags.",
-      benefits: ["Ready-made content", "Hashtag toolkits", "Social media guides", "Community recognition"],
-      cta: "Get Social Kit"
-    },
-    {
-      icon: DollarSign,
-      title: "Support Our Mission",
-      description: "Your donations help us expand our reach and develop new advocacy tools.",
-      benefits: ["Tax deductible", "Impact reports", "Donor recognition", "Exclusive updates"],
-      cta: "Donate Now"
-    }
+    // {
+    //   icon: Share2,
+    //   title: "Amplify Our Message",
+    //   description:
+    //     "Help spread awareness by sharing our campaigns and using our hashtags.",
+    //   benefits: [
+    //     "Ready-made content",
+    //     "Hashtag toolkits",
+    //     "Social media guides",
+    //     "Community recognition",
+    //   ],
+    //   cta: "Get Social Kit",
+    // },
+    // {
+    //   icon: DollarSign,
+    //   title: "Support Our Mission",
+    //   description:
+    //     "Your donations help us expand our reach and develop new advocacy tools.",
+    //   benefits: [
+    //     "Tax deductible",
+    //     "Impact reports",
+    //     "Donor recognition",
+    //     "Exclusive updates",
+    //   ],
+    //   cta: "Donate Now",
+    // },
   ];
 
   const campaigns = [
@@ -41,20 +193,24 @@ export default function GetInvolved() {
       title: "#InclusionMatters",
       description: "Promoting disability rights and accessibility",
       participants: "15.2k",
-      hashtags: ["#InclusionMatters", "#DisabilityRightsGH", "#AccessibilityFirst"]
+      hashtags: [
+        "#InclusionMatters",
+        "#DisabilityRightsGH",
+        "#AccessibilityFirst",
+      ],
     },
     {
       title: "#BreakTheStigma",
       description: "Mental health awareness and support",
       participants: "12.8k",
-      hashtags: ["#BreakTheStigma", "#MentalHealthGH", "#WellnessMatters"]
+      hashtags: ["#BreakTheStigma", "#MentalHealthGH", "#WellnessMatters"],
     },
     {
       title: "#EndVAW",
       description: "Fighting violence against women",
       participants: "18.5k",
-      hashtags: ["#EndVAW", "#StandWithWomen", "#GBVAwareness"]
-    }
+      hashtags: ["#EndVAW", "#StandWithWomen", "#GBVAwareness"],
+    },
   ];
 
   return (
@@ -64,23 +220,30 @@ export default function GetInvolved() {
         <div className="text-center mb-16">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6">Get Involved</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Join thousands of advocates, organizations, and changemakers working toward a more inclusive Ghana. 
-            Every voice matters, every action counts.
+            Join thousands of advocates, organizations, and changemakers working
+            toward a more inclusive Ghana. Every voice matters, every action
+            counts.
           </p>
         </div>
 
         {/* Ways to Get Involved */}
         <section className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Ways to Make a Difference</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              Ways to Make a Difference
+            </h2>
             <p className="text-lg text-muted-foreground">
-              Choose how you'd like to contribute to our mission of inclusion and social justice.
+              Choose how you'd like to contribute to our mission of inclusion
+              and social justice.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {ways.map((way, index) => (
-              <Card key={index} className="bg-gradient-card border-0 hover:shadow-card transition-all duration-300">
+              <Card
+                key={index}
+                className="bg-gradient-card border-0 hover:shadow-card transition-all duration-300"
+              >
                 <CardHeader>
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -101,7 +264,10 @@ export default function GetInvolved() {
                       </div>
                     ))}
                   </div>
-                  <Button className="w-full bg-gradient-hero hover:opacity-90">
+                  <Button
+                    className="w-full bg-gradient-hero hover:opacity-90"
+                    onClick={way.action}
+                  >
                     {way.cta}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -114,9 +280,12 @@ export default function GetInvolved() {
         {/* Active Campaigns */}
         <section className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Join Our Active Campaigns</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              Join Our Active Campaigns
+            </h2>
             <p className="text-lg text-muted-foreground">
-              Participate in ongoing advocacy campaigns by using our hashtags and sharing content.
+              Participate in ongoing advocacy campaigns by using our hashtags
+              and sharing content.
             </p>
           </div>
 
@@ -133,15 +302,18 @@ export default function GetInvolved() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {campaign.hashtags.map((hashtag, idx) => (
-                      <span key={idx} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-mono">
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-mono"
+                      >
                         {hashtag}
                       </span>
                     ))}
                   </div>
-                  <Button variant="outline" className="w-full">
+                  {/* <Button variant="outline" className="w-full">
                     <Share2 className="mr-2 h-4 w-4" />
                     Share Campaign
-                  </Button>
+                  </Button> */}
                 </CardContent>
               </Card>
             ))}
@@ -153,9 +325,12 @@ export default function GetInvolved() {
           <div className="max-w-2xl mx-auto">
             <Card className="bg-gradient-card border-0">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Ready to Get Started?</CardTitle>
+                <CardTitle className="text-2xl">
+                  Ready to Get Started?
+                </CardTitle>
                 <CardDescription>
-                  Tell us how you'd like to get involved and we'll be in touch within 24 hours.
+                  Tell us how you'd like to get involved and we'll be in touch
+                  within 24 hours.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -169,20 +344,22 @@ export default function GetInvolved() {
                     <Input placeholder="Enter your last name" />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Email</label>
                   <Input type="email" placeholder="Enter your email address" />
                 </div>
-                
+
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">How would you like to get involved?</label>
-                  <Textarea 
+                  <label className="text-sm font-medium">
+                    How would you like to get involved?
+                  </label>
+                  <Textarea
                     placeholder="Tell us about your interests, skills, or how you'd like to contribute..."
                     rows={4}
                   />
                 </div>
-                
+
                 <Button className="w-full bg-gradient-hero hover:opacity-90">
                   Submit Application
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -191,6 +368,185 @@ export default function GetInvolved() {
             </Card>
           </div>
         </section>
+
+        {/* Volunteer Modal */}
+        <Dialog open={volunteerModalOpen} onOpenChange={setVolunteerModalOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Apply to Become a Volunteer</DialogTitle>
+              <DialogDescription>
+                Fill out the form below and we'll review your application. We'll
+                be in touch within 24 hours.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleVolunteerSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Full Name *</label>
+                <Input
+                  name="name"
+                  placeholder="Enter your full name"
+                  value={volunteerForm.name}
+                  onChange={handleVolunteerInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Email Address *</label>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={volunteerForm.email}
+                  onChange={handleVolunteerInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Phone Number *</label>
+                <Input
+                  name="phone"
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={volunteerForm.phone}
+                  onChange={handleVolunteerInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Why do you want to volunteer? *
+                </label>
+                <Textarea
+                  name="why"
+                  placeholder="Tell us about your motivation and how you'd like to contribute..."
+                  value={volunteerForm.why}
+                  onChange={handleVolunteerInputChange}
+                  rows={4}
+                  required
+                />
+              </div>
+
+              <div className="flex gap-4 justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setVolunteerModalOpen(false)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-gradient-hero hover:opacity-90"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Application"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Partner Modal */}
+        <Dialog open={partnerModalOpen} onOpenChange={setPartnerModalOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Partnership Proposal</DialogTitle>
+              <DialogDescription>
+                Tell us about your organization and how we can collaborate.
+                We'll be in touch within 24 hours.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handlePartnerSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Organization Name *
+                </label>
+                <Input
+                  name="organizationName"
+                  placeholder="Enter your organization name"
+                  value={partnerForm.organizationName}
+                  onChange={handlePartnerInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Contact Person Name *
+                </label>
+                <Input
+                  name="contactPerson"
+                  placeholder="Enter the contact person's name"
+                  value={partnerForm.contactPerson}
+                  onChange={handlePartnerInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Email Address *</label>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={partnerForm.email}
+                  onChange={handlePartnerInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Phone Number *</label>
+                <Input
+                  name="phone"
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={partnerForm.phone}
+                  onChange={handlePartnerInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  How would you like to partner with us? *
+                </label>
+                <Textarea
+                  name="why"
+                  placeholder="Tell us about your organization, goals, and how we can collaborate..."
+                  value={partnerForm.why}
+                  onChange={handlePartnerInputChange}
+                  rows={4}
+                  required
+                />
+              </div>
+
+              <div className="flex gap-4 justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setPartnerModalOpen(false)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-gradient-hero hover:opacity-90"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Proposal"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

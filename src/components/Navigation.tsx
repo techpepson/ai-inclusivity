@@ -7,7 +7,6 @@ import {
   Shield,
   Heart,
   Palette,
-  BarChart3,
   FileText,
   UserPlus,
   BookOpen,
@@ -15,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { logo } from "@/images/images";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +45,7 @@ export function Navigation() {
     // { name: "Analytics", href: "/analytics", icon: BarChart3 },
     // { name: "Reports", href: "/reports", icon: FileText },
     { name: "Get Involved", href: "/get-involved", icon: UserPlus },
-    { name: "Resources", href: "/resources", icon: BookOpen },
+    // { name: "Resources", href: "/resources", icon: BookOpen },
     { name: "Community", href: "/community", icon: MessageCircle },
   ];
 
@@ -60,9 +60,11 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-gradient-hero p-2 rounded-lg">
-              <BarChart3 className="h-6 w-6 text-white" />
-            </div>
+            <img
+              src={logo}
+              alt="AI4InclusiveGh logo"
+              className="h-12 w-12 rounded-lg object-cover border border-border shadow-sm"
+            />
             <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
               AI4InclusiveGh
             </span>
@@ -78,7 +80,7 @@ export function Navigation() {
                     "px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
                     isActive(item.href)
                       ? "text-primary border-b-2 border-primary"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground",
                   )}
                 >
                   {item.name}
@@ -140,7 +142,7 @@ export function Navigation() {
                       "block px-3 py-2 text-base font-medium rounded-md transition-colors",
                       isActive(item.href)
                         ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                     )}
                     onClick={() => setIsOpen(false)}
                   >

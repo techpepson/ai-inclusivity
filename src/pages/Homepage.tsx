@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   ArrowRight,
   Users,
@@ -25,15 +26,10 @@ import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
 import womenImage from "@/assets/women-empowerment.jpg";
 import mentalHealthImage from "@/assets/mental-health-support.jpg";
 import lgbtqImage from "@/assets/lgbtq-community.jpg";
+import { fetchHeroContent, fetchStatistics } from "@/lib/api-client";
+import type { HeroContent } from "@/lib/types";
 
-type HeroShape = {
-  title: string;
-  subTitle: string;
-  primaryButtonText?: string | null;
-  secondaryButtonText?: string | null;
-};
-
-const DEFAULT_HERO: HeroShape = {
+const DEFAULT_HERO: HeroContent = {
   title: "AI-Powered Advocacy for",
   subTitle: "Inclusive Ghana",
   primaryButtonText: "Explore Analytics",
@@ -100,198 +96,36 @@ function formatNumber(n: number) {
 }
 
 export default function Homepage() {
-  const [heroData, setHeroData] = useState<HeroShape>(DEFAULT_HERO);
-  const [statsData, setStatsData] = useState<StatShape[]>(DEFAULT_STATS);
+  const { data: heroData = DEFAULT_HERO } = useQuery({
+    queryKey: ["hero-content"],
+    queryFn: () => fetchHeroContent(DEFAULT_HERO),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
-  useEffect(() => {
-    let mounted = true;
+  const { data: statsFromApi = [] } = useQuery({
+    queryKey: ["statistics"],
+    queryFn: fetchStatistics,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
-    async function tryFetch(url: string) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) return null;
-        const json = await res.json();
-        return json?.hero ?? null;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    async function fetchHero() {
-      const baseURL = import.meta.env.VITE_BASE_URL || "";
-      // try both common endpoints: /api/hero and /get-hero
-      const endpoints = [
-        `${baseURL}/api/hero`,
-        `${baseURL}/get-hero`,
-        "/api/hero",
-        "/get-hero",
-      ];
-      let raw: any = null;
-
-      for (const ep of endpoints) {
-        raw = await tryFetch(ep);
-        if (raw) break;
-      }
-
-      if (!raw || typeof raw !== "object") return;
-
-      // Accept several possible field names (mainTitle, title) and handle misspelling
-      const titleCandidate =
-        typeof raw.mainTitle === "string" && raw.mainTitle.trim()
-          ? raw.mainTitle.trim()
-          : typeof raw.title === "string" && raw.title.trim()
-          ? raw.title.trim()
-          : null;
-
-      const subTitleCandidate =
-        (typeof raw.subTitle === "string" && raw.subTitle.trim()) ||
-        (typeof raw.sub_title === "string" && raw.sub_title.trim()) ||
-        null;
-
-      const primaryButtonCandidate =
-        typeof raw.primaryButtonText === "string" &&
-        raw.primaryButtonText.trim()
-          ? raw.primaryButtonText.trim()
-          : null;
-
-      // Accept both correct and misspelled secondary field names
-      const secondaryButtonCandidate =
-        typeof raw.secondaryButtonText === "string" &&
-        raw.secondaryButtonText.trim()
-          ? raw.secondaryButtonText.trim()
-          : typeof raw.secoondaryButtonText === "string" &&
-            raw.secoondaryButtonText.trim()
-          ? raw.secoondaryButtonText.trim()
-          : null;
-
-      if (titleCandidate && subTitleCandidate) {
-        const merged: HeroShape = {
-          title: titleCandidate,
-          subTitle: subTitleCandidate,
-          primaryButtonText:
-            primaryButtonCandidate ?? DEFAULT_HERO.primaryButtonText,
-          secondaryButtonText:
-            secondaryButtonCandidate ?? DEFAULT_HERO.secondaryButtonText,
-        };
-
-        if (mounted) setHeroData(merged);
-      }
-    }
-
-    fetchHero();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let mounted = true;
-
-    async function tryFetchStats(url: string) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) return null;
-        const json = await res.json();
-        return json?.statistics ?? null;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    async function fetchStatistics() {
-      const baseURL = import.meta.env.VITE_BASE_URL || "";
-      const endpoints = [
-        `${baseURL}/api/statistics`,
-        `${baseURL}/get-statistics`,
-        "/api/statistics",
-        "/get-statistics",
-      ];
-      let raw: any = null;
-
-      for (const ep of endpoints) {
-        raw = await tryFetchStats(ep);
-        if (raw) break;
-      }
-
-      if (!Array.isArray(raw)) return; // keep defaults
-
-      // Validate all items; if any malformed -> bail and keep DEFAULT_STATS
-      const validated: StatShape[] = [];
-      for (const item of raw) {
-        if (!item || typeof item !== "object") return;
-        const label =
-          typeof item.label === "string" && item.label.trim()
-            ? item.label.trim()
-            : null;
-        // value in DB is Int; accept number or numeric string
-        const num =
-          typeof item.value === "number"
-            ? item.value
-            : typeof item.value === "string" && item.value.trim()
-            ? Number(item.value)
-            : NaN;
-        if (!label || !Number.isFinite(num)) return; // malformed -> keep defaults
-
-        // pick icon from DEFAULT_STATS by label if available
-        const match = DEFAULT_STATS.find(
-          (s) => s.label.toLowerCase() === label.toLowerCase()
-        );
-        const icon = match ? match.icon : TrendingUp;
-
-        validated.push({ label, value: formatNumber(num), icon });
-      }
-
-      if (validated.length > 0 && mounted) setStatsData(validated);
-    }
-
-    fetchStatistics();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const themes = [
-    {
-      title: "Persons with Disabilities",
-      description:
-        "Advocating for accessibility and inclusion of PwDs in Ghana",
-      icon: Users,
-      color: "bg-theme-disability",
-      href: "/themes/disabilities",
-      hashtags: ["#InclusionMatters", "#DisabilityRightsGH"],
-      image: disabilityImage,
-    },
-    {
-      title: "Violence Against Women",
-      description:
-        "Fighting gender-based violence through awareness and support",
-      icon: Shield,
-      color: "bg-theme-vaw",
-      href: "/themes/vaw",
-      hashtags: ["#EndVAW", "#StandWithWomen"],
-      image: womenImage,
-    },
-    {
-      title: "Mental Health & Wellness",
-      description: "Breaking stigma and promoting mental wellness for all",
-      icon: Heart,
-      color: "bg-theme-mental",
-      href: "/themes/mental-health",
-      hashtags: ["#BreakTheStigma", "#MentalHealthAwareness"],
-      image: mentalHealthImage,
-    },
-    {
-      title: "LGBTQ+ Communities",
-      description: "Supporting inclusion and rights for LGBTQ+ individuals",
-      icon: Palette,
-      color: "bg-theme-lgbtq",
-      href: "/themes/lgbtq",
-      hashtags: ["#LGBTQRights", "#LoveIsLove"],
-      image: lgbtqImage,
-    },
-  ];
+  const statsData: StatShape[] =
+    statsFromApi.length > 0
+      ? statsFromApi.map((stat) => {
+          const match = DEFAULT_STATS.find(
+            (s) => s.label.toLowerCase() === stat.label.toLowerCase(),
+          );
+          const icon = match ? match.icon : TrendingUp;
+          return {
+            label: stat.label,
+            value: formatNumber(stat.value),
+            icon,
+          };
+        })
+      : DEFAULT_STATS;
 
   const [focusAreas, setFocusAreas] = useState(DEFAULT_FOCUS_AREAS);
 
@@ -345,8 +179,8 @@ export default function Homepage() {
         const tagsRaw = Array.isArray(obj.hashTags)
           ? obj.hashTags
           : Array.isArray(obj.hashtags)
-          ? obj.hashtags
-          : null;
+            ? obj.hashtags
+            : null;
         const hashtags = Array.isArray(tagsRaw)
           ? (tagsRaw.filter((t) => typeof t === "string") as string[])
           : [];
@@ -440,17 +274,22 @@ export default function Homepage() {
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-              {heroData.title}
-              <span className="block text-primary-glow">
-                {heroData.subTitle}
+            <h1 className="text-4xl lg:text-6xl font-bold mb-4 text-white">
+              {heroData.title.split(" ").slice(0, -1).join(" ")}{" "}
+              <span className="text-primary-glow">
+                {heroData.title.split(" ").slice(-1)}
               </span>
             </h1>
-            <p className="text-xl lg:text-2xl mb-8 text-white/90">
-              Leveraging social media analytics to drive awareness and action
-              for persons with disabilities, VAW prevention, mental health, and
-              LGBTQ+ rights in Ghana.
+            <p className="text-2xl lg:text-3xl font-semibold mb-6 text-white drop-shadow-sm">
+              {heroData.subTitle}
             </p>
+            {heroData.subTitle === DEFAULT_HERO.subTitle && (
+              <p className="text-xl lg:text-2xl mb-8 text-white/90">
+                Leveraging social media analytics to drive awareness and action
+                for persons with disabilities, VAW prevention, mental health,
+                and LGBTQ+ rights in Ghana.
+              </p>
+            )}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/about">
                 <Button size="lg" variant="secondary" className="text-lg px-8">
@@ -541,7 +380,7 @@ export default function Homepage() {
                           >
                             {hashtag}
                           </span>
-                        )
+                        ),
                       )}
                     </div>
                   </div>

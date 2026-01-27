@@ -1,6 +1,8 @@
 import { TrendingUp, Users, BarChart3, Target } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useState, ComponentType, SVGProps } from "react";
+import { ComponentType, SVGProps } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchImpactMetrics } from "@/lib/api-client";
 
 interface StatItem {
   label: string;
@@ -40,84 +42,29 @@ function formatMetricValue(n: number) {
 }
 
 export function ProfessionalStats() {
-  const [metrics, setMetrics] = useState<StatItem[]>(DEFAULT_STATS);
+  const { data: metricsFromApi = [] } = useQuery({
+    queryKey: ["impact-metrics"],
+    queryFn: fetchImpactMetrics,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
-  useEffect(() => {
-    let mounted = true;
-
-    async function tryFetch(url: string) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) return null;
-        const json = await res.json();
-        return json?.metrics ?? null;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    async function fetchMetrics() {
-      const baseURL = import.meta.env.VITE_BASE_URL || "";
-      const endpoints = [
-        `${baseURL}/api/metrics`,
-        `${baseURL}/get-metrics`,
-        "/api/metrics",
-        "/get-metrics",
-      ];
-      let raw: unknown = null;
-
-      for (const ep of endpoints) {
-        raw = await tryFetch(ep);
-        if (raw) break;
-      }
-
-      if (!Array.isArray(raw)) return; // keep defaults
-      const arr = raw as unknown[];
-      if (arr.length === 0) return;
-
-      const validated: StatItem[] = [];
-      for (const item of arr) {
-        if (!item || typeof item !== "object") return; // malformed -> keep defaults
-        const obj = item as Record<string, unknown>;
-        const label =
-          typeof obj.label === "string" && obj.label.trim()
-            ? obj.label.trim()
-            : null;
-        const num =
-          typeof obj.value === "number"
-            ? obj.value
-            : typeof obj.value === "string" && (obj.value as string).trim()
-            ? Number(obj.value as string)
-            : NaN;
-        const growth =
-          typeof obj.growth === "string" && (obj.growth as string).trim()
-            ? (obj.growth as string).trim()
-            : null;
-        if (!label || !Number.isFinite(num)) return; // malformed
-
-        // map to existing icons by label when possible
-        const match = DEFAULT_STATS.find(
-          (s) => s.label.toLowerCase() === label.toLowerCase()
-        );
-        const icon = match ? match.icon : TrendingUp;
-
-        validated.push({
-          label,
-          value: formatMetricValue(num),
-          change: growth ?? "",
-          icon,
-        });
-      }
-
-      if (validated.length > 0 && mounted) setMetrics(validated);
-    }
-
-    fetchMetrics();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  const metrics: StatItem[] =
+    metricsFromApi.length > 0
+      ? metricsFromApi.map((metric) => {
+          const match = DEFAULT_STATS.find(
+            (s) => s.label.toLowerCase() === metric.label.toLowerCase(),
+          );
+          const icon = match ? match.icon : TrendingUp;
+          return {
+            label: metric.label,
+            value: formatMetricValue(metric.value),
+            change: "",
+            icon,
+          };
+        })
+      : DEFAULT_STATS;
 
   return (
     <section className="py-16 bg-gradient-mesh">
@@ -145,9 +92,6 @@ export function ProfessionalStats() {
                 </div>
                 <div className="text-sm text-muted-foreground mb-1">
                   {stat.label}
-                </div>
-                <div className="text-xs text-green-600 font-semibold">
-                  {stat.change} this year
                 </div>
               </CardContent>
             </Card>
