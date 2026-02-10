@@ -280,7 +280,7 @@ export default function Homepage() {
                 {heroData.title.split(" ").slice(-1)}
               </span>
             </h1>
-            <p className="text-2xl lg:text-3xl font-semibold mb-6 text-white drop-shadow-sm">
+            <p className="text-xl lg:text-2xl font-semibold mb-6 text-white drop-shadow-sm">
               {heroData.subTitle}
             </p>
             {heroData.subTitle === DEFAULT_HERO.subTitle && (

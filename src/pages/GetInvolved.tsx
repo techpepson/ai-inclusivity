@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { sendContactMessage } from "@/lib/api-client";
 import {
   Card,
   CardContent,
@@ -28,6 +29,12 @@ import {
 export default function GetInvolved() {
   const [volunteerModalOpen, setVolunteerModalOpen] = useState(false);
   const [partnerModalOpen, setPartnerModalOpen] = useState(false);
+  const [getStartedForm, setGetStartedForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+  });
   const [volunteerForm, setVolunteerForm] = useState({
     name: "",
     email: "",
@@ -42,6 +49,49 @@ export default function GetInvolved() {
     why: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleGetStartedInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setGetStartedForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleGetStartedSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const fullName = `${getStartedForm.firstName} ${getStartedForm.lastName}`
+        .replace(/\s+/g, " ")
+        .trim();
+
+      await sendContactMessage({
+        name: fullName,
+        email: getStartedForm.email,
+        subject: "Get Involved - Ready to Get Started",
+        message: getStartedForm.message,
+      });
+
+      alert("Thank you! We'll be in touch within 24 hours.");
+      setGetStartedForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Error submitting get started form:", error);
+      alert(
+        "There was an error submitting your application. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleVolunteerInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -68,23 +118,23 @@ export default function GetInvolved() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/volunteer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(volunteerForm),
+      const messageLines = [
+        volunteerForm.why?.trim()
+          ? `Why I want to volunteer: ${volunteerForm.why.trim()}`
+          : null,
+      ].filter(Boolean);
+
+      await sendContactMessage({
+        name: volunteerForm.name,
+        email: volunteerForm.email,
+        phone: volunteerForm.phone || null,
+        subject: "Volunteer Application",
+        message: messageLines.join("\n"),
       });
 
-      if (response.ok) {
-        alert("Thank you! We'll review your application and be in touch soon.");
-        setVolunteerModalOpen(false);
-        setVolunteerForm({ name: "", email: "", phone: "", why: "" });
-      } else {
-        alert(
-          "There was an error submitting your application. Please try again.",
-        );
-      }
+      alert("Thank you! We'll review your application and be in touch soon.");
+      setVolunteerModalOpen(false);
+      setVolunteerForm({ name: "", email: "", phone: "", why: "" });
     } catch (error) {
       console.error("Error submitting volunteer form:", error);
       alert(
@@ -100,29 +150,37 @@ export default function GetInvolved() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/partner", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(partnerForm),
+      const messageLines = [
+        partnerForm.organizationName?.trim()
+          ? `Organization: ${partnerForm.organizationName.trim()}`
+          : null,
+        partnerForm.contactPerson?.trim()
+          ? `Contact person: ${partnerForm.contactPerson.trim()}`
+          : null,
+        partnerForm.why?.trim()
+          ? `Partnership details: ${partnerForm.why.trim()}`
+          : null,
+      ].filter(Boolean);
+
+      await sendContactMessage({
+        name: partnerForm.contactPerson || partnerForm.organizationName,
+        email: partnerForm.email,
+        phone: partnerForm.phone || null,
+        subject: "Partnership Proposal",
+        message: messageLines.join("\n"),
       });
 
-      if (response.ok) {
-        alert(
-          "Thank you! We'll review your partnership proposal and be in touch soon.",
-        );
-        setPartnerModalOpen(false);
-        setPartnerForm({
-          organizationName: "",
-          contactPerson: "",
-          email: "",
-          phone: "",
-          why: "",
-        });
-      } else {
-        alert("There was an error submitting your proposal. Please try again.");
-      }
+      alert(
+        "Thank you! We'll review your partnership proposal and be in touch soon.",
+      );
+      setPartnerModalOpen(false);
+      setPartnerForm({
+        organizationName: "",
+        contactPerson: "",
+        email: "",
+        phone: "",
+        why: "",
+      });
     } catch (error) {
       console.error("Error submitting partner form:", error);
       alert("There was an error submitting your proposal. Please try again.");
@@ -333,37 +391,70 @@ export default function GetInvolved() {
                   within 24 hours.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">First Name</label>
-                    <Input placeholder="Enter your first name" />
+              <CardContent>
+                <form onSubmit={handleGetStartedSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">First Name</label>
+                      <Input
+                        name="firstName"
+                        placeholder="Enter your first name"
+                        value={getStartedForm.firstName}
+                        onChange={handleGetStartedInputChange}
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Last Name</label>
+                      <Input
+                        name="lastName"
+                        placeholder="Enter your last name"
+                        value={getStartedForm.lastName}
+                        onChange={handleGetStartedInputChange}
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
                   </div>
+
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Last Name</label>
-                    <Input placeholder="Enter your last name" />
+                    <label className="text-sm font-medium">Email</label>
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email address"
+                      value={getStartedForm.email}
+                      onChange={handleGetStartedInputChange}
+                      required
+                      disabled={isSubmitting}
+                    />
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email</label>
-                  <Input type="email" placeholder="Enter your email address" />
-                </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      How would you like to get involved?
+                    </label>
+                    <Textarea
+                      name="message"
+                      placeholder="Tell us about your interests, skills, or how you'd like to contribute..."
+                      rows={4}
+                      value={getStartedForm.message}
+                      onChange={handleGetStartedInputChange}
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    How would you like to get involved?
-                  </label>
-                  <Textarea
-                    placeholder="Tell us about your interests, skills, or how you'd like to contribute..."
-                    rows={4}
-                  />
-                </div>
-
-                <Button className="w-full bg-gradient-hero hover:opacity-90">
-                  Submit Application
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-hero hover:opacity-90"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Application"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </div>

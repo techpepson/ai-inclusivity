@@ -26,8 +26,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
-import { fetchEvents } from "@/lib/api-client";
-import type { Event } from "@/lib/types";
+import {
+  fetchEvents,
+  fetchSocials,
+  sendContactMessage,
+} from "@/lib/api-client";
+import type { Event, Social } from "@/lib/types";
 
 const DEFAULT_EVENTS: Event[] = [
   {
@@ -62,17 +66,55 @@ const DEFAULT_EVENTS: Event[] = [
   },
 ];
 
+const DEFAULT_SOCIALS: Social[] = [
+  {
+    id: "1",
+    platform: "Twitter",
+    url: "https://twitter.com/AI4InclusiveGh",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "2",
+    platform: "Facebook",
+    url: "https://facebook.com/AI4InclusiveGhana",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "3",
+    platform: "LinkedIn",
+    url: "https://linkedin.com",
+    createdAt: "",
+    updatedAt: "",
+  },
+  {
+    id: "4",
+    platform: "Instagram",
+    url: "https://instagram.com/ai4inclusivegh",
+    createdAt: "",
+    updatedAt: "",
+  },
+];
+
 export default function Community() {
   const [email, setEmail] = useState("");
   const [eventModalOpen, setEventModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [eventApplicationForm, setEventApplicationForm] = useState({
     name: "",
     email: "",
     phone: "",
     reason: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false);
+  const [isSubmittingEvent, setIsSubmittingEvent] = useState(false);
 
   // Fetch events from API
   const { data: eventData = DEFAULT_EVENTS } = useQuery({
@@ -86,6 +128,17 @@ export default function Community() {
   const upcomingEvents =
     eventData && eventData.length > 0 ? eventData : DEFAULT_EVENTS;
 
+  const { data: socialData = DEFAULT_SOCIALS } = useQuery({
+    queryKey: ["socials"],
+    queryFn: () => fetchSocials(),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const socials =
+    socialData && socialData.length > 0 ? socialData : DEFAULT_SOCIALS;
+
   const handleEventInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -98,36 +151,71 @@ export default function Community() {
 
   const handleEventApplicationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setIsSubmittingEvent(true);
 
     try {
-      const response = await fetch("/api/event-registration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...eventApplicationForm,
-          eventTitle: selectedEvent?.title,
-        }),
+      const eventTitle = selectedEvent?.title?.trim() ?? "";
+      const subject = eventTitle
+        ? `Event Registration: ${eventTitle}`
+        : "Event Registration";
+
+      const messageLines = [
+        eventTitle ? `Event: ${eventTitle}` : null,
+        eventApplicationForm.reason?.trim()
+          ? `Reason: ${eventApplicationForm.reason.trim()}`
+          : null,
+      ].filter(Boolean);
+
+      await sendContactMessage({
+        name: eventApplicationForm.name,
+        email: eventApplicationForm.email,
+        phone: eventApplicationForm.phone || null,
+        subject,
+        message: messageLines.join("\n"),
       });
 
-      if (response.ok) {
-        alert(
-          "Thank you for registering! We'll send you confirmation details soon.",
-        );
-        setEventModalOpen(false);
-        setEventApplicationForm({ name: "", email: "", phone: "", reason: "" });
-      } else {
-        alert(
-          "There was an error registering for this event. Please try again.",
-        );
-      }
+      alert(
+        "Thank you for registering! We'll send you confirmation details soon.",
+      );
+      setEventModalOpen(false);
+      setEventApplicationForm({ name: "", email: "", phone: "", reason: "" });
     } catch (error) {
       console.error("Error submitting event registration:", error);
       alert("There was an error registering for this event. Please try again.");
     } finally {
-      setIsSubmitting(false);
+      setIsSubmittingEvent(false);
+    }
+  };
+
+  const handleContactInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setContactForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingContact(true);
+
+    try {
+      await sendContactMessage({
+        name: contactForm.name,
+        email: contactForm.email,
+        subject: contactForm.subject || null,
+        message: contactForm.message,
+      });
+
+      alert("Thanks! Your message has been sent.");
+      setContactForm({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      alert("There was an error sending your message. Please try again.");
+    } finally {
+      setIsSubmittingContact(false);
     }
   };
 
@@ -178,32 +266,7 @@ export default function Community() {
     // }
   ];
 
-  const socialChannels = [
-    {
-      platform: "Twitter",
-      handle: "@AI4InclusiveGh",
-      followers: "45.2k",
-      description: "Daily updates and campaign highlights",
-    },
-    {
-      platform: "Facebook",
-      handle: "AI4InclusiveGhana",
-      followers: "38.7k",
-      description: "Community discussions and events",
-    },
-    {
-      platform: "LinkedIn",
-      handle: "AI4Inclusive Ghana",
-      followers: "22.1k",
-      description: "Professional networking and policy updates",
-    },
-    {
-      platform: "Instagram",
-      handle: "@ai4inclusivegh",
-      followers: "31.5k",
-      description: "Stories and visual advocacy content",
-    },
-  ];
+  // Social media channels are loaded from the backend (/socials/all)
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -218,6 +281,12 @@ export default function Community() {
       default:
         return "bg-primary/10 text-primary";
     }
+  };
+
+  const normalizeExternalUrl = (url: string) => {
+    const trimmed = (url ?? "").trim();
+    if (!trimmed) return "#";
+    return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   };
 
   return (
@@ -390,33 +459,38 @@ export default function Community() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {socialChannels.map((channel, index) => (
-              <Card
-                key={index}
-                className="bg-gradient-card border-0 text-center"
-              >
-                <CardContent className="pt-6 space-y-4">
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-lg">
-                      {channel.platform}
-                    </h4>
-                    <p className="text-sm text-primary font-mono">
-                      {channel.handle}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {channel.followers} followers
-                    </p>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {channel.description}
-                  </p>
-                  <Button variant="outline" size="sm" className="w-full">
-                    <ExternalLink className="mr-2 h-3 w-3" />
-                    Follow
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+            {socials.map((channel, index) => {
+              const href = normalizeExternalUrl(channel.url);
+
+              return (
+                <Card
+                  key={index}
+                  className="bg-gradient-card border-0 text-center"
+                >
+                  <CardContent className="pt-6 space-y-4">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-lg">
+                        {channel.platform}
+                      </h4>
+                      <p className="text-sm text-primary font-mono">
+                        {channel.url}
+                      </p>
+                    </div>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                    >
+                      <a href={href} target="_blank" rel="noreferrer">
+                        <ExternalLink className="mr-2 h-3 w-3" />
+                        Follow
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </section>
 
@@ -433,35 +507,67 @@ export default function Community() {
                   to hear from you.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Name</label>
-                    <Input placeholder="Your full name" />
+              <CardContent>
+                <form onSubmit={handleContactSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Name</label>
+                      <Input
+                        name="name"
+                        placeholder="Your full name"
+                        value={contactForm.name}
+                        onChange={handleContactInputChange}
+                        required
+                        disabled={isSubmittingContact}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Email</label>
+                      <Input
+                        name="email"
+                        type="email"
+                        placeholder="your.email@example.com"
+                        value={contactForm.email}
+                        onChange={handleContactInputChange}
+                        required
+                        disabled={isSubmittingContact}
+                      />
+                    </div>
                   </div>
+
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Email</label>
-                    <Input type="email" placeholder="your.email@example.com" />
+                    <label className="text-sm font-medium">Subject</label>
+                    <Input
+                      name="subject"
+                      placeholder="What's this about?"
+                      value={contactForm.subject}
+                      onChange={handleContactInputChange}
+                      disabled={isSubmittingContact}
+                    />
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Subject</label>
-                  <Input placeholder="What's this about?" />
-                </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Message</label>
+                    <Textarea
+                      name="message"
+                      placeholder="Tell us more about your question or idea..."
+                      rows={4}
+                      value={contactForm.message}
+                      onChange={handleContactInputChange}
+                      required
+                      disabled={isSubmittingContact}
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Message</label>
-                  <Textarea
-                    placeholder="Tell us more about your question or idea..."
-                    rows={4}
-                  />
-                </div>
-
-                <Button className="w-full bg-gradient-hero hover:opacity-90">
-                  <Send className="mr-2 h-4 w-4" />
-                  Send Message
-                </Button>
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-hero hover:opacity-90"
+                    disabled={isSubmittingContact}
+                  >
+                    <Send className="mr-2 h-4 w-4" />
+                    {isSubmittingContact ? "Sending..." : "Send Message"}
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </div>
@@ -535,16 +641,16 @@ export default function Community() {
                   type="button"
                   variant="outline"
                   onClick={() => setEventModalOpen(false)}
-                  disabled={isSubmitting}
+                  disabled={isSubmittingEvent}
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   className="bg-gradient-hero hover:opacity-90"
-                  disabled={isSubmitting}
+                  disabled={isSubmittingEvent}
                 >
-                  {isSubmitting ? "Registering..." : "Register for Event"}
+                  {isSubmittingEvent ? "Registering..." : "Register for Event"}
                 </Button>
               </div>
             </form>

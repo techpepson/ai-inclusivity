@@ -69,3 +69,11 @@ export type Event = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Social = {
+  id: string;
+  platform: string;
+  url: string;
+  createdAt: string;
+  updatedAt: string;
+};

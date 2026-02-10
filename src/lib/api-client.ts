@@ -7,6 +7,7 @@ import type {
   TeamMember,
   Sponsor,
   Event,
+  Social,
 } from "./types";
 
 // Build a base URL that respects dev/prod environments.
@@ -21,10 +22,27 @@ function buildBaseCandidates() {
   if (prodBase) candidates.push(prodBase);
   if (devBase) candidates.push(devBase);
   if (typeof window !== "undefined") candidates.push(window.location.origin);
-  // Deduplicate while preserving order.
-  return candidates.filter(
+
+  const uniq = candidates.filter(
     (url, idx) => candidates.indexOf(url) === idx && !!url,
   );
+
+  // Expand with /api (and without /api) variants to tolerate
+  // differing backend prefix configurations across environments.
+  const expanded: string[] = [];
+  for (const base of uniq) {
+    expanded.push(base);
+
+    const withoutTrailingSlash = base.replace(/\/$/, "");
+    if (/\/api$/i.test(withoutTrailingSlash)) {
+      expanded.push(withoutTrailingSlash.replace(/\/api$/i, ""));
+    } else {
+      expanded.push(`${withoutTrailingSlash}/api`);
+    }
+  }
+
+  // Deduplicate while preserving order.
+  return expanded.filter((url, idx) => expanded.indexOf(url) === idx && !!url);
 }
 
 const baseCandidates = buildBaseCandidates();
@@ -32,7 +50,9 @@ const apiKey = import.meta.env.VITE_API_KEY;
 
 function toUrl(base: string, path: string) {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return `${base}${normalizedPath}`.replace(/([^:]\/)(\/)+/g, "$1/");
+  const merged = `${base}${normalizedPath}`.replace(/([^:]\/)(\/)+/g, "$1/");
+  // Avoid accidentally doubled global prefixes like /api/api.
+  return merged.replace(/\/api\/api\//gi, "/api/");
 }
 
 async function safeJson<T>(response: Response): Promise<T | null> {
@@ -695,4 +715,121 @@ export async function fetchEvents(): Promise<Event[]> {
   }
 
   return [];
+}
+
+export async function fetchSocials(): Promise<Social[]> {
+  const paths = [
+    "/socials/all",
+    "/api/socials/all",
+    "/socials",
+    "/api/socials",
+    "/get-socials",
+  ];
+
+  for (const base of baseCandidates) {
+    for (const path of paths) {
+      const url = toUrl(base, path);
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            ...(apiKey ? { "x-api-key": apiKey } : {}),
+          },
+        });
+
+        if (!res.ok) continue;
+
+        const json = await safeJson<
+          Social[] | { socials?: unknown } | { data?: unknown }
+        >(res);
+        const payload = Array.isArray(json)
+          ? json
+          : json && typeof json === "object" && "socials" in json
+            ? (json as any).socials
+            : json && typeof json === "object" && "data" in json
+              ? (json as any).data
+              : null;
+
+        if (!Array.isArray(payload)) continue;
+
+        const validated: Social[] = [];
+        for (const item of payload) {
+          if (!item || typeof item !== "object") {
+            console.warn("Skipping invalid social item:", item);
+            continue;
+          }
+
+          const platform =
+            typeof (item as any).platform === "string" &&
+            (item as any).platform.trim()
+              ? (item as any).platform.trim()
+              : null;
+
+          const socialUrl =
+            typeof (item as any).url === "string" && (item as any).url.trim()
+              ? (item as any).url.trim()
+              : null;
+
+          if (!platform || !socialUrl) {
+            console.warn("Skipping social with missing required fields:", item);
+            continue;
+          }
+
+          validated.push({
+            id: (item as any).id ?? "",
+            platform,
+            url: socialUrl,
+            createdAt: (item as any).createdAt ?? "",
+            updatedAt: (item as any).updatedAt ?? "",
+          });
+        }
+
+        console.log(`Fetched ${validated.length} socials from ${url}:`);
+        if (validated.length > 0) return validated;
+      } catch (_) {
+        continue;
+      }
+    }
+  }
+
+  return [];
+}
+
+export type ContactMessagePayload = {
+  name: string;
+  email: string;
+  message: string;
+  subject?: string | null;
+  phone?: string | null;
+};
+
+export async function sendContactMessage(payload: ContactMessagePayload) {
+  const paths = ["/contact/send", "/api/contact/send"];
+
+  for (const base of baseCandidates) {
+    for (const path of paths) {
+      const url = toUrl(base, path);
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(apiKey ? { "x-api-key": apiKey } : {}),
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) continue;
+
+        // Return whatever the backend responds with (usually created ContactMessage)
+        return await safeJson<unknown>(res);
+      } catch (_) {
+        continue;
+      }
+    }
+  }
+
+  throw new Error("Failed to send contact message");
 }
