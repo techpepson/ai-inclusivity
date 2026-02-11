@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Menu,
@@ -15,10 +15,99 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { logo } from "@/images/images";
+import { fetchFocusAreas } from "@/lib/api-client";
+import type { FocusArea } from "@/lib/types";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+  const defaultThemesSubmenu = useMemo<
+    Array<{
+      name: string;
+      href: string;
+      icon: React.ComponentType<{ className?: string }>;
+    }>
+  >(
+    () => [
+      {
+        name: "Persons with Disabilities",
+        href: "/themes/disabilities",
+        icon: Users,
+      },
+      { name: "Violence Against Women", href: "/themes/vaw", icon: Shield },
+      {
+        name: "Mental Health & Wellness",
+        href: "/themes/mental-health",
+        icon: Heart,
+      },
+      { name: "LGBTQ+ Communities", href: "/themes/lgbtq", icon: Palette },
+    ],
+    [],
+  );
+
+  const [themesSubmenu, setThemesSubmenu] = useState(defaultThemesSubmenu);
+
+  useEffect(() => {
+    let active = true;
+
+    const toFocusAreaItem = (fa: FocusArea) => {
+      const name = typeof fa.title === "string" ? fa.title.trim() : "";
+      if (!name || !fa.id) return null;
+
+      const title = name.toLowerCase();
+      const hashTag = (fa.hashTag ?? "").toLowerCase();
+
+      const icon = (() => {
+        if (title.includes("disabil") || hashTag.includes("disabil"))
+          return Users;
+        if (
+          title.includes("violence") ||
+          title.includes("women") ||
+          title.includes("vaw") ||
+          hashTag.includes("vaw")
+        )
+          return Shield;
+        if (title.includes("mental") || title.includes("wellness"))
+          return Heart;
+        if (
+          title.includes("lgbt") ||
+          title.includes("queer") ||
+          hashTag.includes("lgbt")
+        ) {
+          return Palette;
+        }
+        return FileText;
+      })();
+
+      return {
+        name,
+        href: `/focus/${encodeURIComponent(fa.id)}`,
+        icon,
+      };
+    };
+
+    fetchFocusAreas()
+      .then((rows) => {
+        if (!active) return;
+        if (!Array.isArray(rows) || rows.length === 0) return;
+
+        const mapped = rows.map(toFocusAreaItem).filter(Boolean) as Array<{
+          name: string;
+          href: string;
+          icon: React.ComponentType<{ className?: string }>;
+        }>;
+
+        if (mapped.length > 0) setThemesSubmenu(mapped);
+      })
+      .catch(() => {
+        // Keep defaults on error.
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [defaultThemesSubmenu]);
 
   const navigation = [
     { name: "Home", href: "/", icon: null },
@@ -27,20 +116,7 @@ export function Navigation() {
       name: "Themes",
       href: "/themes",
       icon: null,
-      submenu: [
-        {
-          name: "Persons with Disabilities",
-          href: "/themes/disabilities",
-          icon: Users,
-        },
-        { name: "Violence Against Women", href: "/themes/vaw", icon: Shield },
-        {
-          name: "Mental Health & Wellness",
-          href: "/themes/mental-health",
-          icon: Heart,
-        },
-        { name: "LGBTQ+ Communities", href: "/themes/lgbtq", icon: Palette },
-      ],
+      submenu: themesSubmenu,
     },
     // { name: "Analytics", href: "/analytics", icon: BarChart3 },
     // { name: "Reports", href: "/reports", icon: FileText },

@@ -77,3 +77,48 @@ export type Social = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type KeyVoice = {
+  id: string;
+  name: string;
+  description: string;
+  followers?: number | null;
+  focusAreaId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type InspiringStory = {
+  id: string;
+  speaker: string;
+  story: string;
+  focusAreaId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type SupportingOrganization = {
+  id: string;
+  name: string;
+  description: string;
+  email: string;
+  website?: string | null;
+  focusAreaId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type FocusArea = {
+  id: string;
+  title: string;
+  images: string[];
+  hashTag: string;
+  description: string;
+  statsLabel?: string;
+  statsValue?: string;
+  keyVoices?: KeyVoice[];
+  inspiringStories?: InspiringStory[];
+  supportingOrganizations?: SupportingOrganization[];
+  createdAt?: string;
+  updatedAt?: string;
+};

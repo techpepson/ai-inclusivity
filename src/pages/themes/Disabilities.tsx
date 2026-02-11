@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Users, TrendingUp, ExternalLink, Heart } from "lucide-react";
 import {
   Card,
@@ -8,9 +10,66 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { fetchFocusAreaById, fetchFocusAreas } from "@/lib/api-client";
+import type { FocusArea } from "@/lib/types";
 import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
 
 export default function Disabilities() {
+  const [focusArea, setFocusArea] = useState<FocusArea | null>(null);
+  const [searchParams] = useSearchParams();
+  const focusAreaId = searchParams.get("id");
+
+  useEffect(() => {
+    let active = true;
+
+    (async () => {
+      try {
+        if (focusAreaId) {
+          const exact = await fetchFocusAreaById(focusAreaId);
+          if (active && exact) {
+            setFocusArea(exact);
+            return;
+          }
+        }
+
+        const all = await fetchFocusAreas();
+        if (!active) return;
+
+        const normalize = (value: string) => value.trim().toLowerCase();
+        const expectedTags = [
+          "#accessibilityfirst",
+          "#disabilityrightsgh",
+          "#pwdvoices",
+          "#pwdvoicesgh",
+          "#inclusionmatters",
+        ];
+
+        const matched =
+          all.find((fa) => expectedTags.includes(normalize(fa.hashTag))) ??
+          all.find((fa) => normalize(fa.title).includes("disabil")) ??
+          all.find((fa) =>
+            normalize(fa.title).includes("persons with disabilities"),
+          ) ??
+          null;
+
+        setFocusArea(matched);
+      } catch (_) {
+        // Keep placeholders on error.
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [focusAreaId]);
+
+  const formatFollowers = (value?: number | null) => {
+    if (typeof value !== "number" || !Number.isFinite(value)) return "";
+    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+    if (value >= 1_000) return `${Math.round(value / 1_000)}k`;
+    return String(value);
+  };
+
   const stories = [
     {
       name: "Akosua Mensah",
@@ -72,6 +131,62 @@ export default function Disabilities() {
     },
   ];
 
+  const heroTitle =
+    typeof focusArea?.title === "string" && focusArea.title.trim()
+      ? focusArea.title.trim()
+      : "Persons with Disabilities";
+  const heroDescription =
+    typeof focusArea?.description === "string" && focusArea.description.trim()
+      ? focusArea.description.trim()
+      : "Advocating for the rights, inclusion, and full participation of\n            persons with disabilities in Ghanaian society. Together, we're\n            building a more accessible and inclusive Ghana for all.";
+  const heroImageSrc =
+    typeof focusArea?.images?.[0] === "string" && focusArea.images[0].trim()
+      ? focusArea.images[0]
+      : disabilityImage;
+
+  const primaryStatValue =
+    typeof focusArea?.statsValue === "string" && focusArea.statsValue.trim()
+      ? focusArea.statsValue.trim()
+      : "3.2M";
+  const primaryStatLabel =
+    typeof focusArea?.statsLabel === "string" && focusArea.statsLabel.trim()
+      ? focusArea.statsLabel.trim()
+      : "PwDs in Ghana";
+
+  const inspiringStories =
+    Array.isArray(focusArea?.inspiringStories) &&
+    focusArea!.inspiringStories!.length > 0
+      ? focusArea!.inspiringStories!.map((s) => ({
+          name: s.speaker,
+          story: s.story,
+          impact: "",
+          hashtag:
+            typeof focusArea?.hashTag === "string" && focusArea.hashTag.trim()
+              ? focusArea.hashTag.trim()
+              : "",
+        }))
+      : stories;
+
+  const keyVoices =
+    Array.isArray(focusArea?.keyVoices) && focusArea!.keyVoices!.length > 0
+      ? focusArea!.keyVoices!.map((kv) => ({
+          name: kv.name,
+          followers: formatFollowers(kv.followers),
+          focus: kv.description,
+        }))
+      : keyInfluencers;
+
+  const supportingOrgs =
+    Array.isArray(focusArea?.supportingOrganizations) &&
+    focusArea!.supportingOrganizations!.length > 0
+      ? focusArea!.supportingOrganizations!.map((org) => ({
+          title: org.name,
+          description: org.description,
+          contact: org.email || org.website || "",
+          services: [] as string[],
+        }))
+      : resources;
+
   return (
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
@@ -79,7 +194,7 @@ export default function Disabilities() {
         <div className="text-center mb-16">
           <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
             <img
-              src={disabilityImage}
+              src={heroImageSrc}
               alt="Persons with Disabilities in Ghana"
               className="w-full h-full object-cover"
             />
@@ -89,14 +204,12 @@ export default function Disabilities() {
                 <Users className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-                Persons with Disabilities
+                {heroTitle}
               </h1>
             </div>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Advocating for the rights, inclusion, and full participation of
-            persons with disabilities in Ghanaian society. Together, we're
-            building a more accessible and inclusive Ghana for all.
+            {heroDescription}
           </p>
         </div>
 
@@ -105,9 +218,11 @@ export default function Disabilities() {
           <Card className="bg-gradient-card border-0 text-center">
             <CardContent className="pt-6">
               <div className="text-3xl font-bold text-theme-disability mb-2">
-                3.2M
+                {primaryStatValue}
               </div>
-              <p className="text-sm text-muted-foreground">PwDs in Ghana</p>
+              <p className="text-sm text-muted-foreground">
+                {primaryStatLabel}
+              </p>
             </CardContent>
           </Card>
           <Card className="bg-gradient-card border-0 text-center">
@@ -182,7 +297,7 @@ export default function Disabilities() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {stories.map((story, index) => (
+            {inspiringStories.map((story, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardHeader>
                   <div className="flex items-center space-x-4">
@@ -191,20 +306,24 @@ export default function Disabilities() {
                     </div>
                     <div>
                       <CardTitle className="text-xl">{story.name}</CardTitle>
-                      <Badge className="bg-theme-disability/10 text-theme-disability">
-                        {story.hashtag}
-                      </Badge>
+                      {story.hashtag ? (
+                        <Badge className="bg-theme-disability/10 text-theme-disability">
+                          {story.hashtag}
+                        </Badge>
+                      ) : null}
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground">{story.story}</p>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="font-semibold text-green-600">
-                      {story.impact}
-                    </span>
-                  </div>
+                  {story.impact ? (
+                    <div className="flex items-center space-x-2 text-sm">
+                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <span className="font-semibold text-green-600">
+                        {story.impact}
+                      </span>
+                    </div>
+                  ) : null}
                 </CardContent>
               </Card>
             ))}
@@ -222,7 +341,7 @@ export default function Disabilities() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {keyInfluencers.map((influencer, index) => (
+            {keyVoices.map((influencer, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardContent className="pt-6 text-center space-y-3">
                   <div className="w-12 h-12 bg-theme-disability/10 rounded-full flex items-center justify-center mx-auto">
@@ -232,9 +351,11 @@ export default function Disabilities() {
                     <div className="font-semibold text-theme-disability">
                       {influencer.name}
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {influencer.followers} followers
-                    </div>
+                    {influencer.followers ? (
+                      <div className="text-sm text-muted-foreground">
+                        {influencer.followers} followers
+                      </div>
+                    ) : null}
                     <div className="text-xs text-muted-foreground mt-1">
                       {influencer.focus}
                     </div>
@@ -258,7 +379,7 @@ export default function Disabilities() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {resources.map((resource, index) => (
+            {supportingOrgs.map((resource, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardHeader>
                   <CardTitle className="text-xl">{resource.title}</CardTitle>
@@ -266,9 +387,11 @@ export default function Disabilities() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <div className="text-sm">
-                      <strong>Contact:</strong> {resource.contact}
-                    </div>
+                    {resource.contact ? (
+                      <div className="text-sm">
+                        <strong>Contact:</strong> {resource.contact}
+                      </div>
+                    ) : null}
                     <div className="flex flex-wrap gap-2">
                       {resource.services.map((service, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">

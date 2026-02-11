@@ -11,6 +11,7 @@ import Reports from "./pages/Reports";
 import GetInvolved from "./pages/GetInvolved";
 import Resources from "./pages/Resources";
 import Community from "./pages/Community";
+import FocusAreaDetails from "./pages/FocusAreaDetails";
 import Disabilities from "./pages/themes/Disabilities";
 import VAW from "./pages/themes/VAW";
 import MentalHealth from "./pages/themes/MentalHealth";
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/get-involved" element={<GetInvolved />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/focus/:id" element={<FocusAreaDetails />} />
             <Route path="/themes" element={<Index />} />
             <Route path="/themes/disabilities" element={<Disabilities />} />
             <Route path="/themes/vaw" element={<VAW />} />

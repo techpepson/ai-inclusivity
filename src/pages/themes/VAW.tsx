@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Shield, TrendingUp, Phone, AlertTriangle } from "lucide-react";
 import {
   Card,
@@ -9,9 +11,58 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { fetchFocusAreaById, fetchFocusAreas } from "@/lib/api-client";
+import type { FocusArea } from "@/lib/types";
 import womenImage from "@/assets/women-empowerment.jpg";
 
 export default function VAW() {
+  const [focusArea, setFocusArea] = useState<FocusArea | null>(null);
+  const [searchParams] = useSearchParams();
+  const focusAreaId = searchParams.get("id");
+
+  useEffect(() => {
+    let active = true;
+
+    (async () => {
+      try {
+        if (focusAreaId) {
+          const exact = await fetchFocusAreaById(focusAreaId);
+          if (active && exact) {
+            setFocusArea(exact);
+            return;
+          }
+        }
+
+        const all = await fetchFocusAreas();
+        if (!active) return;
+
+        const normalize = (value: string) => value.trim().toLowerCase();
+        const expectedTags = ["#endvaw", "#standwithwomen", "#gbvawareness"];
+
+        const matched =
+          all.find((fa) => expectedTags.includes(normalize(fa.hashTag))) ??
+          all.find((fa) => normalize(fa.title).includes("violence")) ??
+          all.find((fa) => normalize(fa.title).includes("women")) ??
+          null;
+
+        setFocusArea(matched);
+      } catch (_) {
+        // Keep placeholders on error.
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [focusAreaId]);
+
+  const formatFollowers = (value?: number | null) => {
+    if (typeof value !== "number" || !Number.isFinite(value)) return "";
+    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+    if (value >= 1_000) return `${Math.round(value / 1_000)}k`;
+    return String(value);
+  };
+
   const campaigns = [
     {
       name: "#EndVAW Campaign",
@@ -56,6 +107,7 @@ export default function VAW() {
       ],
       hotline: "191 (Toll-free)",
       email: "dovvsu@ghanapolice.gov.gh",
+      website: "",
     },
     {
       name: "Women's Rights Coalition Ghana",
@@ -64,6 +116,7 @@ export default function VAW() {
       services: ["Legal Aid", "Counseling", "Advocacy", "Education"],
       hotline: "+233-302-123-456",
       email: "info@wrcghana.org",
+      website: "",
     },
     {
       name: "Legal Aid for Women",
@@ -77,28 +130,64 @@ export default function VAW() {
       ],
       hotline: "+233-244-567-890",
       email: "legal@womensaid.gh",
+      website: "",
     },
   ];
+
+  const heroTitle =
+    typeof focusArea?.title === "string" && focusArea.title.trim()
+      ? focusArea.title.trim()
+      : "Violence Against Women";
+  const heroDescription =
+    typeof focusArea?.description === "string" && focusArea.description.trim()
+      ? focusArea.description.trim()
+      : "Fighting gender-based violence through awareness, advocacy, and\n            support. Together, we're working to create safe spaces and empower\n            women across Ghana.";
+  const heroImageSrc =
+    typeof focusArea?.images?.[0] === "string" && focusArea.images[0].trim()
+      ? focusArea.images[0]
+      : womenImage;
+
+  const primaryStatValue =
+    typeof focusArea?.statsValue === "string" && focusArea.statsValue.trim()
+      ? focusArea.statsValue.trim()
+      : "1 in 3";
+  const primaryStatLabel =
+    typeof focusArea?.statsLabel === "string" && focusArea.statsLabel.trim()
+      ? focusArea.statsLabel.trim()
+      : "Women experience GBV";
+
+  const keyVoices =
+    Array.isArray(focusArea?.keyVoices) && focusArea!.keyVoices!.length > 0
+      ? focusArea!.keyVoices!.map((kv) => ({
+          name: kv.name,
+          followers: formatFollowers(kv.followers),
+          focus: kv.description,
+        }))
+      : keyInfluencers;
+
+  const supportingOrgs =
+    Array.isArray(focusArea?.supportingOrganizations) &&
+    focusArea!.supportingOrganizations!.length > 0
+      ? focusArea!.supportingOrganizations!.map((org) => ({
+          name: org.name,
+          description: org.description,
+          services: [] as string[],
+          hotline: "",
+          email: org.email,
+          website: org.website ?? "",
+        }))
+      : supportServices;
 
   return (
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Emergency Alert */}
-        <Alert className="mb-8 border-red-200 bg-red-50">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
-          <AlertTitle className="text-red-800">Need Immediate Help?</AlertTitle>
-          <AlertDescription className="text-red-700">
-            If you or someone you know is in immediate danger, call{" "}
-            <strong>191</strong> (DOVVSU Hotline) or <strong>999</strong>{" "}
-            (Emergency Services) immediately.
-          </AlertDescription>
-        </Alert>
 
         {/* Hero Section */}
         <div className="text-center mb-16">
           <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
             <img
-              src={womenImage}
+              src={heroImageSrc}
               alt="Violence Against Women prevention in Ghana"
               className="w-full h-full object-cover"
             />
@@ -108,14 +197,12 @@ export default function VAW() {
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-                Violence Against Women
+                {heroTitle}
               </h1>
             </div>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Fighting gender-based violence through awareness, advocacy, and
-            support. Together, we're working to create safe spaces and empower
-            women across Ghana.
+            {heroDescription}
           </p>
         </div>
 
@@ -124,10 +211,10 @@ export default function VAW() {
           <Card className="bg-gradient-card border-0 text-center">
             <CardContent className="pt-6">
               <div className="text-3xl font-bold text-theme-vaw mb-2">
-                1 in 3
+                {primaryStatValue}
               </div>
               <p className="text-sm text-muted-foreground">
-                Women experience GBV
+                {primaryStatLabel}
               </p>
             </CardContent>
           </Card>
@@ -259,7 +346,7 @@ export default function VAW() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {keyInfluencers.map((influencer, index) => (
+            {keyVoices.map((influencer, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardContent className="pt-6 text-center space-y-3">
                   <div className="w-12 h-12 bg-theme-vaw/10 rounded-full flex items-center justify-center mx-auto">
@@ -269,9 +356,11 @@ export default function VAW() {
                     <div className="font-semibold text-theme-vaw">
                       {influencer.name}
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {influencer.followers} followers
-                    </div>
+                    {influencer.followers ? (
+                      <div className="text-sm text-muted-foreground">
+                        {influencer.followers} followers
+                      </div>
+                    ) : null}
                     <div className="text-xs text-muted-foreground mt-1">
                       {influencer.focus}
                     </div>
@@ -295,7 +384,7 @@ export default function VAW() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {supportServices.map((service, index) => (
+            {supportingOrgs.map((service, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardHeader>
                   <CardTitle className="text-xl">{service.name}</CardTitle>
@@ -303,15 +392,24 @@ export default function VAW() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Phone className="h-4 w-4 text-theme-vaw" />
-                      <span className="font-semibold text-theme-vaw">
-                        {service.hotline}
-                      </span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      <strong>Email:</strong> {service.email}
-                    </div>
+                    {service.hotline ? (
+                      <div className="flex items-center space-x-2">
+                        <Phone className="h-4 w-4 text-theme-vaw" />
+                        <span className="font-semibold text-theme-vaw">
+                          {service.hotline}
+                        </span>
+                      </div>
+                    ) : null}
+                    {service.email ? (
+                      <div className="text-sm text-muted-foreground">
+                        <strong>Email:</strong> {service.email}
+                      </div>
+                    ) : null}
+                    {service.website ? (
+                      <div className="text-sm text-muted-foreground">
+                        <strong>Website:</strong> {service.website}
+                      </div>
+                    ) : null}
                     <div className="flex flex-wrap gap-2">
                       {service.services.map((serviceType, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">

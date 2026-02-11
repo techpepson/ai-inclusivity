@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Palette, TrendingUp, Phone, Heart } from "lucide-react";
 import {
   Card,
@@ -8,9 +10,65 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { fetchFocusAreaById, fetchFocusAreas } from "@/lib/api-client";
+import type { FocusArea } from "@/lib/types";
 import lgbtqImage from "@/assets/lgbtq-community.jpg";
 
 export default function LGBTQ() {
+  const [focusArea, setFocusArea] = useState<FocusArea | null>(null);
+  const [searchParams] = useSearchParams();
+  const focusAreaId = searchParams.get("id");
+
+  useEffect(() => {
+    let active = true;
+
+    (async () => {
+      try {
+        if (focusAreaId) {
+          const exact = await fetchFocusAreaById(focusAreaId);
+          if (active && exact) {
+            setFocusArea(exact);
+            return;
+          }
+        }
+
+        const all = await fetchFocusAreas();
+        if (!active) return;
+
+        const normalize = (value: string) => value.trim().toLowerCase();
+        const expectedTags = [
+          "#prideghana",
+          "#inclusionforall",
+          "#loveislove",
+          "#lgbtrights",
+          "#lgbqrights",
+          "#lgbtqrights",
+        ];
+
+        const matched =
+          all.find((fa) => expectedTags.includes(normalize(fa.hashTag))) ??
+          all.find((fa) => normalize(fa.title).includes("lgbt")) ??
+          all.find((fa) => normalize(fa.title).includes("queer")) ??
+          null;
+
+        setFocusArea(matched);
+      } catch (_) {
+        // Keep placeholders on error.
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [focusAreaId]);
+
+  const formatFollowers = (value?: number | null) => {
+    if (typeof value !== "number" || !Number.isFinite(value)) return "";
+    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+    if (value >= 1_000) return `${Math.round(value / 1_000)}k`;
+    return String(value);
+  };
+
   const inspiringStories = [
     {
       name: "Ama Boateng",
@@ -66,6 +124,7 @@ export default function LGBTQ() {
       ],
       hotline: "+233-244-777-888",
       email: "support@lgbtqrights.gh",
+      website: "",
     },
     {
       name: "Safe Spaces Network",
@@ -74,6 +133,7 @@ export default function LGBTQ() {
       services: ["Safe Spaces", "Support Groups", "Counseling", "Referrals"],
       hotline: "+233-302-444-555",
       email: "info@safespaces.gh",
+      website: "",
     },
     {
       name: "Pride Counseling Services",
@@ -81,8 +141,67 @@ export default function LGBTQ() {
       services: ["Counseling", "Therapy", "Crisis Support", "Family Support"],
       hotline: "+233-244-222-444",
       email: "counseling@pride.gh",
+      website: "",
     },
   ];
+
+  const heroTitle =
+    typeof focusArea?.title === "string" && focusArea.title.trim()
+      ? focusArea.title.trim()
+      : "LGBTQ+ Communities";
+  const heroDescription =
+    typeof focusArea?.description === "string" && focusArea.description.trim()
+      ? focusArea.description.trim()
+      : "Supporting inclusion, celebrating diversity, and fighting for equal\n            rights. Every person deserves to live authentically with dignity and\n            respect.";
+  const heroImageSrc =
+    typeof focusArea?.images?.[0] === "string" && focusArea.images[0].trim()
+      ? focusArea.images[0]
+      : lgbtqImage;
+
+  const primaryStatValue =
+    typeof focusArea?.statsValue === "string" && focusArea.statsValue.trim()
+      ? focusArea.statsValue.trim()
+      : "5-10%";
+  const primaryStatLabel =
+    typeof focusArea?.statsLabel === "string" && focusArea.statsLabel.trim()
+      ? focusArea.statsLabel.trim()
+      : "Population estimate";
+
+  const inspiringStoriesData =
+    Array.isArray(focusArea?.inspiringStories) &&
+    focusArea!.inspiringStories!.length > 0
+      ? focusArea!.inspiringStories!.map((s) => ({
+          name: s.speaker,
+          story: s.story,
+          impact: "",
+          hashtag:
+            typeof focusArea?.hashTag === "string" && focusArea.hashTag.trim()
+              ? focusArea.hashTag.trim()
+              : "",
+        }))
+      : inspiringStories;
+
+  const keyVoices =
+    Array.isArray(focusArea?.keyVoices) && focusArea!.keyVoices!.length > 0
+      ? focusArea!.keyVoices!.map((kv) => ({
+          name: kv.name,
+          followers: formatFollowers(kv.followers),
+          focus: kv.description,
+        }))
+      : keyInfluencers;
+
+  const supportingOrgs =
+    Array.isArray(focusArea?.supportingOrganizations) &&
+    focusArea!.supportingOrganizations!.length > 0
+      ? focusArea!.supportingOrganizations!.map((org) => ({
+          name: org.name,
+          description: org.description,
+          services: [] as string[],
+          hotline: "",
+          email: org.email,
+          website: org.website ?? "",
+        }))
+      : supportServices;
 
   return (
     <div className="min-h-screen py-20">
@@ -91,7 +210,7 @@ export default function LGBTQ() {
         <div className="text-center mb-16">
           <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
             <img
-              src={lgbtqImage}
+              src={heroImageSrc}
               alt="LGBTQ+ Communities in Ghana"
               className="w-full h-full object-cover"
             />
@@ -101,14 +220,12 @@ export default function LGBTQ() {
                 <Palette className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-                LGBTQ+ Communities
+                {heroTitle}
               </h1>
             </div>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Supporting inclusion, celebrating diversity, and fighting for equal
-            rights. Every person deserves to live authentically with dignity and
-            respect.
+            {heroDescription}
           </p>
         </div>
 
@@ -117,10 +234,10 @@ export default function LGBTQ() {
           <Card className="bg-gradient-card border-0 text-center">
             <CardContent className="pt-6">
               <div className="text-3xl font-bold text-theme-lgbtq mb-2">
-                5-10%
+                {primaryStatValue}
               </div>
               <p className="text-sm text-muted-foreground">
-                Population estimate
+                {primaryStatLabel}
               </p>
             </CardContent>
           </Card>
@@ -194,7 +311,7 @@ export default function LGBTQ() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {inspiringStories.map((story, index) => (
+            {inspiringStoriesData.map((story, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardHeader>
                   <div className="flex items-center space-x-4">
@@ -203,20 +320,24 @@ export default function LGBTQ() {
                     </div>
                     <div>
                       <CardTitle className="text-xl">{story.name}</CardTitle>
-                      <Badge className="bg-theme-lgbtq/10 text-theme-lgbtq">
-                        {story.hashtag}
-                      </Badge>
+                      {story.hashtag ? (
+                        <Badge className="bg-theme-lgbtq/10 text-theme-lgbtq">
+                          {story.hashtag}
+                        </Badge>
+                      ) : null}
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground">{story.story}</p>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="font-semibold text-green-600">
-                      {story.impact}
-                    </span>
-                  </div>
+                  {story.impact ? (
+                    <div className="flex items-center space-x-2 text-sm">
+                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <span className="font-semibold text-green-600">
+                        {story.impact}
+                      </span>
+                    </div>
+                  ) : null}
                 </CardContent>
               </Card>
             ))}
@@ -234,7 +355,7 @@ export default function LGBTQ() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {keyInfluencers.map((influencer, index) => (
+            {keyVoices.map((influencer, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardContent className="pt-6 text-center space-y-3">
                   <div className="w-12 h-12 bg-theme-lgbtq/10 rounded-full flex items-center justify-center mx-auto">
@@ -244,9 +365,11 @@ export default function LGBTQ() {
                     <div className="font-semibold text-theme-lgbtq">
                       {influencer.name}
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {influencer.followers} followers
-                    </div>
+                    {influencer.followers ? (
+                      <div className="text-sm text-muted-foreground">
+                        {influencer.followers} followers
+                      </div>
+                    ) : null}
                     <div className="text-xs text-muted-foreground mt-1">
                       {influencer.focus}
                     </div>
@@ -270,7 +393,7 @@ export default function LGBTQ() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {supportServices.map((service, index) => (
+            {supportingOrgs.map((service, index) => (
               <Card key={index} className="bg-gradient-card border-0">
                 <CardHeader>
                   <CardTitle className="text-xl">{service.name}</CardTitle>
@@ -278,15 +401,24 @@ export default function LGBTQ() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Phone className="h-4 w-4 text-theme-lgbtq" />
-                      <span className="font-semibold text-theme-lgbtq">
-                        {service.hotline}
-                      </span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      <strong>Email:</strong> {service.email}
-                    </div>
+                    {service.hotline ? (
+                      <div className="flex items-center space-x-2">
+                        <Phone className="h-4 w-4 text-theme-lgbtq" />
+                        <span className="font-semibold text-theme-lgbtq">
+                          {service.hotline}
+                        </span>
+                      </div>
+                    ) : null}
+                    {service.email ? (
+                      <div className="text-sm text-muted-foreground">
+                        <strong>Email:</strong> {service.email}
+                      </div>
+                    ) : null}
+                    {service.website ? (
+                      <div className="text-sm text-muted-foreground">
+                        <strong>Website:</strong> {service.website}
+                      </div>
+                    ) : null}
                     <div className="flex flex-wrap gap-2">
                       {service.services.map((serviceType, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">

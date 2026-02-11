@@ -26,8 +26,12 @@ import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
 import womenImage from "@/assets/women-empowerment.jpg";
 import mentalHealthImage from "@/assets/mental-health-support.jpg";
 import lgbtqImage from "@/assets/lgbtq-community.jpg";
-import { fetchHeroContent, fetchStatistics } from "@/lib/api-client";
-import type { HeroContent } from "@/lib/types";
+import {
+  fetchFocusAreas as fetchFocusAreasFromApi,
+  fetchHeroContent,
+  fetchStatistics,
+} from "@/lib/api-client";
+import type { FocusArea, HeroContent } from "@/lib/types";
 
 const DEFAULT_HERO: HeroContent = {
   title: "AI-Powered Advocacy for",
@@ -132,62 +136,26 @@ export default function Homepage() {
   useEffect(() => {
     let mounted = true;
 
-    async function tryFetchFocus(url: string) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) return null;
-        const json = await res.json();
-        return json?.focusAreas ?? json?.focusAreas ?? null;
-      } catch (e) {
-        return null;
-      }
-    }
-
     async function fetchFocusAreas() {
-      const baseURL = import.meta.env.VITE_BASE_URL || "";
-      const endpoints = [
-        `${baseURL}/api/focus-areas`,
-        `${baseURL}/get-focus-areas`,
-        "/api/focus-areas",
-        "/get-focus-areas",
-      ];
-
-      let raw: unknown = null;
-      for (const ep of endpoints) {
-        raw = await tryFetchFocus(ep);
-        if (raw) break;
-      }
-
-      if (!Array.isArray(raw)) return; // keep defaults
-      const arr = raw as unknown[];
-      if (arr.length === 0) return;
+      const rows: FocusArea[] = await fetchFocusAreasFromApi();
+      if (!Array.isArray(rows) || rows.length === 0) return; // keep defaults
 
       const validated: typeof DEFAULT_FOCUS_AREAS = [];
 
-      for (const item of arr) {
-        if (!item || typeof item !== "object") return; // malformed -> keep defaults
-        const obj = item as Record<string, unknown>;
-
-        const label =
-          typeof obj.label === "string" && obj.label.trim()
-            ? obj.label.trim()
-            : null;
+      for (const row of rows) {
+        const label = typeof row.title === "string" ? row.title.trim() : "";
         const description =
-          typeof obj.description === "string" && obj.description.trim()
-            ? obj.description.trim()
-            : null;
-        const tagsRaw = Array.isArray(obj.hashTags)
-          ? obj.hashTags
-          : Array.isArray(obj.hashtags)
-            ? obj.hashtags
-            : null;
-        const hashtags = Array.isArray(tagsRaw)
-          ? (tagsRaw.filter((t) => typeof t === "string") as string[])
-          : [];
-        const imageRaw =
-          typeof obj.image === "string" ? (obj.image as string).trim() : "";
+          typeof row.description === "string" ? row.description.trim() : "";
+        if (!label || !description) continue;
 
-        if (!label || !description) return; // malformed
+        const hashtags =
+          typeof row.hashTag === "string" && row.hashTag.trim()
+            ? [row.hashTag.trim()]
+            : [];
+        const imageRaw =
+          Array.isArray(row.images) && typeof row.images[0] === "string"
+            ? row.images[0].trim()
+            : "";
 
         // choose a default image if the incoming `image` is empty
         const defaultImage = (() => {
@@ -206,18 +174,15 @@ export default function Homepage() {
 
         const image = imageRaw ? imageRaw : defaultImage;
 
-        // derive icon, color, and href from the label (avoid external dependencies)
+        // derive icon + color from the label (avoid external dependencies)
         const lLower = label.toLowerCase();
         let icon = Users;
         let color = "bg-theme-disability";
-        let href = `/themes/${label
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "")}`;
+        let fallbackHref = "/themes";
         if (lLower.includes("disabil")) {
           icon = Users;
           color = "bg-theme-disability";
-          href = "/themes/disabilities";
+          fallbackHref = "/themes/disabilities";
         } else if (
           lLower.includes("violence") ||
           lLower.includes("vaw") ||
@@ -225,16 +190,20 @@ export default function Homepage() {
         ) {
           icon = Shield;
           color = "bg-theme-vaw";
-          href = "/themes/vaw";
+          fallbackHref = "/themes/vaw";
         } else if (lLower.includes("mental")) {
           icon = Heart;
           color = "bg-theme-mental";
-          href = "/themes/mental-health";
+          fallbackHref = "/themes/mental-health";
         } else if (lLower.includes("lgbt")) {
           icon = Palette;
           color = "bg-theme-lgbtq";
-          href = "/themes/lgbtq";
+          fallbackHref = "/themes/lgbtq";
         }
+
+        const href = row.id
+          ? `/focus/${encodeURIComponent(row.id)}`
+          : fallbackHref;
 
         validated.push({
           label,
@@ -382,6 +351,14 @@ export default function Homepage() {
                           </span>
                         ),
                       )}
+                    </div>
+
+                    <div>
+                      <Link to={theme.href}>
+                        <Button variant="outline" className="w-full">
+                          Read more
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>

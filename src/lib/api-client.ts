@@ -8,6 +8,7 @@ import type {
   Sponsor,
   Event,
   Social,
+  FocusArea,
 } from "./types";
 
 // Build a base URL that respects dev/prod environments.
@@ -18,10 +19,14 @@ const devBase = (import.meta.env.VITE_DEV_URL ?? "").replace(/\/$/, "");
 
 function buildBaseCandidates() {
   const candidates = [] as string[];
-  if (envMode === "development" && devBase) candidates.push(devBase);
-  if (prodBase) candidates.push(prodBase);
-  if (devBase) candidates.push(devBase);
-  if (typeof window !== "undefined") candidates.push(window.location.origin);
+  if (envMode === "development") {
+    if (devBase) candidates.push(devBase);
+    if (typeof window !== "undefined") candidates.push(window.location.origin);
+  } else {
+    if (prodBase) candidates.push(prodBase);
+    if (devBase) candidates.push(devBase);
+    if (typeof window !== "undefined") candidates.push(window.location.origin);
+  }
 
   const uniq = candidates.filter(
     (url, idx) => candidates.indexOf(url) === idx && !!url,
@@ -794,6 +799,205 @@ export async function fetchSocials(): Promise<Social[]> {
   }
 
   return [];
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === "object";
+}
+
+export async function fetchFocusAreas(): Promise<FocusArea[]> {
+  const paths = ["/focus/all", "/focus/get-all", "/focus/getAll"];
+
+  for (const base of baseCandidates) {
+    for (const path of paths) {
+      const url = toUrl(base, path);
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            ...(apiKey ? { "x-api-key": apiKey } : {}),
+          },
+        });
+
+        if (!res.ok) continue;
+
+        const json = await safeJson<unknown>(res);
+        const payload = Array.isArray(json)
+          ? json
+          : isRecord(json)
+            ? ((json["focusAreas"] as unknown) ??
+              (json["data"] as unknown) ??
+              null)
+            : null;
+
+        if (!Array.isArray(payload)) continue;
+
+        const validated: FocusArea[] = [];
+        for (const item of payload) {
+          if (!isRecord(item)) continue;
+
+          const title = item["title"];
+          const description = item["description"];
+          const hashTag = item["hashTag"];
+          if (
+            !isNonEmptyString(title) ||
+            !isNonEmptyString(description) ||
+            !isNonEmptyString(hashTag)
+          ) {
+            continue;
+          }
+
+          const imagesRaw = item["images"];
+          const images = Array.isArray(imagesRaw)
+            ? imagesRaw.filter(
+                (x: unknown) => typeof x === "string" && x.trim().length > 0,
+              )
+            : [];
+
+          const statsLabelRaw = item["statsLabel"];
+          const statsValueRaw = item["statsValue"];
+
+          const keyVoicesRaw = item["keyVoices"];
+          const inspiringStoriesRaw = item["inspiringStories"];
+          const supportingOrganizationsRaw = item["supportingOrganizations"];
+
+          validated.push({
+            id: typeof item["id"] === "string" ? item["id"] : "",
+            title: title.trim(),
+            description: description.trim(),
+            hashTag: hashTag.trim(),
+            images,
+            statsLabel:
+              typeof statsLabelRaw === "string" ? statsLabelRaw : undefined,
+            statsValue:
+              typeof statsValueRaw === "string" ? statsValueRaw : undefined,
+            keyVoices: Array.isArray(keyVoicesRaw)
+              ? (keyVoicesRaw as unknown as FocusArea["keyVoices"])
+              : undefined,
+            inspiringStories: Array.isArray(inspiringStoriesRaw)
+              ? (inspiringStoriesRaw as unknown as FocusArea["inspiringStories"])
+              : undefined,
+            supportingOrganizations: Array.isArray(supportingOrganizationsRaw)
+              ? (supportingOrganizationsRaw as unknown as FocusArea["supportingOrganizations"])
+              : undefined,
+            createdAt:
+              typeof item["createdAt"] === "string"
+                ? item["createdAt"]
+                : undefined,
+            updatedAt:
+              typeof item["updatedAt"] === "string"
+                ? item["updatedAt"]
+                : undefined,
+          });
+        }
+
+        if (validated.length > 0) return validated;
+      } catch (_) {
+        continue;
+      }
+    }
+  }
+
+  return [];
+}
+
+export async function fetchFocusAreaById(
+  id: string,
+): Promise<FocusArea | null> {
+  const trimmedId = typeof id === "string" ? id.trim() : "";
+  if (!trimmedId) return null;
+
+  const query = `?id=${encodeURIComponent(trimmedId)}`;
+  const paths = [`/focus/single${query}`, `/focus/get-by-id${query}`];
+
+  for (const base of baseCandidates) {
+    for (const path of paths) {
+      const url = toUrl(base, path);
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            ...(apiKey ? { "x-api-key": apiKey } : {}),
+          },
+        });
+
+        if (!res.ok) continue;
+
+        const json = await safeJson<unknown>(res);
+        const payload = isRecord(json)
+          ? ((json["focusArea"] as unknown) ??
+            (json["data"] as unknown) ??
+            json)
+          : json;
+
+        if (!isRecord(payload)) continue;
+
+        const title = payload["title"];
+        const description = payload["description"];
+        const hashTag = payload["hashTag"];
+        if (
+          !isNonEmptyString(title) ||
+          !isNonEmptyString(description) ||
+          !isNonEmptyString(hashTag)
+        ) {
+          continue;
+        }
+
+        const imagesRaw = payload["images"];
+        const images = Array.isArray(imagesRaw)
+          ? imagesRaw.filter(
+              (x: unknown) => typeof x === "string" && x.trim().length > 0,
+            )
+          : [];
+
+        const statsLabelRaw = payload["statsLabel"];
+        const statsValueRaw = payload["statsValue"];
+
+        const keyVoicesRaw = payload["keyVoices"];
+        const inspiringStoriesRaw = payload["inspiringStories"];
+        const supportingOrganizationsRaw = payload["supportingOrganizations"];
+
+        return {
+          id: typeof payload["id"] === "string" ? payload["id"] : trimmedId,
+          title: title.trim(),
+          description: description.trim(),
+          hashTag: hashTag.trim(),
+          images,
+          statsLabel:
+            typeof statsLabelRaw === "string" ? statsLabelRaw : undefined,
+          statsValue:
+            typeof statsValueRaw === "string" ? statsValueRaw : undefined,
+          keyVoices: Array.isArray(keyVoicesRaw)
+            ? (keyVoicesRaw as unknown as FocusArea["keyVoices"])
+            : undefined,
+          inspiringStories: Array.isArray(inspiringStoriesRaw)
+            ? (inspiringStoriesRaw as unknown as FocusArea["inspiringStories"])
+            : undefined,
+          supportingOrganizations: Array.isArray(supportingOrganizationsRaw)
+            ? (supportingOrganizationsRaw as unknown as FocusArea["supportingOrganizations"])
+            : undefined,
+          createdAt:
+            typeof payload["createdAt"] === "string"
+              ? payload["createdAt"]
+              : undefined,
+          updatedAt:
+            typeof payload["updatedAt"] === "string"
+              ? payload["updatedAt"]
+              : undefined,
+        };
+      } catch (_) {
+        continue;
+      }
+    }
+  }
+
+  return null;
 }
 
 export type ContactMessagePayload = {
