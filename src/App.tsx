@@ -16,6 +16,8 @@ import Disabilities from "./pages/themes/Disabilities";
 import VAW from "./pages/themes/VAW";
 import MentalHealth from "./pages/themes/MentalHealth";
 import LGBTQ from "./pages/themes/LGBTQ";
+import Themes from "./pages/Themes";
+import Events from "./pages/Events";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 
@@ -37,8 +39,9 @@ const App = () => (
             <Route path="/get-involved" element={<GetInvolved />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/events" element={<Events />} />
             <Route path="/focus/:id" element={<FocusAreaDetails />} />
-            <Route path="/themes" element={<Index />} />
+            <Route path="/themes" element={<Themes />} />
             <Route path="/themes/disabilities" element={<Disabilities />} />
             <Route path="/themes/vaw" element={<VAW />} />
             <Route path="/themes/mental-health" element={<MentalHealth />} />

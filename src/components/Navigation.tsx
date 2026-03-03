@@ -1,22 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  Menu,
-  X,
-  Users,
-  Shield,
-  Heart,
-  Palette,
-  FileText,
-  UserPlus,
-  BookOpen,
-  MessageCircle,
-} from "lucide-react";
+import { Menu, X, Users, Shield, Heart, Palette, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { logo } from "@/images/images";
 import { fetchFocusAreas } from "@/lib/api-client";
 import type { FocusArea } from "@/lib/types";
+import { logo } from "@/images/images";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,19 +99,17 @@ export function Navigation() {
   }, [defaultThemesSubmenu]);
 
   const navigation = [
-    { name: "Home", href: "/", icon: null },
-    { name: "About", href: "/about", icon: null },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
     {
       name: "Themes",
       href: "/themes",
-      icon: null,
       submenu: themesSubmenu,
     },
-    // { name: "Analytics", href: "/analytics", icon: BarChart3 },
-    // { name: "Reports", href: "/reports", icon: FileText },
-    { name: "Get Involved", href: "/get-involved", icon: UserPlus },
-    // { name: "Resources", href: "/resources", icon: BookOpen },
-    { name: "Community", href: "/community", icon: MessageCircle },
+    { name: "Analytics", href: "/analytics" },
+    { name: "Campaigns", href: "/get-involved" },
+    { name: "Events", href: "/events" },
+    { name: "Community", href: "/community" },
   ];
 
   const isActive = (path: string) => {
@@ -135,15 +122,20 @@ export function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-3 group">
             <img
               src={logo}
               alt="AI4InclusiveGh logo"
-              className="h-12 w-12 rounded-lg object-cover border border-border shadow-sm"
+              className="w-10 h-10 rounded-lg object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              AI4InclusiveGh
-            </span>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-foreground">
+                AI4InclusiveGh
+              </span>
+              <span className="text-xs text-muted-foreground -mt-1">
+                Advocacy Through AI
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -153,24 +145,32 @@ export function Navigation() {
                 <Link
                   to={item.href}
                   className={cn(
-                    "px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
+                    "px-3 py-2 text-sm font-medium transition-all duration-300 hover:text-primary relative",
                     isActive(item.href)
-                      ? "text-primary border-b-2 border-primary"
+                      ? "text-primary"
                       : "text-muted-foreground",
                   )}
                 >
                   {item.name}
+                  <span
+                    className={cn(
+                      "absolute bottom-0 left-0 w-full h-0.5 bg-primary transform origin-left transition-transform duration-300",
+                      isActive(item.href)
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100",
+                    )}
+                  ></span>
                 </Link>
 
                 {/* Dropdown for Themes */}
                 {item.submenu && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-popover border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-popover border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100">
                     <div className="p-2">
                       {item.submenu.map((subitem) => (
                         <Link
                           key={subitem.name}
                           to={subitem.href}
-                          className="flex items-center px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                          className="flex items-center px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground hover:translate-x-1 transition-all duration-200"
                         >
                           {subitem.icon && (
                             <subitem.icon className="h-4 w-4 mr-3" />
@@ -184,13 +184,14 @@ export function Navigation() {
               </div>
             ))}
 
-            <Link to="/community/#contact">
+            <Link to="/community">
               <Button
                 variant="default"
                 size="sm"
-                className="bg-gradient-hero hover:opacity-90"
+                className="bg-primary hover:bg-primary/90 gap-2 hover:scale-105 transition-transform duration-300"
               >
-                Get In Touch
+                <Users className="h-4 w-4" />
+                Join Community
               </Button>
             </Link>
           </div>
