@@ -136,9 +136,6 @@ export function Navigation() {
               <span className="text-lg font-bold text-foreground">
                 AI4InclusiveGh
               </span>
-              <span className="text-xs text-muted-foreground -mt-1">
-                Advocacy Through AI
-              </span>
             </div>
           </Link>
 
