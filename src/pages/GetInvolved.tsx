@@ -89,8 +89,8 @@ const FEATURED_CAMPAIGNS = [
   {
     title: "#PrideGhana",
     description:
-      "Advocating for LGBTQ+ rights, equality, and protection from discrimination. Building a more accepting society.",
-    category: "LGBTQ+ Rights",
+      "Advocating for Sexual and Gender minority community rights, equality, and protection from discrimination. Building a more accepting society.",
+    category: "SGMC Rights",
     participants: "8.5k",
     reach: "280K+",
     progress: 55,

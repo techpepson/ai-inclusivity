@@ -41,14 +41,14 @@ const FOCUS_DISTRIBUTION = [
   { name: "PwDs", percentage: 35, color: "bg-purple-500" },
   { name: "VAW", percentage: 28, color: "bg-pink-500" },
   { name: "Mental Health", percentage: 22, color: "bg-teal-500" },
-  { name: "LGBTQ+", percentage: 15, color: "bg-yellow-500" },
+  { name: "SGMC", percentage: 15, color: "bg-yellow-500" },
 ];
 
 const TOP_CAMPAIGNS = [
   { rank: 1, name: "#InclusionMatters", reach: "1.2M", engagement: 94 },
   { rank: 2, name: "#EndVAW", reach: "2.1M", engagement: 89 },
   { rank: 3, name: "#BreakTheStigma", reach: "1.0M", engagement: 91 },
-  { rank: 4, name: "#LGBTQRights", reach: "0.8M", engagement: 86 },
+  { rank: 4, name: "#SGMCRights", reach: "0.8M", engagement: 86 },
 ];
 
 const TRENDING_KEYWORDS = [

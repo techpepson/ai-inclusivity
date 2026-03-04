@@ -183,7 +183,7 @@ const TESTIMONIALS = [
   },
   {
     name: "Kofi Boateng",
-    role: "LGBTQ+ Rights Advocate",
+    role: "Sexual and Gender Minority Community Advocate",
     avatar: "K",
     quote:
       "Finally, a platform that combines data with heart. The community support here is incredible, and the tools help us measure real impact.",

@@ -211,7 +211,7 @@ export default function MentalHealth() {
             alt="Mental Health"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-teal-900/80 to-emerald-900/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-800/60"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10 py-20 text-white">
@@ -323,7 +323,7 @@ export default function MentalHealth() {
               >
                 <CardContent className="p-8">
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0">
                       {story.name.charAt(0)}
                     </div>
                     <div className="flex-1">
@@ -376,7 +376,7 @@ export default function MentalHealth() {
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
                 <CardContent className="pt-8 pb-6 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                     <Brain className="h-7 w-7 text-white" />
                   </div>
                   <div className="font-bold text-primary mb-1">
@@ -452,7 +452,7 @@ export default function MentalHealth() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-teal-500 to-emerald-500 text-white">
+      <section className="py-20 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">
             Join the Movement for Mental Wellness

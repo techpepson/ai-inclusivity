@@ -1,9 +1,28 @@
 import { useState } from "react";
-import { FileText, Download, Calendar, Filter, Search, BarChart3 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  FileText,
+  Download,
+  Calendar,
+  Filter,
+  Search,
+  BarChart3,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 
 export default function Reports() {
@@ -17,15 +36,17 @@ export default function Reports() {
       date: "2024-12-15",
       downloads: 1247,
       type: "Quarterly Report",
-      description: "Comprehensive analysis of disability rights conversations and policy developments"
+      description:
+        "Comprehensive analysis of disability rights conversations and policy developments",
     },
     {
       title: "Mental Health Awareness Campaign Impact",
-      theme: "Mental Health", 
+      theme: "Mental Health",
       date: "2024-12-10",
       downloads: 892,
       type: "Campaign Report",
-      description: "Measuring the reach and impact of #BreakTheStigma mental health campaign"
+      description:
+        "Measuring the reach and impact of #BreakTheStigma mental health campaign",
     },
     {
       title: "VAW Prevention Social Media Analysis",
@@ -33,15 +54,17 @@ export default function Reports() {
       date: "2024-12-05",
       downloads: 756,
       type: "Monthly Report",
-      description: "Social media sentiment and engagement analysis for violence against women prevention"
+      description:
+        "Social media sentiment and engagement analysis for violence against women prevention",
     },
     {
-      title: "LGBTQ+ Inclusion Trends November 2024",
-      theme: "LGBTQ+",
+      title: "SGMC Inclusion Trends November 2024",
+      theme: "SGMC",
       date: "2024-11-30",
       downloads: 634,
-      type: "Monthly Report", 
-      description: "Analysis of inclusion conversations and advocacy efforts in Ghana"
+      type: "Monthly Report",
+      description:
+        "Analysis of inclusion conversations and advocacy efforts in Ghana",
     },
     {
       title: "Cross-Theme Advocacy Impact Report",
@@ -49,24 +72,42 @@ export default function Reports() {
       date: "2024-11-15",
       downloads: 1523,
       type: "Impact Report",
-      description: "Comprehensive overview of advocacy efforts across all four focus areas"
-    }
+      description:
+        "Comprehensive overview of advocacy efforts across all four focus areas",
+    },
   ];
 
   const archivedReports = [
-    { title: "Annual Social Impact Report 2023", date: "2024-01-15", downloads: 2341 },
-    { title: "Mental Health Stigma Analysis 2023", date: "2023-12-20", downloads: 1876 },
-    { title: "Disability Rights Policy Review", date: "2023-11-10", downloads: 1654 },
-    { title: "LGBTQ+ Advocacy Trends 2023", date: "2023-10-25", downloads: 1432 }
+    {
+      title: "Annual Social Impact Report 2023",
+      date: "2024-01-15",
+      downloads: 2341,
+    },
+    {
+      title: "Mental Health Stigma Analysis 2023",
+      date: "2023-12-20",
+      downloads: 1876,
+    },
+    {
+      title: "Disability Rights Policy Review",
+      date: "2023-11-10",
+      downloads: 1654,
+    },
+    { title: "SGMC Advocacy Trends 2023", date: "2023-10-25", downloads: 1432 },
   ];
 
   const getThemeColor = (theme: string) => {
     switch (theme) {
-      case "Disabilities": return "bg-theme-disability/10 text-theme-disability";
-      case "VAW": return "bg-theme-vaw/10 text-theme-vaw";
-      case "Mental Health": return "bg-theme-mental/10 text-theme-mental";
-      case "LGBTQ+": return "bg-theme-lgbtq/10 text-theme-lgbtq";
-      default: return "bg-primary/10 text-primary";
+      case "Disabilities":
+        return "bg-theme-disability/10 text-theme-disability";
+      case "VAW":
+        return "bg-theme-vaw/10 text-theme-vaw";
+      case "Mental Health":
+        return "bg-theme-mental/10 text-theme-mental";
+      case "SGMC":
+        return "bg-theme-lgbtq/10 text-theme-lgbtq";
+      default:
+        return "bg-primary/10 text-primary";
     }
   };
 
@@ -75,10 +116,13 @@ export default function Reports() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">Reports & Analytics</h1>
+          <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+            Reports & Analytics
+          </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Access comprehensive reports on social media advocacy, campaign performance, and trend analysis 
-            across our four focus areas in Ghana.
+            Access comprehensive reports on social media advocacy, campaign
+            performance, and trend analysis across our four focus areas in
+            Ghana.
           </p>
         </div>
 
@@ -87,13 +131,10 @@ export default function Reports() {
           <div className="flex-1">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input 
-                placeholder="Search reports..." 
-                className="pl-10"
-              />
+              <Input placeholder="Search reports..." className="pl-10" />
             </div>
           </div>
-          
+
           <Select value={selectedTheme} onValueChange={setSelectedTheme}>
             <SelectTrigger className="w-full lg:w-48">
               <SelectValue placeholder="Filter by theme" />
@@ -103,10 +144,10 @@ export default function Reports() {
               <SelectItem value="disabilities">Disabilities</SelectItem>
               <SelectItem value="vaw">Violence Against Women</SelectItem>
               <SelectItem value="mental-health">Mental Health</SelectItem>
-              <SelectItem value="lgbtq">LGBTQ+</SelectItem>
+              <SelectItem value="lgbtq">SGMC</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
             <SelectTrigger className="w-full lg:w-48">
               <SelectValue placeholder="Time period" />
@@ -118,7 +159,7 @@ export default function Reports() {
               <SelectItem value="1y">Last year</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Button>
             <Filter className="mr-2 h-4 w-4" />
             Advanced Filters
@@ -133,7 +174,8 @@ export default function Reports() {
               Generate Custom Report
             </CardTitle>
             <CardDescription>
-              Create a personalized report with specific themes, date ranges, and metrics.
+              Create a personalized report with specific themes, date ranges,
+              and metrics.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -147,12 +189,12 @@ export default function Reports() {
                   <SelectItem value="custom">Custom Selection</SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <div className="flex space-x-2">
                 <Input type="date" className="flex-1" />
                 <Input type="date" className="flex-1" />
               </div>
-              
+
               <Select>
                 <SelectTrigger>
                   <SelectValue placeholder="Report format" />
@@ -164,7 +206,7 @@ export default function Reports() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <Button className="bg-gradient-hero hover:opacity-90">
               <Download className="mr-2 h-4 w-4" />
               Generate Report
@@ -184,12 +226,17 @@ export default function Reports() {
 
           <div className="space-y-6">
             {recentReports.map((report, index) => (
-              <Card key={index} className="bg-gradient-card border-0 hover:shadow-card transition-all duration-300">
+              <Card
+                key={index}
+                className="bg-gradient-card border-0 hover:shadow-card transition-all duration-300"
+              >
                 <CardHeader>
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <CardTitle className="text-xl">{report.title}</CardTitle>
+                        <CardTitle className="text-xl">
+                          {report.title}
+                        </CardTitle>
                         <Badge className={getThemeColor(report.theme)}>
                           {report.theme}
                         </Badge>
@@ -197,11 +244,16 @@ export default function Reports() {
                       </div>
                       <CardDescription>{report.description}</CardDescription>
                       <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">
-                        <span>Published: {new Date(report.date).toLocaleDateString()}</span>
-                        <span>Downloads: {report.downloads.toLocaleString()}</span>
+                        <span>
+                          Published:{" "}
+                          {new Date(report.date).toLocaleDateString()}
+                        </span>
+                        <span>
+                          Downloads: {report.downloads.toLocaleString()}
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="flex space-x-2">
                       <Button variant="outline" size="sm">
                         <FileText className="mr-2 h-4 w-4" />
@@ -237,7 +289,9 @@ export default function Reports() {
                       <FileText className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-sm leading-tight">{report.title}</h4>
+                      <h4 className="font-semibold text-sm leading-tight">
+                        {report.title}
+                      </h4>
                       <p className="text-xs text-muted-foreground mt-1">
                         {new Date(report.date).toLocaleDateString()}
                       </p>

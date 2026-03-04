@@ -26,10 +26,25 @@ import { logo } from "@/images/images";
 
 const DEFAULT_THEMES = [
   {
+    id: "vaw",
+    label: "Violence Against Women",
+    hashtag: "#EndVAW",
+    hashtagColor: "text-blue-600",
+    bgColor: "bg-blue-50",
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
+    icon: Shield,
+    href: "/themes/vaw",
+    image: womenImage,
+    description:
+      "Fighting gender-based violence through education, awareness, and advocacy for stronger protective legislation. Our AI monitors reports, support resources, and policy discussions to drive meaningful change.",
+    stats: { reach: "2.1M", campaigns: 18, voices: "15.2K" },
+  },
+  {
     id: "disabilities",
     label: "Persons with Disabilities",
     hashtag: "#InclusionMatters",
-    hashtagColor: "text-blue-500",
+    hashtagColor: "text-blue-600",
     bgColor: "bg-blue-50",
     iconBg: "bg-blue-100",
     iconColor: "text-blue-600",
@@ -41,28 +56,13 @@ const DEFAULT_THEMES = [
     stats: { reach: "1.2M", campaigns: 12, voices: "8.5K" },
   },
   {
-    id: "vaw",
-    label: "Violence Against Women",
-    hashtag: "#EndVAW",
-    hashtagColor: "text-red-500",
-    bgColor: "bg-red-50",
-    iconBg: "bg-red-100",
-    iconColor: "text-red-600",
-    icon: Shield,
-    href: "/themes/vaw",
-    image: womenImage,
-    description:
-      "Fighting gender-based violence through education, awareness, and advocacy for stronger protective legislation. Our AI monitors reports, support resources, and policy discussions to drive meaningful change.",
-    stats: { reach: "2.1M", campaigns: 18, voices: "15.2K" },
-  },
-  {
     id: "mental-health",
     label: "Mental Health & Wellness",
     hashtag: "#BreakTheStigma",
-    hashtagColor: "text-teal-500",
-    bgColor: "bg-teal-50",
-    iconBg: "bg-teal-100",
-    iconColor: "text-teal-600",
+    hashtagColor: "text-blue-600",
+    bgColor: "bg-blue-50",
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
     icon: Heart,
     href: "/themes/mental-health",
     image: mentalHealthImage,
@@ -72,17 +72,17 @@ const DEFAULT_THEMES = [
   },
   {
     id: "lgbtq",
-    label: "LGBTQ+ Rights",
-    hashtag: "#LGBTQRights",
-    hashtagColor: "text-purple-500",
-    bgColor: "bg-purple-50",
-    iconBg: "bg-purple-100",
-    iconColor: "text-purple-600",
+    label: "Sexual and Gender Minority Community",
+    hashtag: "#SGMCRights",
+    hashtagColor: "text-blue-600",
+    bgColor: "bg-blue-50",
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
     icon: Palette,
     href: "/themes/lgbtq",
     image: lgbtqImage,
     description:
-      "Supporting rights, safety, and dignity for LGBTQ+ individuals in Ghana. We monitor conversations around equality, document challenges, and connect communities with resources and support networks.",
+      "Supporting rights, safety, and dignity for Sexual and Gender minority community individuals in Ghana. We monitor conversations around equality, document challenges, and connect communities with resources and support networks.",
     stats: { reach: "950K", campaigns: 8, voices: "6.2K" },
   },
 ];
@@ -108,30 +108,38 @@ export default function Themes() {
       if (!Array.isArray(rows) || rows.length === 0) return;
 
       // Map API data to theme format if available
-      const mapped = rows.map((row) => {
-        const label = typeof row.title === "string" ? row.title.trim() : "";
-        const lLower = label.toLowerCase();
+      const mapped = rows
+        .map((row) => {
+          const label = typeof row.title === "string" ? row.title.trim() : "";
+          const lLower = label.toLowerCase();
 
-        // Find matching default theme
-        const match = DEFAULT_THEMES.find((t) => {
-          if (lLower.includes("disabil")) return t.id === "disabilities";
-          if (lLower.includes("violence") || lLower.includes("women") || lLower.includes("vaw"))
-            return t.id === "vaw";
-          if (lLower.includes("mental")) return t.id === "mental-health";
-          if (lLower.includes("lgbt")) return t.id === "lgbtq";
-          return false;
-        });
+          // Find matching default theme
+          const match = DEFAULT_THEMES.find((t) => {
+            if (lLower.includes("disabil")) return t.id === "disabilities";
+            if (
+              lLower.includes("violence") ||
+              lLower.includes("women") ||
+              lLower.includes("vaw")
+            )
+              return t.id === "vaw";
+            if (lLower.includes("mental")) return t.id === "mental-health";
+            if (lLower.includes("lgbt")) return t.id === "lgbtq";
+            return false;
+          });
 
-        if (match) {
-          return {
-            ...match,
-            label: label || match.label,
-            hashtag: row.hashTag || match.hashtag,
-            href: row.id ? `/focus/${encodeURIComponent(row.id)}` : match.href,
-          };
-        }
-        return null;
-      }).filter(Boolean);
+          if (match) {
+            return {
+              ...match,
+              label: label || match.label,
+              hashtag: row.hashTag || match.hashtag,
+              href: row.id
+                ? `/focus/${encodeURIComponent(row.id)}`
+                : match.href,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
 
       if (mapped.length > 0 && mounted) {
         setThemes(mapped as typeof DEFAULT_THEMES);
@@ -230,12 +238,16 @@ export default function Themes() {
                       <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-1.5">
                           <TrendingUp className="h-4 w-4 text-primary" />
-                          <span className="font-medium">{theme.stats.reach}</span>
+                          <span className="font-medium">
+                            {theme.stats.reach}
+                          </span>
                           <span className="text-muted-foreground">reach</span>
                         </div>
                         <div className="flex items-center gap-1.5">
                           <MessageCircle className="h-4 w-4 text-primary" />
-                          <span className="font-medium">{theme.stats.voices}</span>
+                          <span className="font-medium">
+                            {theme.stats.voices}
+                          </span>
                           <span className="text-muted-foreground">voices</span>
                         </div>
                       </div>
@@ -405,10 +417,16 @@ export default function Themes() {
                 <span className="text-red-400">♥</span> for Ghana
               </p>
               <div className="flex gap-6">
-                <Link to="/privacy" className="hover:text-white transition-colors">
+                <Link
+                  to="/privacy"
+                  className="hover:text-white transition-colors"
+                >
                   Privacy Policy
                 </Link>
-                <Link to="/terms" className="hover:text-white transition-colors">
+                <Link
+                  to="/terms"
+                  className="hover:text-white transition-colors"
+                >
                   Terms of Service
                 </Link>
               </div>

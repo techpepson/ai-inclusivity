@@ -31,6 +31,16 @@ import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
 import womenImage from "@/assets/women-empowerment.jpg";
 import mentalHealthImage from "@/assets/mental-health-support.jpg";
 import lgbtqImage from "@/assets/lgbtq-community.jpg";
+import flyer1 from "@/assets/flyer_1.jpeg";
+import flyer2 from "@/assets/flyer_2.jpeg";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import {
   fetchFocusAreas as fetchFocusAreasFromApi,
   fetchHeroContent,
@@ -103,8 +113,8 @@ const DEFAULT_FOCUS_AREAS = [
     image: mentalHealthImage,
   },
   {
-    label: "LGBTQ+ Rights",
-    hashtag: "#LGBTQRights",
+    label: "Sexual and Gender Minority Community",
+    hashtag: "#SGMCRights",
     hashtagColor: "text-orange-500",
     bgColor: "bg-orange-50",
     icon: Palette,
@@ -323,63 +333,46 @@ export default function Homepage() {
               </div>
             </div>
 
-            {/* Right Side - Current Event Banner */}
+            {/* Right Side - Flyer Slider */}
             <div
-              className="animate-scale-in opacity-0"
+              className="animate-scale-in opacity-0 order-first lg:order-last"
               style={{ animationDelay: "0.3s" }}
             >
-              <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
-                {/* Event Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={heroImage}
-                    alt="Upcoming Event"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center gap-1.5 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full">
-                      <Sparkles className="h-3 w-3" />
-                      UPCOMING EVENT
-                    </span>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <p className="text-white/80 text-sm">March 15, 2026</p>
-                  </div>
-                </div>
-
-                {/* Event Details */}
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2">
-                    National Inclusion Summit 2026
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                    Join us for Ghana's largest gathering of advocates,
-                    policymakers, and community leaders driving inclusive
-                    change.
-                  </p>
-
-                  {/* Event Stats */}
-                  <div className="flex items-center gap-4 mb-4 text-sm">
-                    <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <Users className="h-4 w-4 text-primary" />
-                      <span>500+ Attendees</span>
+              <Carousel
+                opts={{
+                  align: "center",
+                  loop: true,
+                }}
+                plugins={[
+                  Autoplay({
+                    delay: 4000,
+                  }),
+                ]}
+                className="w-full max-w-md mx-auto lg:max-w-none"
+              >
+                <CarouselContent>
+                  <CarouselItem>
+                    <div className="p-1">
+                      <img
+                        src={flyer1}
+                        alt="Flyer 1"
+                        className="w-full h-auto rounded-xl shadow-2xl"
+                      />
                     </div>
-                    <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <span>Accra, Ghana</span>
+                  </CarouselItem>
+                  <CarouselItem>
+                    <div className="p-1">
+                      <img
+                        src={flyer2}
+                        alt="Flyer 2"
+                        className="w-full h-auto rounded-xl shadow-2xl"
+                      />
                     </div>
-                  </div>
-
-                  {/* CTA Button */}
-                  <Link to="/community">
-                    <Button className="w-full bg-primary hover:bg-primary/90 text-white group">
-                      Register Now
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+                  </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
+                <CarouselNext className="right-2 bg-white/80 hover:bg-white" />
+              </Carousel>
             </div>
           </div>
         </div>

@@ -48,7 +48,7 @@ const GUIDES = [
   {
     title: "Inclusive Language Guide",
     description:
-      "Best practices for respectful communication about disability, mental health, and LGBTQ+ issues",
+      "Best practices for respectful communication about disability, mental health, and Sexual and Gender minority community issues",
     category: "Communication",
     format: "PDF",
     pages: 28,
@@ -98,11 +98,12 @@ const POLICY_PAPERS = [
     downloads: 734,
   },
   {
-    title: "LGBTQ+ Rights and Social Acceptance in Ghana",
+    title:
+      "Sexual and Gender Minority Community Rights and Social Acceptance in Ghana",
     authors: "Prof. Yaa Asantewa, Dr. Kofi Amponsah",
     date: "2024-09-30",
     abstract:
-      "Research on social attitudes and policy recommendations for LGBTQ+ inclusion.",
+      "Research on social attitudes and policy recommendations for Sexual and Gender minority community inclusion.",
     downloads: 567,
   },
 ];
@@ -175,12 +176,12 @@ const SUPPORT_CONTACTS = [
     ],
   },
   {
-    category: "LGBTQ+ Resources",
+    category: "SGMC Resources",
     icon: Lightbulb,
     bgColor: "bg-gradient-to-br from-pink-600 to-purple-600",
     contacts: [
       {
-        name: "LGBTQ+ Rights Ghana",
+        name: "SGMC Rights Ghana",
         phone: "+233-244-777-888",
         email: "support@lgbtqrights.gh",
       },

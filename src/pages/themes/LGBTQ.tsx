@@ -90,7 +90,7 @@ export default function LGBTQ() {
     {
       name: "Ama Boateng",
       story:
-        "Created community-led safe spaces in Accra that welcome LGBTQ+ youth and allies to learn and organize.",
+        "Created community-led safe spaces in Accra that welcome Sexual and Gender minority community youth and allies to learn and organize.",
       impact: "10+ safe spaces opened",
       hashtag: "#PrideGhana",
     },
@@ -104,7 +104,7 @@ export default function LGBTQ() {
   ];
 
   const keyInfluencers = [
-    { name: "@LGBTQGhana", followers: "76k", focus: "Rights Advocacy" },
+    { name: "@SGMCGhana", followers: "76k", focus: "Rights Advocacy" },
     { name: "@PrideAdvocateGH", followers: "58k", focus: "Community Building" },
     {
       name: "@InclusionMattersGH",
@@ -115,7 +115,7 @@ export default function LGBTQ() {
   ];
 
   const trendingHashtags = [
-    { tag: "#LGBTQRights", tweets: "25.4k", sentiment: "87%" },
+    { tag: "#SGMCRights", tweets: "25.4k", sentiment: "87%" },
     { tag: "#LoveIsLove", tweets: "19.8k", sentiment: "91%" },
     { tag: "#PrideGhana", tweets: "16.2k", sentiment: "89%" },
     { tag: "#InclusionForAll", tweets: "12.7k", sentiment: "93%" },
@@ -123,22 +123,22 @@ export default function LGBTQ() {
 
   const resources = [
     {
-      title: "LGBTQ+ Rights Ghana",
+      title: "SGMC Rights Ghana",
       description:
-        "Advocacy organization fighting for LGBTQ+ rights and equality",
-      contact: "support@lgbtqrights.gh",
+        "Advocacy organization fighting for Sexual and Gender minority community rights and equality",
+      contact: "support@sgmcrights.gh",
       services: ["Legal Support", "Advocacy", "Community Building"],
     },
     {
       title: "Safe Spaces Network",
       description:
-        "Creating safe, welcoming spaces for LGBTQ+ individuals across Ghana",
+        "Creating safe, welcoming spaces for Sexual and Gender minority community individuals across Ghana",
       contact: "info@safespaces.gh",
       services: ["Safe Spaces", "Support Groups", "Counseling"],
     },
     {
       title: "Pride Counseling Services",
-      description: "LGBTQ+-affirming mental health and counseling services",
+      description: "SGMC-affirming mental health and counseling services",
       contact: "counseling@pride.gh",
       services: ["Counseling", "Therapy", "Crisis Support"],
     },
@@ -147,11 +147,11 @@ export default function LGBTQ() {
   const heroTitle =
     typeof focusArea?.title === "string" && focusArea.title.trim()
       ? focusArea.title.trim()
-      : "LGBTQ+ Rights";
+      : "Sexual and Gender Minority Community";
   const heroDescription =
     typeof focusArea?.description === "string" && focusArea.description.trim()
       ? focusArea.description.trim()
-      : "Advocating for equality, dignity, and rights for LGBTQ+ individuals in Ghana. Together, we're building a more accepting and inclusive society for all.";
+      : "Advocating for equality, dignity, and rights for Sexual and Gender minority community individuals in Ghana. Together, we're building a more accepting and inclusive society for all.";
   const heroImageSrc =
     typeof focusArea?.images?.[0] === "string" && focusArea.images[0].trim()
       ? focusArea.images[0]
@@ -207,10 +207,10 @@ export default function LGBTQ() {
         <div className="absolute inset-0">
           <img
             src={heroImageSrc}
-            alt="LGBTQ+ Rights"
+            alt="Sexual and Gender Minority Community"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-pink-900/80 to-purple-900/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-800/60"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10 py-20 text-white">
@@ -268,8 +268,8 @@ export default function LGBTQ() {
               Trending <span className="text-primary">Conversations</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              The most active hashtags driving LGBTQ+ rights discussions in
-              Ghana
+              The most active hashtags driving Sexual and Gender minority
+              community rights discussions in Ghana
             </p>
           </div>
 
@@ -308,7 +308,8 @@ export default function LGBTQ() {
               Inspiring <span className="text-primary">Stories</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Real stories from LGBTQ+ advocates making a difference in Ghana
+              Real stories from Sexual and Gender minority community advocates
+              making a difference in Ghana
             </p>
           </div>
 
@@ -321,7 +322,7 @@ export default function LGBTQ() {
               >
                 <CardContent className="p-8">
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0">
                       {story.name.charAt(0)}
                     </div>
                     <div className="flex-1">
@@ -361,8 +362,8 @@ export default function LGBTQ() {
               Key <span className="text-primary">Voices</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Influential advocates and organizations leading the LGBTQ+ rights
-              movement
+              Influential advocates and organizations leading the Sexual and
+              Gender minority community rights movement
             </p>
           </div>
 
@@ -374,7 +375,7 @@ export default function LGBTQ() {
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
                 <CardContent className="pt-8 pb-6 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                     <Users className="h-7 w-7 text-white" />
                   </div>
                   <div className="font-bold text-primary mb-1">
@@ -403,8 +404,8 @@ export default function LGBTQ() {
               Supporting <span className="text-primary">Organizations</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Connect with organizations providing support for LGBTQ+
-              individuals
+              Connect with organizations providing support for Sexual and Gender
+              minority community individuals
             </p>
           </div>
 
@@ -450,10 +451,10 @@ export default function LGBTQ() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-pink-500 to-purple-500 text-white">
+      <section className="py-20 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-            Join the Movement for LGBTQ+ Rights
+            Join the Movement for Sexual and Gender Minority Community Rights
           </h2>
           <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
             Your voice matters in creating an inclusive and accepting Ghana.

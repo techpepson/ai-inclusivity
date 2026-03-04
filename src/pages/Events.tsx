@@ -84,7 +84,7 @@ const DEFAULT_EVENTS: (Event & {
     id: "4",
     title: "Pride March 2026: Love is Love",
     description:
-      "Annual pride celebration bringing together LGBTQ+ community members and allies for a peaceful march and festival.",
+      "Annual pride celebration bringing together Sexual and Gender Minority Community members and allies for a peaceful march and festival.",
     date: "2026-06-20",
     time: "3:00 PM - 8:00 PM",
     type: "Community Event",

@@ -30,7 +30,11 @@ export function Navigation() {
         href: "/themes/mental-health",
         icon: Heart,
       },
-      { name: "LGBTQ+ Communities", href: "/themes/lgbtq", icon: Palette },
+      {
+        name: "Sexual and Gender Minority Community",
+        href: "/themes/lgbtq",
+        icon: Palette,
+      },
     ],
     [],
   );

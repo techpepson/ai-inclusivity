@@ -65,7 +65,7 @@ const DEFAULT_TEAM: TeamMember[] = [
     name: "Kofi Boateng",
     role: "Community Engagement Lead",
     description:
-      "Community organizer focused on LGBTQ+ rights and mental health awareness.",
+      "Community organizer focused on Sexual and Gender minority community rights and mental health awareness.",
     profilePicture: "https://picsum.photos/id/1000/400/400",
     createdAt: "",
     updatedAt: "",
@@ -142,7 +142,7 @@ const DEFAULT_ABOUT: AboutSection = {
   missionDescription:
     "To leverage artificial intelligence and data analytics to monitor social conversations, amplify marginalized voices, and drive evidence-based advocacy for inclusive policies in Ghana.",
   visionDescription:
-    "A Ghana where every voice is heard, every community is valued, and data-driven advocacy creates lasting social change for persons with disabilities, women, LGBTQ+ individuals, and those affected by mental health stigma.",
+    "A Ghana where every voice is heard, every community is valued, and data-driven advocacy creates lasting social change for persons with disabilities, women, Sexual and Gender minority community individuals, and those affected by mental health stigma.",
   createdAt: "",
   updatedAt: "",
 };
@@ -204,9 +204,9 @@ const PILLARS = [
   },
   {
     icon: Wifi,
-    title: "LGBTQ+ Communities",
+    title: "Sexual and Gender Minority Community",
     description:
-      "Supporting rights, safety, and dignity for LGBTQ+ individuals.",
+      "Supporting rights, safety, and dignity for Sexual and Gender minority community individuals.",
     reach: "950K reach",
     bgColor: "bg-secondary",
   },
