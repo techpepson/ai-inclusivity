@@ -123,7 +123,7 @@ export default function Themes() {
             )
               return t.id === "vaw";
             if (lLower.includes("mental")) return t.id === "mental-health";
-            if (lLower.includes("lgbt")) return t.id === "lgbtq";
+            if (lLower.includes("lgbt") || lLower.includes("gender") || lLower.includes("sgmc")) return t.id === "lgbtq";
             return false;
           });
 
@@ -140,6 +140,16 @@ export default function Themes() {
           return null;
         })
         .filter(Boolean);
+
+      // Sort to enforce order: VAW, Disabilities, Mental Health, SGMC
+      const orderPriority = (item: any) => {
+        if (item.id === "vaw") return 0;
+        if (item.id === "disabilities") return 1;
+        if (item.id === "mental-health") return 2;
+        if (item.id === "lgbtq") return 3;
+        return 4;
+      };
+      mapped.sort((a, b) => orderPriority(a) - orderPriority(b));
 
       if (mapped.length > 0 && mounted) {
         setThemes(mapped as typeof DEFAULT_THEMES);

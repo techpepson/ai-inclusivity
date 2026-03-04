@@ -19,12 +19,12 @@ export function Navigation() {
     }>
   >(
     () => [
+      { name: "Violence Against Women", href: "/themes/vaw", icon: Shield },
       {
         name: "Persons with Disabilities",
         href: "/themes/disabilities",
         icon: Users,
       },
-      { name: "Violence Against Women", href: "/themes/vaw", icon: Shield },
       {
         name: "Mental Health & Wellness",
         href: "/themes/mental-health",
@@ -66,17 +66,30 @@ export function Navigation() {
         if (
           title.includes("lgbt") ||
           title.includes("queer") ||
-          hashTag.includes("lgbt")
+          title.includes("gender") ||
+          title.includes("sgmc") ||
+          hashTag.includes("lgbt") ||
+          hashTag.includes("sgmc")
         ) {
           return Palette;
         }
         return FileText;
       })();
 
+      // Get sort priority
+      const getPriority = () => {
+        if (title.includes("violence") || title.includes("women") || title.includes("vaw")) return 0;
+        if (title.includes("disabil")) return 1;
+        if (title.includes("mental") || title.includes("wellness")) return 2;
+        if (title.includes("lgbt") || title.includes("queer") || title.includes("gender") || title.includes("sgmc")) return 3;
+        return 4;
+      };
+
       return {
         name,
         href: `/focus/${encodeURIComponent(fa.id)}`,
         icon,
+        priority: getPriority(),
       };
     };
 
@@ -89,7 +102,11 @@ export function Navigation() {
           name: string;
           href: string;
           icon: React.ComponentType<{ className?: string }>;
+          priority: number;
         }>;
+
+        // Sort by priority
+        mapped.sort((a, b) => a.priority - b.priority);
 
         if (mapped.length > 0) setThemesSubmenu(mapped);
       })

@@ -86,6 +86,15 @@ const PLATFORM_FEATURES = [
 
 const DEFAULT_FOCUS_AREAS = [
   {
+    label: "Violence Against Women",
+    hashtag: "#EndVAW",
+    hashtagColor: "text-blue-500",
+    bgColor: "bg-blue-50",
+    icon: Shield,
+    href: "/themes/vaw",
+    image: womenImage,
+  },
+  {
     label: "Persons with Disabilities",
     hashtag: "#InclusionMatters",
     hashtagColor: "text-blue-500",
@@ -95,19 +104,10 @@ const DEFAULT_FOCUS_AREAS = [
     image: disabilityImage,
   },
   {
-    label: "Violence Against Women",
-    hashtag: "#EndVAW",
-    hashtagColor: "text-red-500",
-    bgColor: "bg-red-50",
-    icon: Shield,
-    href: "/themes/vaw",
-    image: womenImage,
-  },
-  {
     label: "Mental Health",
     hashtag: "#BreakTheStigma",
-    hashtagColor: "text-teal-500",
-    bgColor: "bg-teal-50",
+    hashtagColor: "text-blue-500",
+    bgColor: "bg-blue-50",
     icon: Heart,
     href: "/themes/mental-health",
     image: mentalHealthImage,
@@ -115,8 +115,8 @@ const DEFAULT_FOCUS_AREAS = [
   {
     label: "Sexual and Gender Minority Community",
     hashtag: "#SGMCRights",
-    hashtagColor: "text-orange-500",
-    bgColor: "bg-orange-50",
+    hashtagColor: "text-blue-500",
+    bgColor: "bg-blue-50",
     icon: Palette,
     href: "/themes/lgbtq",
     image: lgbtqImage,
@@ -220,20 +220,20 @@ export default function Homepage() {
           lLower.includes("women")
         ) {
           icon = Shield;
-          bgColor = "bg-red-50";
-          hashtagColor = "text-red-500";
+          bgColor = "bg-blue-50";
+          hashtagColor = "text-blue-500";
           fallbackHref = "/themes/vaw";
           defaultImage = womenImage;
         } else if (lLower.includes("mental")) {
           icon = Heart;
-          bgColor = "bg-teal-50";
-          hashtagColor = "text-teal-500";
+          bgColor = "bg-blue-50";
+          hashtagColor = "text-blue-500";
           fallbackHref = "/themes/mental-health";
           defaultImage = mentalHealthImage;
-        } else if (lLower.includes("lgbt")) {
+        } else if (lLower.includes("lgbt") || lLower.includes("gender") || lLower.includes("sgmc")) {
           icon = Palette;
-          bgColor = "bg-orange-50";
-          hashtagColor = "text-orange-500";
+          bgColor = "bg-blue-50";
+          hashtagColor = "text-blue-500";
           fallbackHref = "/themes/lgbtq";
           defaultImage = lgbtqImage;
         }
@@ -253,6 +253,17 @@ export default function Homepage() {
           image,
         } as any);
       }
+
+      // Sort to enforce order: VAW, Disabilities, Mental Health, SGMC
+      const orderPriority = (item: any) => {
+        const l = item.label.toLowerCase();
+        if (l.includes("violence") || l.includes("vaw") || l.includes("women")) return 0;
+        if (l.includes("disabil")) return 1;
+        if (l.includes("mental")) return 2;
+        if (l.includes("lgbt") || l.includes("gender") || l.includes("sgmc")) return 3;
+        return 4;
+      };
+      validated.sort((a, b) => orderPriority(a) - orderPriority(b));
 
       if (validated.length > 0 && mounted) setFocusAreas(validated);
     }
