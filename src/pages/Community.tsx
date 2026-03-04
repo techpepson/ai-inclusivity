@@ -408,7 +408,7 @@ export default function Community() {
         </div>
       </section>
 
-      {/* Upcoming Events */}
+      {/* Upcoming Events - Commented Out
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -470,7 +470,6 @@ export default function Community() {
             ))}
           </div>
 
-          {/* Want to Host an Event */}
           <Card className="mt-8 border-0 bg-primary text-white">
             <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
@@ -489,6 +488,7 @@ export default function Community() {
           </Card>
         </div>
       </section>
+      */}
 
       {/* Testimonials */}
       <section className="py-20 bg-background">
