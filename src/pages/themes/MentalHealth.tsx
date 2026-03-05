@@ -496,8 +496,7 @@ export default function MentalHealth() {
               </div>
               <p className="text-slate-300 mb-6 text-sm">
                 Using artificial intelligence and social media analytics to
-                amplify voices, track advocacy trends, and drive policy change
-                for marginalized communities in Ghana.
+                amplify voices for marginalized communities in Ghana.
               </p>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-slate-300 text-sm">
