@@ -411,7 +411,7 @@ export default function Community() {
       {/* Upcoming Events */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          {/* <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
               Upcoming <span className="text-primary">Events</span>
             </h2>
@@ -419,9 +419,9 @@ export default function Community() {
               Join us in creating positive change through workshops, campaigns,
               conferences, and community gatherings
             </p>
-          </div>
+          </div> */}
 
-          <div className="grid md:grid-cols-2 gap-6">
+          {/* <div className="grid md:grid-cols-2 gap-6">
             {upcomingEvents.slice(0, 4).map((event, index) => (
               <Card
                 key={event.id}
@@ -468,7 +468,7 @@ export default function Community() {
                 </CardContent>
               </Card>
             ))}
-          </div>
+          </div> */}
 
           {/* Want to Host an Event */}
           <Card className="mt-8 border-0 bg-primary text-white">
