@@ -503,7 +503,6 @@ export default function Analytics() {
                 />
                 <div>
                   <h3 className="font-bold text-lg">AI4InclusiveGh</h3>
-                  <p className="text-sm text-slate-400">Advocacy Through AI</p>
                 </div>
               </div>
               <p className="text-slate-300 mb-6 text-sm">
@@ -514,7 +513,7 @@ export default function Analytics() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-slate-300 text-sm">
                   <Mail className="h-4 w-4 text-primary" />
-                  <span>contact@ai4inclusivegh.org</span>
+                  <span>ai4inclusiveghana@ug.edu.gh</span>
                 </div>
                 <div className="flex items-center gap-3 text-slate-300 text-sm">
                   <Phone className="h-4 w-4 text-primary" />
@@ -585,9 +584,7 @@ export default function Analytics() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-slate-400 text-sm">
-                © 2026 AI4InclusiveGh. All rights reserved. | Built with{" "}
-                <span className="text-red-500">❤</span> for a more inclusive
-                Ghana
+                © 2026 AI4InclusiveGh. All rights reserved.
               </p>
               <div className="flex items-center gap-6">
                 {/* Social Links */}

@@ -123,7 +123,7 @@ export default function Themes() {
             )
               return t.id === "vaw";
             if (lLower.includes("mental")) return t.id === "mental-health";
-            if (lLower.includes("lgbt") || lLower.includes("gender") || lLower.includes("sgmc")) return t.id === "lgbtq";
+            if (lLower.includes("lgbt")) return t.id === "lgbtq";
             return false;
           });
 
@@ -140,16 +140,6 @@ export default function Themes() {
           return null;
         })
         .filter(Boolean);
-
-      // Sort to enforce order: VAW, Disabilities, Mental Health, SGMC
-      const orderPriority = (item: any) => {
-        if (item.id === "vaw") return 0;
-        if (item.id === "disabilities") return 1;
-        if (item.id === "mental-health") return 2;
-        if (item.id === "lgbtq") return 3;
-        return 4;
-      };
-      mapped.sort((a, b) => orderPriority(a) - orderPriority(b));
 
       if (mapped.length > 0 && mounted) {
         setThemes(mapped as typeof DEFAULT_THEMES);
@@ -339,7 +329,6 @@ export default function Themes() {
                 />
                 <div>
                   <h3 className="font-bold text-lg">AI4InclusiveGh</h3>
-                  <p className="text-sm text-slate-400">Advocacy Through AI</p>
                 </div>
               </div>
               <p className="text-slate-300 mb-6 text-sm">
@@ -350,7 +339,7 @@ export default function Themes() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-slate-300 text-sm">
                   <Mail className="h-4 w-4 text-primary" />
-                  <span>contact@ai4inclusivegh.org</span>
+                  <span>ai4inclusiveghana@ug.edu.gh</span>
                 </div>
                 <div className="flex items-center gap-3 text-slate-300 text-sm">
                   <Phone className="h-4 w-4 text-primary" />
@@ -423,8 +412,7 @@ export default function Themes() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400">
               <p>
-                © 2026 AI4InclusiveGh. All rights reserved. | Built with{" "}
-                <span className="text-red-400">♥</span> for Ghana
+                © 2026 AI4InclusiveGh. All rights reserved.
               </p>
               <div className="flex gap-6">
                 <Link

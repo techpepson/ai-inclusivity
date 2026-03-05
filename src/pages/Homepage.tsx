@@ -86,15 +86,6 @@ const PLATFORM_FEATURES = [
 
 const DEFAULT_FOCUS_AREAS = [
   {
-    label: "Violence Against Women",
-    hashtag: "#EndVAW",
-    hashtagColor: "text-blue-500",
-    bgColor: "bg-blue-50",
-    icon: Shield,
-    href: "/themes/vaw",
-    image: womenImage,
-  },
-  {
     label: "Persons with Disabilities",
     hashtag: "#InclusionMatters",
     hashtagColor: "text-blue-500",
@@ -104,10 +95,19 @@ const DEFAULT_FOCUS_AREAS = [
     image: disabilityImage,
   },
   {
+    label: "Violence Against Women",
+    hashtag: "#EndVAW",
+    hashtagColor: "text-red-500",
+    bgColor: "bg-red-50",
+    icon: Shield,
+    href: "/themes/vaw",
+    image: womenImage,
+  },
+  {
     label: "Mental Health",
     hashtag: "#BreakTheStigma",
-    hashtagColor: "text-blue-500",
-    bgColor: "bg-blue-50",
+    hashtagColor: "text-teal-500",
+    bgColor: "bg-teal-50",
     icon: Heart,
     href: "/themes/mental-health",
     image: mentalHealthImage,
@@ -115,8 +115,8 @@ const DEFAULT_FOCUS_AREAS = [
   {
     label: "Sexual and Gender Minority Community",
     hashtag: "#SGMCRights",
-    hashtagColor: "text-blue-500",
-    bgColor: "bg-blue-50",
+    hashtagColor: "text-orange-500",
+    bgColor: "bg-orange-50",
     icon: Palette,
     href: "/themes/lgbtq",
     image: lgbtqImage,
@@ -220,20 +220,20 @@ export default function Homepage() {
           lLower.includes("women")
         ) {
           icon = Shield;
-          bgColor = "bg-blue-50";
-          hashtagColor = "text-blue-500";
+          bgColor = "bg-red-50";
+          hashtagColor = "text-red-500";
           fallbackHref = "/themes/vaw";
           defaultImage = womenImage;
         } else if (lLower.includes("mental")) {
           icon = Heart;
-          bgColor = "bg-blue-50";
-          hashtagColor = "text-blue-500";
+          bgColor = "bg-teal-50";
+          hashtagColor = "text-teal-500";
           fallbackHref = "/themes/mental-health";
           defaultImage = mentalHealthImage;
-        } else if (lLower.includes("lgbt") || lLower.includes("gender") || lLower.includes("sgmc")) {
+        } else if (lLower.includes("lgbt")) {
           icon = Palette;
-          bgColor = "bg-blue-50";
-          hashtagColor = "text-blue-500";
+          bgColor = "bg-orange-50";
+          hashtagColor = "text-orange-500";
           fallbackHref = "/themes/lgbtq";
           defaultImage = lgbtqImage;
         }
@@ -253,17 +253,6 @@ export default function Homepage() {
           image,
         } as any);
       }
-
-      // Sort to enforce order: VAW, Disabilities, Mental Health, SGMC
-      const orderPriority = (item: any) => {
-        const l = item.label.toLowerCase();
-        if (l.includes("violence") || l.includes("vaw") || l.includes("women")) return 0;
-        if (l.includes("disabil")) return 1;
-        if (l.includes("mental")) return 2;
-        if (l.includes("lgbt") || l.includes("gender") || l.includes("sgmc")) return 3;
-        return 4;
-      };
-      validated.sort((a, b) => orderPriority(a) - orderPriority(b));
 
       if (validated.length > 0 && mounted) setFocusAreas(validated);
     }
@@ -541,7 +530,6 @@ export default function Homepage() {
                 />
                 <div>
                   <h3 className="font-bold text-lg">AI4InclusiveGh</h3>
-                  <p className="text-sm text-slate-400">Advocacy Through AI</p>
                 </div>
               </div>
               <p className="text-slate-300 mb-6">
@@ -552,7 +540,7 @@ export default function Homepage() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-slate-300">
                   <Mail className="h-5 w-5 text-primary" />
-                  <span>contact@ai4inclusivegh.org</span>
+                  <span>ai4inclusiveghana@ug.edu.gh</span>
                 </div>
                 <div className="flex items-center gap-3 text-slate-300">
                   <Phone className="h-5 w-5 text-primary" />
@@ -608,9 +596,7 @@ export default function Homepage() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-slate-400 text-sm">
-                © 2026 AI4InclusiveGh. All rights reserved. | Built with{" "}
-                <span className="text-red-500">❤</span> for a more inclusive
-                Ghana
+                © 2026 AI4InclusiveGh. All rights reserved.
               </p>
               <div className="flex items-center gap-6">
                 {/* Social Links */}
