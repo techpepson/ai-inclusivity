@@ -65,6 +65,8 @@ export type Event = {
   time?: string;
   type?: string;
   description?: string;
+  location?: string;
+  images?: string[];
   attendees?: number;
   createdAt: string;
   updatedAt: string;

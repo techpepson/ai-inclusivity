@@ -44,9 +44,10 @@ import Autoplay from "embla-carousel-autoplay";
 import {
   fetchFocusAreas as fetchFocusAreasFromApi,
   fetchHeroContent,
+  fetchEvents,
   sendContactMessage,
 } from "@/lib/api-client";
-import type { FocusArea, HeroContent } from "@/lib/types";
+import type { FocusArea, HeroContent, Event } from "@/lib/types";
 import { logo } from "@/images/images";
 
 const DEFAULT_HERO: HeroContent = {
@@ -133,13 +134,41 @@ const FOOTER_LINKS = [
 ];
 
 export default function Homepage() {
-  useQuery({
+  const { data: heroContent } = useQuery({
     queryKey: ["hero-content"],
     queryFn: () => fetchHeroContent(DEFAULT_HERO),
     staleTime: 1000 * 60 * 5,
     retry: 1,
     refetchOnWindowFocus: false,
   });
+
+  // Use API data if available, otherwise use defaults
+  const hero = heroContent ?? DEFAULT_HERO;
+
+  // Fetch events to get images for the slider
+  const { data: events } = useQuery({
+    queryKey: ["events"],
+    queryFn: fetchEvents,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  // Get images from the most current event (sorted by date descending)
+  const sliderImages = (() => {
+    if (!events || events.length === 0) {
+      return [flyer1, flyer2]; // fallback to default flyers
+    }
+    // Sort events by date descending (most recent first)
+    const sortedEvents = [...events].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+    const mostRecentEvent = sortedEvents[0];
+    if (mostRecentEvent.images && mostRecentEvent.images.length > 0) {
+      return mostRecentEvent.images;
+    }
+    return [flyer1, flyer2]; // fallback if no images
+  })();
 
   const [focusAreas, setFocusAreas] = useState(DEFAULT_FOCUS_AREAS);
 
@@ -295,8 +324,7 @@ export default function Homepage() {
                 className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight animate-slide-in-left"
                 style={{ animationDelay: "0.1s" }}
               >
-                Amplifying <span className="text-yellow-400">Voices</span> for
-                Inclusive Ghana
+                {hero.title}
               </h1>
 
               {/* Description */}
@@ -304,9 +332,7 @@ export default function Homepage() {
                 className="text-lg lg:text-xl text-white/90 mb-8 max-w-xl animate-fade-in-up opacity-0"
                 style={{ animationDelay: "0.3s" }}
               >
-                AI4InclusiveGh uses artificial intelligence and social media
-                analytics to monitor conversations, track advocacy trends, and
-                drive policy change for marginalized communities in Ghana.
+                {hero.subTitle}
               </p>
 
               {/* CTA Buttons */}
@@ -320,7 +346,7 @@ export default function Homepage() {
                     variant="outline"
                     className="bg-white text-primary hover:bg-white/90 border-white text-lg px-8 hover:scale-105 transition-transform duration-300"
                   >
-                    Explore Analytics
+                    {hero.primaryButtonText}
                   </Button>
                 </Link>
                 <Button
@@ -328,7 +354,7 @@ export default function Homepage() {
                   onClick={() => setJoinDialogOpen(true)}
                   className="bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30 text-lg px-8 hover:scale-105 transition-transform duration-300"
                 >
-                  Join Community
+                  {hero.secondaryButtonText}
                 </Button>
               </div>
             </div>
@@ -351,24 +377,17 @@ export default function Homepage() {
                 className="w-full max-w-md mx-auto lg:max-w-none"
               >
                 <CarouselContent>
-                  <CarouselItem>
-                    <div className="p-1">
-                      <img
-                        src={flyer1}
-                        alt="Flyer 1"
-                        className="w-full h-auto rounded-xl shadow-2xl"
-                      />
-                    </div>
-                  </CarouselItem>
-                  <CarouselItem>
-                    <div className="p-1">
-                      <img
-                        src={flyer2}
-                        alt="Flyer 2"
-                        className="w-full h-auto rounded-xl shadow-2xl"
-                      />
-                    </div>
-                  </CarouselItem>
+                  {sliderImages.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <div className="p-1">
+                        <img
+                          src={image}
+                          alt={`Event image ${index + 1}`}
+                          className="w-full h-auto rounded-xl shadow-2xl"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
                 </CarouselContent>
                 <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
                 <CarouselNext className="right-2 bg-white/80 hover:bg-white" />

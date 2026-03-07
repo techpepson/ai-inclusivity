@@ -10,6 +10,7 @@ import {
   Heart,
   Zap,
   Check,
+  CheckCircle,
   Phone,
   MapPin,
   Calendar,
@@ -38,9 +39,10 @@ import { useQuery } from "@tanstack/react-query";
 import {
   fetchEvents,
   fetchSocials,
+  fetchTestimonials,
   sendContactMessage,
 } from "@/lib/api-client";
-import type { Event, Social } from "@/lib/types";
+import type { Event, Social, Testimonial } from "@/lib/types";
 import { Link } from "react-router-dom";
 import communityImage from "@/assets/team-collaboration.jpg";
 import { logo } from "@/images/images";
@@ -163,7 +165,6 @@ const TESTIMONIALS = [
     avatar: "A",
     quote:
       "AI4InclusiveGh has given us the data and insights we needed to make our mental health advocacy more effective. The platform is revolutionary!",
-    campaigns: 8,
   },
   {
     name: "Kwame Asante",
@@ -171,7 +172,6 @@ const TESTIMONIALS = [
     avatar: "K",
     quote:
       "Being part of this community has connected me with advocates nationwide. Together, we're making real change for persons with disabilities in Ghana.",
-    campaigns: 12,
   },
   {
     name: "Ama Osei",
@@ -179,7 +179,6 @@ const TESTIMONIALS = [
     avatar: "A",
     quote:
       "The analytics show us exactly where our message is resonating. This platform has transformed how we approach advocacy against gender-based violence.",
-    campaigns: 15,
   },
   {
     name: "Kofi Boateng",
@@ -187,7 +186,6 @@ const TESTIMONIALS = [
     avatar: "K",
     quote:
       "Finally, a platform that combines data with heart. The community support here is incredible, and the tools help us measure real impact.",
-    campaigns: 6,
   },
   {
     name: "Efua Darko",
@@ -195,7 +193,6 @@ const TESTIMONIALS = [
     avatar: "E",
     quote:
       "The AI insights help us understand what messaging works best. We've seen our campaign reach grow by 300% since joining this platform.",
-    campaigns: 10,
   },
   {
     name: "Yaw Mensah",
@@ -203,7 +200,6 @@ const TESTIMONIALS = [
     avatar: "Y",
     quote:
       "The data exports and reports are invaluable for our research. This platform bridges the gap between grassroots advocacy and policy change.",
-    campaigns: 7,
   },
 ];
 
@@ -238,6 +234,7 @@ const FOOTER_LINKS = [
 export default function Community() {
   const [email, setEmail] = useState("");
   const [eventModalOpen, setEventModalOpen] = useState(false);
+  const [proposalModalOpen, setProposalModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [eventApplicationForm, setEventApplicationForm] = useState({
     name: "",
@@ -245,7 +242,18 @@ export default function Community() {
     phone: "",
     reason: "",
   });
+  const [proposalForm, setProposalForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    eventTitle: "",
+    eventDescription: "",
+  });
   const [isSubmittingEvent, setIsSubmittingEvent] = useState(false);
+  const [isSubmittingProposal, setIsSubmittingProposal] = useState(false);
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscribeSuccess, setSubscribeSuccess] = useState(false);
+  const [proposalSuccess, setProposalSuccess] = useState(false);
 
   // Fetch events from API
   const { data: eventData = DEFAULT_EVENTS } = useQuery({
@@ -267,6 +275,28 @@ export default function Community() {
     refetchOnWindowFocus: false,
   });
 
+  // Fetch testimonials from API
+  const { data: testimonialData = [] } = useQuery({
+    queryKey: ["testimonials"],
+    queryFn: () => fetchTestimonials(),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  // Map API testimonials to display format, fall back to defaults
+  const testimonials = (() => {
+    if (testimonialData && testimonialData.length > 0) {
+      return testimonialData.map((t: Testimonial) => ({
+        name: t.speaker,
+        role: t.role,
+        avatar: t.speaker.charAt(0).toUpperCase(),
+        quote: t.statement,
+      }));
+    }
+    return TESTIMONIALS;
+  })();
+
   const handleEventInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -275,6 +305,68 @@ export default function Community() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleProposalInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setProposalForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setIsSubscribing(true);
+    try {
+      await sendContactMessage({
+        name: "Newsletter Subscriber",
+        email: email.trim(),
+        phone: null,
+        subject: "Newsletter Subscription",
+        message: `New newsletter subscription request from: ${email.trim()}`,
+      });
+      setSubscribeSuccess(true);
+      setEmail("");
+      setTimeout(() => setSubscribeSuccess(false), 3000);
+    } catch (error) {
+      console.error("Failed to subscribe:", error);
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
+  const handleProposalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingProposal(true);
+    try {
+      await sendContactMessage({
+        name: proposalForm.name,
+        email: proposalForm.email,
+        phone: proposalForm.phone || null,
+        subject: `Event Proposal: ${proposalForm.eventTitle}`,
+        message: proposalForm.eventDescription,
+      });
+      setProposalSuccess(true);
+      setProposalForm({
+        name: "",
+        email: "",
+        phone: "",
+        eventTitle: "",
+        eventDescription: "",
+      });
+      setTimeout(() => {
+        setProposalModalOpen(false);
+        setProposalSuccess(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to submit proposal:", error);
+    } finally {
+      setIsSubmittingProposal(false);
+    }
   };
 
   const handleEventApplicationSubmit = async (e: React.FormEvent) => {
@@ -482,7 +574,11 @@ export default function Community() {
                   in your community
                 </p>
               </div>
-              <Button variant="secondary" className="shrink-0">
+              <Button
+                variant="secondary"
+                className="shrink-0"
+                onClick={() => setProposalModalOpen(true)}
+              >
                 Submit Event Proposal
               </Button>
             </CardContent>
@@ -500,7 +596,7 @@ export default function Community() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((testimonial, index) => (
+            {testimonials.map((testimonial, index) => (
               <Card
                 key={index}
                 className="border border-border/50 hover:shadow-lg transition-all duration-300 animate-fade-in-up opacity-0"
@@ -521,12 +617,6 @@ export default function Community() {
                   <p className="text-muted-foreground mb-4 italic">
                     "{testimonial.quote}"
                   </p>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Award className="h-4 w-4 text-primary" />
-                    <span className="text-muted-foreground">
-                      {testimonial.campaigns} Campaigns Joined
-                    </span>
-                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -546,19 +636,29 @@ export default function Community() {
                   Subscribe to our newsletter for monthly advocacy insights,
                   campaign updates, and community highlights.
                 </p>
-                <div className="flex gap-2">
+                <form onSubmit={handleSubscribe} className="flex gap-2">
                   <Input
                     type="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="flex-1"
+                    required
                   />
-                  <Button className="bg-primary hover:bg-primary/90">
+                  <Button
+                    type="submit"
+                    className="bg-primary hover:bg-primary/90"
+                    disabled={isSubscribing}
+                  >
                     <Send className="h-4 w-4 mr-2" />
-                    Subscribe
+                    {isSubscribing ? "Sending..." : "Subscribe"}
                   </Button>
-                </div>
+                </form>
+                {subscribeSuccess && (
+                  <p className="text-green-600 text-sm mt-2">
+                    Thank you for subscribing! We'll be in touch.
+                  </p>
+                )}
               </CardContent>
             </Card>
 
@@ -570,19 +670,17 @@ export default function Community() {
                 </h3>
                 <p className="opacity-90 mb-6">
                   Join our community of advocates today and help shape a more
-                  inclusive future for Ghana. Registration is free and takes
-                  less than a minute.
+                  inclusive future for Ghana.
                 </p>
                 <div className="flex flex-wrap gap-4 mb-6">
-                  <Button className="bg-white/10" variant="secondary">
-                    Create Free Account
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="border-white bg-white/10 text-white hover:bg-white/10"
-                  >
-                    Learn More
-                  </Button>
+                  <Link to="/about">
+                    <Button
+                      variant="outline"
+                      className="border-white bg-white/10 text-white hover:bg-white/10"
+                    >
+                      Learn More
+                    </Button>
+                  </Link>
                 </div>
                 <div className="space-y-3">
                   {SIGNUP_BENEFITS.map((benefit, index) => (
@@ -850,6 +948,116 @@ export default function Community() {
               </Button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Event Proposal Modal */}
+      <Dialog
+        open={proposalModalOpen}
+        onOpenChange={(open) => {
+          setProposalModalOpen(open);
+          if (!open) setProposalSuccess(false);
+        }}
+      >
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Submit Event Proposal</DialogTitle>
+            <DialogDescription>
+              Have an idea for a community event? Fill out the form below and
+              we'll get back to you.
+            </DialogDescription>
+          </DialogHeader>
+          {proposalSuccess ? (
+            <div className="text-center py-6">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Proposal Submitted!</h3>
+              <p className="text-muted-foreground">
+                Thank you for your proposal. We'll review it and get back to you
+                soon.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleProposalSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Full Name *</label>
+                <Input
+                  name="name"
+                  placeholder="Enter your full name"
+                  value={proposalForm.name}
+                  onChange={handleProposalInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Email Address *</label>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={proposalForm.email}
+                  onChange={handleProposalInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Phone Number</label>
+                <Input
+                  name="phone"
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={proposalForm.phone}
+                  onChange={handleProposalInputChange}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Event Title *</label>
+                <Input
+                  name="eventTitle"
+                  placeholder="Proposed event title"
+                  value={proposalForm.eventTitle}
+                  onChange={handleProposalInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Event Description *
+                </label>
+                <Textarea
+                  name="eventDescription"
+                  placeholder="Describe the event you'd like to propose, including goals, target audience, and any other details..."
+                  value={proposalForm.eventDescription}
+                  onChange={handleProposalInputChange}
+                  rows={4}
+                  required
+                />
+              </div>
+
+              <div className="flex gap-4 justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setProposalModalOpen(false)}
+                  disabled={isSubmittingProposal}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-primary hover:bg-primary/90"
+                  disabled={isSubmittingProposal}
+                >
+                  {isSubmittingProposal ? "Submitting..." : "Submit Proposal"}
+                </Button>
+              </div>
+            </form>
+          )}
         </DialogContent>
       </Dialog>
     </div>

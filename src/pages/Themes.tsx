@@ -107,39 +107,65 @@ export default function Themes() {
       const rows: FocusArea[] = await fetchFocusAreasFromApi();
       if (!Array.isArray(rows) || rows.length === 0) return;
 
-      // Map API data to theme format if available
-      const mapped = rows
-        .map((row) => {
-          const label = typeof row.title === "string" ? row.title.trim() : "";
-          const lLower = label.toLowerCase();
+      // Map API data to theme format
+      const mapped = rows.map((row, index) => {
+        const label = typeof row.title === "string" ? row.title.trim() : "";
+        const lLower = label.toLowerCase();
 
-          // Find matching default theme
-          const match = DEFAULT_THEMES.find((t) => {
-            if (lLower.includes("disabil")) return t.id === "disabilities";
-            if (
-              lLower.includes("violence") ||
-              lLower.includes("women") ||
-              lLower.includes("vaw")
-            )
-              return t.id === "vaw";
-            if (lLower.includes("mental")) return t.id === "mental-health";
-            if (lLower.includes("lgbt")) return t.id === "lgbtq";
-            return false;
-          });
+        // Find matching default theme for styling
+        const match = DEFAULT_THEMES.find((t) => {
+          if (lLower.includes("disabil")) return t.id === "disabilities";
+          if (
+            lLower.includes("violence") ||
+            lLower.includes("women") ||
+            lLower.includes("vaw")
+          )
+            return t.id === "vaw";
+          if (lLower.includes("mental")) return t.id === "mental-health";
+          if (
+            lLower.includes("lgbt") ||
+            lLower.includes("sgmc") ||
+            lLower.includes("gender minority")
+          )
+            return t.id === "lgbtq";
+          return false;
+        });
 
-          if (match) {
-            return {
-              ...match,
-              label: label || match.label,
-              hashtag: row.hashTag || match.hashtag,
-              href: row.id
-                ? `/focus/${encodeURIComponent(row.id)}`
-                : match.href,
-            };
-          }
-          return null;
-        })
-        .filter(Boolean);
+        // Get image from API or use default
+        const imageRaw =
+          Array.isArray(row.images) && typeof row.images[0] === "string"
+            ? row.images[0].trim()
+            : "";
+        const defaultImage =
+          match?.image || DEFAULT_THEMES[index % DEFAULT_THEMES.length].image;
+        const image = imageRaw || defaultImage;
+
+        // Use match defaults or fallback to first default theme's styling
+        const fallback = DEFAULT_THEMES[index % DEFAULT_THEMES.length];
+
+        return {
+          id: row.id || match?.id || `theme-${index}`,
+          label: label || match?.label || fallback.label,
+          hashtag: row.hashTag || match?.hashtag || fallback.hashtag,
+          hashtagColor: match?.hashtagColor || fallback.hashtagColor,
+          bgColor: match?.bgColor || fallback.bgColor,
+          iconBg: match?.iconBg || fallback.iconBg,
+          iconColor: match?.iconColor || fallback.iconColor,
+          icon: match?.icon || fallback.icon,
+          href: row.id
+            ? `/focus/${encodeURIComponent(row.id)}`
+            : match?.href || fallback.href,
+          image,
+          description:
+            row.description || match?.description || fallback.description,
+          stats: {
+            reach:
+              row.statsValue || match?.stats?.reach || fallback.stats.reach,
+            campaigns: match?.stats?.campaigns || fallback.stats.campaigns,
+            voices: match?.stats?.voices || fallback.stats.voices,
+          },
+        };
+      });
 
       if (mapped.length > 0 && mounted) {
         setThemes(mapped as typeof DEFAULT_THEMES);
@@ -185,8 +211,9 @@ export default function Themes() {
             className="text-lg lg:text-xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.3s" }}
           >
-            We focus on four critical areas of social advocacy in Ghana, using
-            AI-powered analytics to amplify voices and drive meaningful change.
+            We focus on {themes.length} critical areas of social advocacy in
+            Ghana, using AI-powered analytics to amplify voices and drive
+            meaningful change.
           </p>
         </div>
       </section>

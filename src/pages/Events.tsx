@@ -202,20 +202,22 @@ function categorizeEvent(
   today: Date,
 ): "upcoming" | "ongoing" | "past" {
   const eventDate = new Date(event.date);
+  eventDate.setHours(0, 0, 0, 0);
 
-  // Check if event is ongoing (date has passed but time indicates ongoing)
-  if (
-    event.time?.toLowerCase().includes("ongoing") ||
-    event.time?.toLowerCase().includes("every")
-  ) {
+  const todayStart = new Date(today);
+  todayStart.setHours(0, 0, 0, 0);
+
+  // Event happening today is "ongoing"
+  if (eventDate.getTime() === todayStart.getTime()) {
     return "ongoing";
   }
 
-  // Check if event is in the past
-  if (eventDate < today) {
+  // Event in the past
+  if (eventDate < todayStart) {
     return "past";
   }
 
+  // Event in the future
   return "upcoming";
 }
 
@@ -241,13 +243,18 @@ export default function Events() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Fetch events from API
-  const { data: apiEvents } = useQuery({
+  const { data: apiEvents, isLoading } = useQuery({
     queryKey: ["events"],
     queryFn: fetchEvents,
     staleTime: 1000 * 60 * 5,
   });
 
-  const events = apiEvents?.length ? apiEvents : DEFAULT_EVENTS;
+  // Use API data if available; only fall back to defaults when API returns nothing
+  const events = useMemo(() => {
+    if (apiEvents && apiEvents.length > 0) return apiEvents;
+    if (isLoading) return [];
+    return DEFAULT_EVENTS;
+  }, [apiEvents, isLoading]);
 
   // Categorize events
   const categorizedEvents = useMemo(() => {
@@ -442,98 +449,117 @@ export default function Events() {
           </div>
 
           {/* Events Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {currentEvents.map((event, index) => {
-              const typeStyle = EVENT_TYPE_STYLES[event.type] || {
-                bgColor: "bg-gray-500",
-                textColor: "text-white",
-              };
-              const eventWithExtras = event as Event & {
-                description?: string;
-                location?: string;
-                image?: string;
-              };
-
-              return (
-                <Card
-                  key={event.id}
-                  className="overflow-hidden border border-border/50 hover:shadow-xl transition-all duration-300 group animate-fade-in-up opacity-0"
-                  style={{ animationDelay: `${0.1 * index}s` }}
-                >
-                  {/* Event Image */}
-                  <div className="relative h-48 overflow-hidden bg-gray-100">
-                    <img
-                      src={eventWithExtras.image || conferenceImage}
-                      alt={event.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0"
-                    />
-                    {/* Category Badge */}
-                    <div className="absolute top-4 right-4">
-                      <Badge
-                        className={`${typeStyle.bgColor} ${typeStyle.textColor} px-3 py-1`}
-                      >
-                        {event.type}
-                      </Badge>
-                    </div>
-                  </div>
-
-                  {/* Event Content */}
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold mb-2 line-clamp-2">
-                      {event.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                      {eventWithExtras.description ||
-                        "Join us for this exciting event!"}
-                    </p>
-
-                    {/* Event Details */}
-                    <div className="space-y-2 mb-6">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Calendar className="h-4 w-4 text-primary" />
-                        <span>{formatEventDate(event.date)}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4 text-primary" />
-                        <span>{event.time}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin className="h-4 w-4 text-primary" />
-                        <span className="line-clamp-1">
-                          {eventWithExtras.location || "Location TBA"}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Users className="h-4 w-4 text-primary" />
-                        <span>{event.attendees} expected attendees</span>
-                      </div>
-                    </div>
-
-                    {/* Register Button */}
-                    {activeTab !== "past" ? (
-                      <Button
-                        className="w-full bg-primary hover:bg-primary/90 text-white group"
-                        onClick={() => openRegisterModal(event)}
-                      >
-                        Register Now
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    ) : (
-                      <Button variant="outline" className="w-full" disabled>
-                        Event Concluded
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-
-          {currentEvents.length === 0 && (
+          {isLoading ? (
+            <div className="text-center py-16">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground text-lg">Loading events...</p>
+            </div>
+          ) : events.length === 0 ? (
+            <div className="text-center py-16">
+              <Calendar className="h-16 w-16 text-muted-foreground/40 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">No Events Yet</h3>
+              <p className="text-muted-foreground text-lg max-w-md mx-auto">
+                We're planning exciting events for our community. Check back
+                soon for upcoming workshops, conferences, and gatherings!
+              </p>
+            </div>
+          ) : currentEvents.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground text-lg">
                 No {activeTab} events at the moment. Check back soon!
               </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {currentEvents.map((event, index) => {
+                const typeStyle = EVENT_TYPE_STYLES[event.type || ""] || {
+                  bgColor: "bg-gray-500",
+                  textColor: "text-white",
+                };
+
+                return (
+                  <Card
+                    key={event.id}
+                    className="overflow-hidden border border-border/50 hover:shadow-xl transition-all duration-300 group animate-fade-in-up opacity-0"
+                    style={{ animationDelay: `${0.1 * index}s` }}
+                  >
+                    {/* Event Image */}
+                    <div className="relative h-48 overflow-hidden bg-gray-100">
+                      <img
+                        src={
+                          event.images && event.images.length > 0
+                            ? event.images[0]
+                            : conferenceImage
+                        }
+                        alt={event.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0"
+                      />
+                      {/* Category Badge */}
+                      {event.type && (
+                        <div className="absolute top-4 right-4">
+                          <Badge
+                            className={`${typeStyle.bgColor} ${typeStyle.textColor} px-3 py-1`}
+                          >
+                            {event.type}
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Event Content */}
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold mb-2 line-clamp-2">
+                        {event.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                        {event.description ||
+                          "Join us for this exciting event!"}
+                      </p>
+
+                      {/* Event Details */}
+                      <div className="space-y-2 mb-6">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4 text-primary" />
+                          <span>{formatEventDate(event.date)}</span>
+                        </div>
+                        {event.time && (
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Clock className="h-4 w-4 text-primary" />
+                            <span>{event.time}</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <MapPin className="h-4 w-4 text-primary" />
+                          <span className="line-clamp-1">
+                            {event.location || "Location TBA"}
+                          </span>
+                        </div>
+                        {event.attendees && (
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Users className="h-4 w-4 text-primary" />
+                            <span>{event.attendees} expected attendees</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Register Button */}
+                      {activeTab !== "past" ? (
+                        <Button
+                          className="w-full bg-primary hover:bg-primary/90 text-white group"
+                          onClick={() => openRegisterModal(event)}
+                        >
+                          Register Now
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      ) : (
+                        <Button variant="outline" className="w-full" disabled>
+                          Event Concluded
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>

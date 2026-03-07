@@ -23,8 +23,9 @@ import {
   fetchTeamMembers,
   fetchSponsors,
   fetchAboutSection,
+  fetchFocusAreas,
 } from "@/lib/api-client";
-import type { TeamMember, Sponsor, AboutSection } from "@/lib/types";
+import type { TeamMember, Sponsor, AboutSection, FocusArea } from "@/lib/types";
 import { Link } from "react-router-dom";
 import { logo } from "@/images/images";
 import { Phone, MapPin } from "lucide-react";
@@ -268,8 +269,8 @@ const FOOTER_LINKS = [
 ];
 
 export default function About() {
-  // Fetch team members from API
-  const { data: teamData = DEFAULT_TEAM } = useQuery({
+  // Fetch team members from API (includes both team and board members)
+  const { data: allTeamData = [] } = useQuery({
     queryKey: ["team-members"],
     queryFn: () => fetchTeamMembers(),
     staleTime: 1000 * 60 * 5,
@@ -277,7 +278,44 @@ export default function About() {
     refetchOnWindowFocus: false,
   });
 
-  const team = teamData && teamData.length > 0 ? teamData : DEFAULT_TEAM;
+  // Separate team members from board members based on role
+  const { teamMembers, boardMembers } = (() => {
+    // If no data from API, use defaults for both
+    if (!allTeamData || allTeamData.length === 0) {
+      return {
+        teamMembers: DEFAULT_TEAM,
+        boardMembers: DEFAULT_BOARD,
+      };
+    }
+
+    // Board roles keywords
+    const boardKeywords = ["board", "chair", "treasurer"];
+
+    const team: TeamMember[] = [];
+    const board: TeamMember[] = [];
+
+    for (const member of allTeamData) {
+      const roleLower = member.role.toLowerCase();
+      const isBoard = boardKeywords.some((keyword) =>
+        roleLower.includes(keyword),
+      );
+
+      if (isBoard) {
+        board.push(member);
+      } else {
+        team.push(member);
+      }
+    }
+
+    // If API returned data but no items matched either category,
+    // use appropriate defaults only for empty categories
+    return {
+      teamMembers: team.length > 0 ? team : DEFAULT_TEAM,
+      boardMembers: board, // Don't fall back if API had data - show actual board members from server
+    };
+  })();
+
+  const team = teamMembers;
 
   // Fetch sponsors from API
   const { data: sponsorData = DEFAULT_SPONSORS } = useQuery({
@@ -298,6 +336,60 @@ export default function About() {
   });
 
   const about = aboutData || DEFAULT_ABOUT;
+
+  // Fetch focus areas from API for pillars
+  const { data: focusAreasData = [] } = useQuery({
+    queryKey: ["focus-areas"],
+    queryFn: () => fetchFocusAreas(),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  // Map focus areas to pillar format
+  const pillars = (() => {
+    if (!focusAreasData || focusAreasData.length === 0) {
+      return PILLARS;
+    }
+
+    const iconMap: Record<string, typeof Accessibility> = {
+      disabilities: Accessibility,
+      disability: Accessibility,
+      vaw: Heart,
+      violence: Heart,
+      women: Heart,
+      mental: Brain,
+      lgbtq: Wifi,
+      lgbt: Wifi,
+      sgmc: Wifi,
+      gender: Wifi,
+    };
+
+    return focusAreasData.map((area: FocusArea, index: number) => {
+      const lLower = area.title.toLowerCase();
+      let icon = Accessibility;
+
+      for (const [key, value] of Object.entries(iconMap)) {
+        if (lLower.includes(key)) {
+          icon = value;
+          break;
+        }
+      }
+
+      return {
+        icon,
+        title: area.title,
+        description: area.description,
+        reach: area.statsValue
+          ? `${area.statsValue} reach`
+          : PILLARS[index % PILLARS.length]?.reach || "",
+        bgColor: index % 2 === 0 ? "bg-primary" : "bg-secondary",
+      };
+    });
+  })();
+
+  const pillarsLabel =
+    pillars.length === 4 ? "Four" : pillars.length.toString();
 
   return (
     <div className="min-h-screen">
@@ -404,12 +496,13 @@ export default function About() {
         </div>
       </section>
 
-      {/* Four Pillars of Impact */}
+      {/* Pillars of Impact */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Four Pillars of <span className="text-primary">Impact</span>
+              {pillarsLabel} Pillars of{" "}
+              <span className="text-primary">Impact</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Our focus areas where AI-powered advocacy creates real change
@@ -417,7 +510,7 @@ export default function About() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {PILLARS.map((pillar, index) => (
+            {pillars.map((pillar, index) => (
               <Card
                 key={index}
                 className="border-0 bg-muted/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
@@ -568,54 +661,56 @@ export default function About() {
         </div>
       </section>
 
-      {/* Board Members */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Board Members
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              The dedicated individuals guiding our organization
-            </p>
-          </div>
+      {/* Board Members - only show if there are board members */}
+      {boardMembers.length > 0 && (
+        <section className="py-20 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+                Board Members
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                The dedicated individuals guiding our organization
+              </p>
+            </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {DEFAULT_BOARD.map((member, index) => (
-              <Card
-                key={index}
-                className="border border-border/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center group"
-              >
-                <CardContent className="pt-8 pb-6">
-                  <div className="relative mx-auto w-20 h-20 mb-4">
-                    <div className="absolute inset-0 bg-primary rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-300"></div>
-                    <Avatar className="w-20 h-20 relative rounded-2xl border-4 border-white">
-                      <AvatarImage
-                        src={member.profilePicture}
-                        alt={member.name}
-                        className="object-cover"
-                      />
-                      <AvatarFallback className="text-lg rounded-2xl">
-                        {member.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
-                  <h3 className="text-lg font-bold">{member.name}</h3>
-                  <p className="text-primary text-sm font-medium mb-2">
-                    {member.role}
-                  </p>
-                  <p className="text-muted-foreground text-sm">
-                    {member.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {boardMembers.map((member, index) => (
+                <Card
+                  key={index}
+                  className="border border-border/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center group"
+                >
+                  <CardContent className="pt-8 pb-6">
+                    <div className="relative mx-auto w-20 h-20 mb-4">
+                      <div className="absolute inset-0 bg-primary rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-300"></div>
+                      <Avatar className="w-20 h-20 relative rounded-2xl border-4 border-white">
+                        <AvatarImage
+                          src={member.profilePicture}
+                          alt={member.name}
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="text-lg rounded-2xl">
+                          {member.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+                    <h3 className="text-lg font-bold">{member.name}</h3>
+                    <p className="text-primary text-sm font-medium mb-2">
+                      {member.role}
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      {member.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="bg-slate-800 text-white">

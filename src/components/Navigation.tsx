@@ -30,7 +30,11 @@ export function Navigation() {
         href: "/themes/mental-health",
         icon: Heart,
       },
-      { name: "Sexual and Gender Minority Community", href: "/themes/lgbtq", icon: Palette },
+      {
+        name: "Sexual and Gender Minority Community",
+        href: "/themes/lgbtq",
+        icon: Palette,
+      },
     ],
     [],
   );
@@ -107,7 +111,7 @@ export function Navigation() {
       submenu: themesSubmenu,
     },
     { name: "Analytics", href: "/analytics" },
-    { name: "Campaigns", href: "/get-involved" },
+    // { name: "Campaigns", href: "/get-involved" },
     { name: "Events", href: "/events" },
     { name: "Community", href: "/community" },
   ];

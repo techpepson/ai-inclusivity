@@ -702,6 +702,15 @@ export async function fetchEvents(): Promise<Event[]> {
               typeof (item as any).description === "string"
                 ? (item as any).description.trim()
                 : undefined,
+            location:
+              typeof (item as any).location === "string"
+                ? (item as any).location.trim()
+                : undefined,
+            images: Array.isArray((item as any).images)
+              ? (item as any).images.filter(
+                  (img: unknown) => typeof img === "string" && img.trim(),
+                )
+              : undefined,
             attendees:
               typeof (item as any).attendees === "number"
                 ? (item as any).attendees
