@@ -301,7 +301,7 @@ export default function Homepage() {
         <div className="absolute inset-0">
           <img
             src={heroImage}
-            alt="AI-powered advocacy for inclusive Ghana"
+            alt="AI-powered dashboard for inclusive Ghana"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-primary/65"></div>
@@ -315,7 +315,7 @@ export default function Homepage() {
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8 animate-fade-in-down">
                 <Sparkles className="h-4 w-4 text-yellow-400 animate-pulse" />
                 <span className="text-sm font-medium">
-                  AI-Powered Advocacy for Ghana
+                  AI-Powered Dashboard for Ghana
                 </span>
               </div>
 
@@ -405,7 +405,7 @@ export default function Homepage() {
               Platform <span className="text-primary">Features</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive tools for data-driven advocacy and social change
+              Comprehensive tools for data-driven dashboard and social change
             </p>
           </div>
 
@@ -512,7 +512,7 @@ export default function Homepage() {
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-white/90">
             Join our community of advocates and help shape a more inclusive
-            future for Ghana through data-driven advocacy.
+            future for Ghana through data-driven dashboard.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
