@@ -51,9 +51,9 @@ import type { FocusArea, HeroContent, Event } from "@/lib/types";
 import { logo } from "@/images/images";
 
 const DEFAULT_HERO: HeroContent = {
-  title: "Amplifying Voices for Inclusive Ghana",
+  title: "Voices for Inclusive Ghana",
   subTitle:
-    "AI4InclusiveGh uses artificial intelligence and social media analytics to monitor conversations, track advocacy trends, and drive policy change for marginalized communities in Ghana.",
+    "Using AI and social media analytics to track advocacy trends and drive policy change for marginalized communities.",
   primaryButtonText: "Explore Analytics",
   secondaryButtonText: "Join Community",
 };
@@ -438,7 +438,7 @@ export default function Homepage() {
               Our Focus <span className="text-primary">Areas</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We advocate for four critical social impact areas across Ghana
+              We focus on four critical social impact areas across Ghana
             </p>
           </div>
 
