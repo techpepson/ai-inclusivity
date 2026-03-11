@@ -415,7 +415,8 @@ export default function About() {
             className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight animate-fade-in-up opacity-0 text-white"
             style={{ animationDelay: "0.1s" }}
           >
-            Advocacy Through <span className="text-yellow-400">AI & Data</span>
+            Advancing Inclusivity through{" "}
+            <span className="text-yellow-400">AI & Data</span>
           </h1>
 
           {/* Description */}
@@ -661,16 +662,14 @@ export default function About() {
         </div>
       </section>
 
-      {/* Board Members - only show if there are board members */}
+      {/* Funders - only show if there are board members */}
       {boardMembers.length > 0 && (
         <section className="py-20 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                Board Members
-              </h2>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">Funders</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                The dedicated individuals guiding our organization
+                The dedicated individuals and organizations funding our mission
               </p>
             </div>
 
