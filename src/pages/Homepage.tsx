@@ -51,7 +51,7 @@ import type { FocusArea, HeroContent, Event } from "@/lib/types";
 import { logo } from "@/images/images";
 
 const DEFAULT_HERO: HeroContent = {
-  title: "Voices for Inclusive Ghana",
+  title: "Amplifying Voices for an Inclusive Ghana",
   subTitle:
     "Using AI and social media analytics to track advocacy trends and drive policy change for marginalized communities.",
   primaryButtonText: "Explore Analytics",
@@ -321,7 +321,7 @@ export default function Homepage() {
 
               {/* Main Heading */}
               <h1
-                className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight animate-slide-in-left"
+                className="text-4xl lg:text-4xl xl:text-5xl font-bold mb-6 leading-tight animate-slide-in-left"
                 style={{ animationDelay: "0.1s" }}
               >
                 {hero.title}
