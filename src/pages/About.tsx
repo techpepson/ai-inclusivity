@@ -239,22 +239,22 @@ const HOW_IT_WORKS = [
 
 const TIMELINE = [
   {
-    year: "2024",
-    title: "Platform Launch",
-    description:
-      "AI4InclusiveGh launches with initial focus on disability rights advocacy.",
-  },
-  {
     year: "2025",
-    title: "Expanding Impact",
+    title: "Project Launch & Data Collection",
     description:
-      "Added three more focus areas and onboarded 30+ partner organizations.",
+      "Began large-scale data extraction and groundwork for building an AI-based tool to understand stigma across themes.",
   },
   {
     year: "2026",
-    title: "Policy Wins",
+    title: "Platform Development & Analysis",
     description:
-      "Contributed to 12 policy changes benefiting marginalized communities.",
+      "Launched the project website, expanded community engagement, and conducted in-depth data analysis to generate early insights.",
+  },
+  {
+    year: "2027",
+    title: "Anticipated Policy Influence",
+    description:
+      "Project findings are positioned to support policy reforms and strengthen protections for marginalized groups.",
   },
 ];
 

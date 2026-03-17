@@ -4,30 +4,21 @@ import {
   Users,
   Mail,
   Send,
-  ExternalLink,
   Award,
   Bell,
   Heart,
   Zap,
   Check,
-  CheckCircle,
   Phone,
   MapPin,
-  Calendar,
-  Clock,
-  MapPinned,
 } from "lucide-react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +28,6 @@ import {
 } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import {
-  fetchEvents,
   fetchSocials,
   fetchTestimonials,
   sendContactMessage,
@@ -47,48 +37,7 @@ import { Link } from "react-router-dom";
 import communityImage from "@/assets/team-collaboration.jpg";
 import { logo } from "@/images/images";
 
-const DEFAULT_EVENTS: Event[] = [
-  {
-    id: "1",
-    title: "Digital Accessibility Summit 2026",
-    date: "2026-03-15",
-    time: "9:00 AM - 5:00 PM",
-    type: "Conference",
-    attendees: 250,
-    createdAt: "",
-    updatedAt: "",
-  },
-  {
-    id: "2",
-    title: "Women Safety Workshop Series",
-    date: "2026-03-22",
-    time: "2:00 PM - 6:00 PM",
-    type: "Workshop",
-    attendees: 150,
-    createdAt: "",
-    updatedAt: "",
-  },
-  {
-    id: "3",
-    title: "Mental Wellness Community Gathering",
-    date: "2026-04-05",
-    time: "10:00 AM - 3:00 PM",
-    type: "Community Event",
-    attendees: 100,
-    createdAt: "",
-    updatedAt: "",
-  },
-  {
-    id: "4",
-    title: "Pride March 2026: Love is Love",
-    date: "2026-06-20",
-    time: "3:00 PM - 8:00 PM",
-    type: "March",
-    attendees: 500,
-    createdAt: "",
-    updatedAt: "",
-  },
-];
+
 
 const DEFAULT_SOCIALS: Social[] = [
   {
@@ -160,43 +109,43 @@ const MEMBER_BENEFITS = [
 
 const TESTIMONIALS = [
   {
-    name: "Akosua Mensah",
-    role: "Mental Health Advocate",
+    name: "Akosua",
+    role: "Mental Health",
     avatar: "A",
     quote:
       "AI4InclusiveGh has given us the data and insights we needed to make our mental health advocacy more effective. The platform is revolutionary!",
   },
   {
-    name: "Kwame Asante",
-    role: "Disability Rights Activist",
+    name: "Kwame",
+    role: "pwds",
     avatar: "K",
     quote:
       "Being part of this community has connected me with advocates nationwide. Together, we're making real change for persons with disabilities in Ghana.",
   },
   {
-    name: "Ama Osei",
-    role: "Women's Rights Advocate",
+    name: "Ama",
+    role: "VAW",
     avatar: "A",
     quote:
       "The analytics show us exactly where our message is resonating. This platform has transformed how we approach advocacy against gender-based violence.",
   },
   {
-    name: "Kofi Boateng",
-    role: "Sexual and Gender Minority Community Advocate",
+    name: "Kofi",
+    role: "SGM",
     avatar: "K",
     quote:
       "Finally, a platform that combines data with heart. The community support here is incredible, and the tools help us measure real impact.",
   },
   {
-    name: "Efua Darko",
-    role: "Community Organizer",
+    name: "Efua",
+    role: "Engagement Lead",
     avatar: "E",
     quote:
       "The AI insights help us understand what messaging works best. We've seen our campaign reach grow by 300% since joining this platform.",
   },
   {
-    name: "Yaw Mensah",
-    role: "Policy Researcher",
+    name: "Yaw",
+    role: "Insights Analyst",
     avatar: "Y",
     quote:
       "The data exports and reports are invaluable for our research. This platform bridges the gap between grassroots advocacy and policy change.",
@@ -234,7 +183,6 @@ const FOOTER_LINKS = [
 export default function Community() {
   const [email, setEmail] = useState("");
   const [eventModalOpen, setEventModalOpen] = useState(false);
-  const [proposalModalOpen, setProposalModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [eventApplicationForm, setEventApplicationForm] = useState({
     name: "",
@@ -242,30 +190,10 @@ export default function Community() {
     phone: "",
     reason: "",
   });
-  const [proposalForm, setProposalForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    eventTitle: "",
-    eventDescription: "",
-  });
   const [isSubmittingEvent, setIsSubmittingEvent] = useState(false);
-  const [isSubmittingProposal, setIsSubmittingProposal] = useState(false);
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
-  const [proposalSuccess, setProposalSuccess] = useState(false);
 
-  // Fetch events from API
-  const { data: eventData = DEFAULT_EVENTS } = useQuery({
-    queryKey: ["events"],
-    queryFn: () => fetchEvents(),
-    staleTime: 1000 * 60 * 5,
-    retry: 1,
-    refetchOnWindowFocus: false,
-  });
-
-  const upcomingEvents =
-    eventData && eventData.length > 0 ? eventData : DEFAULT_EVENTS;
 
   const { data: socialData = DEFAULT_SOCIALS } = useQuery({
     queryKey: ["socials"],
@@ -284,17 +212,59 @@ export default function Community() {
     refetchOnWindowFocus: false,
   });
 
+  const normalizeName = (name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return name;
+    return trimmed.split(/\s+/)[0];
+  };
+
+  const normalizeRole = (role: string) => {
+    const lower = role.toLowerCase();
+
+    if (lower.includes("sexual and gender minority")) return "SGM";
+    if (
+      lower.includes("violence against women") ||
+      lower.includes("women's rights") ||
+      lower.includes("womens rights")
+    ) {
+      return "VAW";
+    }
+    if (
+      lower.includes("persons with disabilities") ||
+      lower.includes("disability") ||
+      lower.includes("pwd")
+    ) {
+      return "pwds";
+    }
+    if (lower.includes("mental health")) return "Mental Health";
+    if (lower.includes("community organizer")) return "Engagement Lead";
+    if (lower.includes("policy researcher")) return "Insights Analyst";
+
+    const withoutAdvocacyTerms = role
+      .replace(/\badvocate\b/gi, "")
+      .replace(/\bactivist\b/gi, "")
+      .replace(/\s{2,}/g, " ")
+      .trim()
+      .replace(/^[-,\s]+|[-,\s]+$/g, "");
+
+    return withoutAdvocacyTerms || "Community Member";
+  };
+
   // Map API testimonials to display format, fall back to defaults
   const testimonials = (() => {
     if (testimonialData && testimonialData.length > 0) {
       return testimonialData.map((t: Testimonial) => ({
-        name: t.speaker,
-        role: t.role,
+        name: normalizeName(t.speaker),
+        role: normalizeRole(t.role),
         avatar: t.speaker.charAt(0).toUpperCase(),
         quote: t.statement,
       }));
     }
-    return TESTIMONIALS;
+    return TESTIMONIALS.map((t) => ({
+      ...t,
+      name: normalizeName(t.name),
+      role: normalizeRole(t.role),
+    }));
   })();
 
   const handleEventInputChange = (
@@ -302,16 +272,6 @@ export default function Community() {
   ) => {
     const { name, value } = e.target;
     setEventApplicationForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleProposalInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setProposalForm((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -336,36 +296,6 @@ export default function Community() {
       console.error("Failed to subscribe:", error);
     } finally {
       setIsSubscribing(false);
-    }
-  };
-
-  const handleProposalSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmittingProposal(true);
-    try {
-      await sendContactMessage({
-        name: proposalForm.name,
-        email: proposalForm.email,
-        phone: proposalForm.phone || null,
-        subject: `Event Proposal: ${proposalForm.eventTitle}`,
-        message: proposalForm.eventDescription,
-      });
-      setProposalSuccess(true);
-      setProposalForm({
-        name: "",
-        email: "",
-        phone: "",
-        eventTitle: "",
-        eventDescription: "",
-      });
-      setTimeout(() => {
-        setProposalModalOpen(false);
-        setProposalSuccess(false);
-      }, 2000);
-    } catch (error) {
-      console.error("Failed to submit proposal:", error);
-    } finally {
-      setIsSubmittingProposal(false);
     }
   };
 
@@ -500,91 +430,7 @@ export default function Community() {
         </div>
       </section>
 
-      {/* Upcoming Events */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          {/* <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Upcoming <span className="text-primary">Events</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join us in creating positive change through workshops, campaigns,
-              conferences, and community gatherings
-            </p>
-          </div> */}
 
-          {/* <div className="grid md:grid-cols-2 gap-6">
-            {upcomingEvents.slice(0, 4).map((event, index) => (
-              <Card
-                key={event.id}
-                className="border border-border/50 overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-in-up opacity-0"
-                style={{ animationDelay: `${0.1 * index}s` }}
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1">
-                      <Badge className="mb-3 bg-primary/10 text-primary hover:bg-primary/20">
-                        {event.type}
-                      </Badge>
-                      <h3 className="text-xl font-bold mb-3">{event.title}</h3>
-
-                      <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-primary" />
-                          <span>
-                            {new Date(event.date).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-primary" />
-                          <span>{event.time}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Users className="h-4 w-4 text-primary" />
-                          <span>{event.attendees} expected attendees</span>
-                        </div>
-                      </div>
-
-                      <Button
-                        className="bg-primary hover:bg-primary/90"
-                        onClick={() => openEventModal(event)}
-                      >
-                        Register Now
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div> */}
-
-          {/* Want to Host an Event */}
-          <Card className="mt-8 border-0 bg-primary text-white">
-            <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
-                <h3 className="text-2xl font-bold mb-2">
-                  Want to Host an Event?
-                </h3>
-                <p className="opacity-90">
-                  Partner with us to organize impactful events that drive change
-                  in your community
-                </p>
-              </div>
-              <Button
-                variant="secondary"
-                className="shrink-0"
-                onClick={() => setProposalModalOpen(true)}
-              >
-                Submit Event Proposal
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
       {/* Testimonials */}
       <section className="py-20 bg-background">
@@ -615,7 +461,7 @@ export default function Community() {
                     </div>
                   </div>
                   <p className="text-muted-foreground mb-4 italic">
-                    "{testimonial.quote}"
+                    {testimonial.quote}
                   </p>
                 </CardContent>
               </Card>
@@ -951,115 +797,7 @@ export default function Community() {
         </DialogContent>
       </Dialog>
 
-      {/* Event Proposal Modal */}
-      <Dialog
-        open={proposalModalOpen}
-        onOpenChange={(open) => {
-          setProposalModalOpen(open);
-          if (!open) setProposalSuccess(false);
-        }}
-      >
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Submit Event Proposal</DialogTitle>
-            <DialogDescription>
-              Have an idea for a community event? Fill out the form below and
-              we'll get back to you.
-            </DialogDescription>
-          </DialogHeader>
-          {proposalSuccess ? (
-            <div className="text-center py-6">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">Proposal Submitted!</h3>
-              <p className="text-muted-foreground">
-                Thank you for your proposal. We'll review it and get back to you
-                soon.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleProposalSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Full Name *</label>
-                <Input
-                  name="name"
-                  placeholder="Enter your full name"
-                  value={proposalForm.name}
-                  onChange={handleProposalInputChange}
-                  required
-                />
-              </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Email Address *</label>
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={proposalForm.email}
-                  onChange={handleProposalInputChange}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Phone Number</label>
-                <Input
-                  name="phone"
-                  type="tel"
-                  placeholder="Enter your phone number"
-                  value={proposalForm.phone}
-                  onChange={handleProposalInputChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Event Title *</label>
-                <Input
-                  name="eventTitle"
-                  placeholder="Proposed event title"
-                  value={proposalForm.eventTitle}
-                  onChange={handleProposalInputChange}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Event Description *
-                </label>
-                <Textarea
-                  name="eventDescription"
-                  placeholder="Describe the event you'd like to propose, including goals, target audience, and any other details..."
-                  value={proposalForm.eventDescription}
-                  onChange={handleProposalInputChange}
-                  rows={4}
-                  required
-                />
-              </div>
-
-              <div className="flex gap-4 justify-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setProposalModalOpen(false)}
-                  disabled={isSubmittingProposal}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="bg-primary hover:bg-primary/90"
-                  disabled={isSubmittingProposal}
-                >
-                  {isSubmittingProposal ? "Submitting..." : "Submit Proposal"}
-                </Button>
-              </div>
-            </form>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

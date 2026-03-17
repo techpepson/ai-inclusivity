@@ -185,14 +185,14 @@ export function Navigation() {
               </div>
             ))}
 
-            <Link to="/community">
+            <Link to="/?addTestimony=true">
               <Button
                 variant="default"
                 size="sm"
                 className="bg-primary hover:bg-primary/90 gap-2 hover:scale-105 transition-transform duration-300"
               >
                 <Users className="h-4 w-4" />
-                Join Community
+                Add Testimony
               </Button>
             </Link>
           </div>
@@ -247,6 +247,18 @@ export function Navigation() {
                   )}
                 </div>
               ))}
+              <div className="pt-2">
+                <Link
+                  to="/?addTestimony=true"
+                  className="block px-3"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Button className="w-full gap-2">
+                    <Users className="h-4 w-4" />
+                    Add Testimony
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         )}

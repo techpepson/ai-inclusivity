@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -134,6 +134,9 @@ const FOOTER_LINKS = [
 ];
 
 export default function Homepage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { data: heroContent } = useQuery({
     queryKey: ["hero-content"],
     queryFn: () => fetchHeroContent(DEFAULT_HERO),
@@ -178,7 +181,8 @@ export default function Homepage() {
     name: "",
     email: "",
     phone: "",
-    message: "",
+    complement: "",
+    displayUserName: false,
   });
   const [joinFormLoading, setJoinFormLoading] = useState(false);
   const [joinFormSuccess, setJoinFormSuccess] = useState(false);
@@ -192,11 +196,17 @@ export default function Homepage() {
         name: joinFormData.name,
         email: joinFormData.email,
         phone: joinFormData.phone || null,
-        subject: "Join Community Request",
-        message: joinFormData.message,
+        subject: "Add Testimony Submission",
+        message: `Complement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
       });
       setJoinFormSuccess(true);
-      setJoinFormData({ name: "", email: "", phone: "", message: "" });
+      setJoinFormData({
+        name: "",
+        email: "",
+        phone: "",
+        complement: "",
+        displayUserName: false,
+      });
       setTimeout(() => {
         setJoinDialogOpen(false);
         setJoinFormSuccess(false);
@@ -207,6 +217,22 @@ export default function Homepage() {
       setJoinFormLoading(false);
     }
   };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get("addTestimony") === "true") {
+      setJoinDialogOpen(true);
+      searchParams.delete("addTestimony");
+
+      navigate(
+        {
+          pathname: location.pathname,
+          search: searchParams.toString() ? `?${searchParams.toString()}` : "",
+        },
+        { replace: true },
+      );
+    }
+  }, [location.pathname, location.search, navigate]);
 
   useEffect(() => {
     let mounted = true;
@@ -690,10 +716,9 @@ export default function Homepage() {
       <Dialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Join Our Community</DialogTitle>
+            <DialogTitle>Add Testimony</DialogTitle>
             <DialogDescription>
-              Become part of a growing network of advocates driving change in
-              Ghana
+              Share your testimony to support inclusive advocacy in Ghana.
             </DialogDescription>
           </DialogHeader>
           {joinFormSuccess ? (
@@ -715,27 +740,26 @@ export default function Homepage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Request Submitted!</h3>
               <p className="text-muted-foreground">
-                Welcome to the community! We'll be in touch soon.
+                Your testimony has been submitted successfully.
               </p>
             </div>
           ) : (
             <form onSubmit={handleJoinSubmit} className="space-y-4">
               <div>
-                <label className="text-sm font-medium">Full Name *</label>
+                <label className="text-sm font-medium">Name *</label>
                 <Input
                   required
                   value={joinFormData.name}
                   onChange={(e) =>
                     setJoinFormData({ ...joinFormData, name: e.target.value })
                   }
-                  placeholder="Your full name"
+                  placeholder="Your name"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Email *</label>
+                <label className="text-sm font-medium">Email (Optional)</label>
                 <Input
                   type="email"
-                  required
                   value={joinFormData.email}
                   onChange={(e) =>
                     setJoinFormData({ ...joinFormData, email: e.target.value })
@@ -755,19 +779,38 @@ export default function Homepage() {
               </div>
               <div>
                 <label className="text-sm font-medium">
-                  Tell us about yourself *
+                  Add your complement (Optional)
                 </label>
                 <Textarea
-                  required
-                  value={joinFormData.message}
+                  value={joinFormData.complement}
                   onChange={(e) =>
                     setJoinFormData({
                       ...joinFormData,
-                      message: e.target.value,
+                      complement: e.target.value,
                     })
                   }
-                  placeholder="What advocacy areas interest you? How would you like to contribute?"
+                  placeholder="Write your complement or testimony"
                   rows={4}
+                />
+              </div>
+              <div className="flex items-center justify-between rounded-md border border-border p-3">
+                <label
+                  className="text-sm font-medium"
+                  htmlFor="display-user-name"
+                >
+                  Option to display user name
+                </label>
+                <input
+                  id="display-user-name"
+                  type="checkbox"
+                  checked={joinFormData.displayUserName}
+                  onChange={(e) =>
+                    setJoinFormData({
+                      ...joinFormData,
+                      displayUserName: e.target.checked,
+                    })
+                  }
+                  className="h-4 w-4"
                 />
               </div>
               <Button
@@ -775,7 +818,7 @@ export default function Homepage() {
                 className="w-full bg-primary hover:bg-primary/90"
                 disabled={joinFormLoading}
               >
-                {joinFormLoading ? "Submitting..." : "Join Community"}
+                {joinFormLoading ? "Submitting..." : "Submit Testimony"}
               </Button>
             </form>
           )}
