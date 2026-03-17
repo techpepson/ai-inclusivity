@@ -31,7 +31,7 @@ export default function Reports() {
 
   const recentReports = [
     {
-      title: "Disability Rights Advocacy Q4 2024",
+      title: "Disability Rights Inclusion Q4 2024",
       theme: "Disabilities",
       date: "2024-12-15",
       downloads: 1247,
@@ -64,16 +64,16 @@ export default function Reports() {
       downloads: 634,
       type: "Monthly Report",
       description:
-        "Analysis of inclusion conversations and advocacy efforts in Ghana",
+        "Analysis of inclusion conversations and inclusion efforts in Ghana",
     },
     {
-      title: "Cross-Theme Advocacy Impact Report",
+      title: "Cross-Theme Inclusion Impact Report",
       theme: "All Themes",
       date: "2024-11-15",
       downloads: 1523,
       type: "Impact Report",
       description:
-        "Comprehensive overview of advocacy efforts across all four focus areas",
+        "Comprehensive overview of inclusion efforts across all four focus areas",
     },
   ];
 
@@ -93,7 +93,7 @@ export default function Reports() {
       date: "2023-11-10",
       downloads: 1654,
     },
-    { title: "SGMC Advocacy Trends 2023", date: "2023-10-25", downloads: 1432 },
+    { title: "SGMC Inclusion Trends 2023", date: "2023-10-25", downloads: 1432 },
   ];
 
   const getThemeColor = (theme: string) => {
@@ -120,7 +120,7 @@ export default function Reports() {
             Reports & Analytics
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Access comprehensive reports on social media advocacy, campaign
+            Access comprehensive reports on social media inclusion, campaign
             performance, and trend analysis across our four focus areas in
             Ghana.
           </p>
@@ -276,7 +276,7 @@ export default function Reports() {
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">Archived Reports</h2>
             <p className="text-lg text-muted-foreground">
-              Access historical reports and track long-term advocacy trends.
+              Access historical reports and track long-term inclusion trends.
             </p>
           </div>
 

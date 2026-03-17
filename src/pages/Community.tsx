@@ -90,7 +90,8 @@ const MEMBER_BENEFITS = [
   {
     icon: Award,
     title: "Recognition",
-    description: "Earn badges and recognition for your advocacy contributions.",
+    description:
+      "Earn badges and recognition for your community contributions.",
     bgColor: "bg-primary",
   },
   {
@@ -108,11 +109,11 @@ const TESTIMONIALS = [
     role: "Mental Health",
     avatar: "A",
     quote:
-      "AI4InclusiveGh has given us the data and insights we needed to make our mental health advocacy more effective. The platform is revolutionary!",
+      "AI4InclusiveGh has given us the data and insights we needed to make our mental health inclusion more effective. The platform is revolutionary!",
   },
   {
     name: "Kwame",
-    role: "pwds",
+    role: "PWDs",
     avatar: "K",
     quote:
       "Being part of this community has connected me with advocates nationwide. Together, we're making real change for persons with disabilities in Ghana.",
@@ -122,7 +123,7 @@ const TESTIMONIALS = [
     role: "VAW",
     avatar: "A",
     quote:
-      "The analytics show us exactly where our message is resonating. This platform has transformed how we approach advocacy against gender-based violence.",
+      "The analytics show us exactly where our message is resonating. This platform has transformed how we approach inclusion against gender-based violence.",
   },
   {
     name: "Kofi",
@@ -143,7 +144,7 @@ const TESTIMONIALS = [
     role: "Insights Analyst",
     avatar: "Y",
     quote:
-      "The data exports and reports are invaluable for our research. This platform bridges the gap between grassroots advocacy and policy change.",
+      "The data exports and reports are invaluable for our research. This platform bridges the gap between grassroots inclusion and policy change.",
   },
 ];
 
@@ -213,7 +214,7 @@ export default function Community() {
   };
 
   const normalizeRole = (role: string) => {
-    const lower = role.toLowerCase();
+    const lower = role;
 
     if (lower.includes("sexual and gender minority")) return "SGM";
     if (
@@ -234,14 +235,14 @@ export default function Community() {
     if (lower.includes("community organizer")) return "Engagement Lead";
     if (lower.includes("policy researcher")) return "Insights Analyst";
 
-    const withoutAdvocacyTerms = role
+    const withoutInclusionTerms = role
       .replace(/\badvocate\b/gi, "")
       .replace(/\bactivist\b/gi, "")
       .replace(/\s{2,}/g, " ")
       .trim()
       .replace(/^[-,\s]+|[-,\s]+$/g, "");
 
-    return withoutAdvocacyTerms || "Community Member";
+    return withoutInclusionTerms || "Community Member";
   };
 
   // Map API testimonials to display format, fall back to defaults
@@ -368,8 +369,8 @@ export default function Community() {
             className="text-lg lg:text-xl text-white/90 mb-10 max-w-3xl mx-auto animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.3s" }}
           >
-            Join thousands of organizations and changemakers working together to
-            create a more inclusive Ghana.
+            Join thousands of individuals, organizations and changemakers
+            working together to create a more inclusive Ghana.
           </p>
 
           {/* Hero Stats */}
@@ -471,7 +472,7 @@ export default function Community() {
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">Stay Connected</h3>
                 <p className="text-muted-foreground mb-6">
-                  Subscribe to our newsletter for monthly advocacy insights,
+                  Subscribe to our newsletter for monthly inclusion insights,
                   campaign updates, and community highlights.
                 </p>
                 <form onSubmit={handleSubscribe} className="flex gap-2">
@@ -501,7 +502,7 @@ export default function Community() {
             </Card>
 
             {/* CTA */}
-            <Card className="border-0 bg-primary text-white">
+            {/* <Card className="border-0 bg-primary text-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">
                   Ready to Make a Difference?
@@ -534,7 +535,7 @@ export default function Community() {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </section>

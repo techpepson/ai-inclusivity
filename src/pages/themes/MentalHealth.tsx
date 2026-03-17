@@ -111,7 +111,7 @@ export default function MentalHealth() {
     {
       name: "@WellnessMattersGH",
       followers: "87k",
-      focus: "Wellness Advocacy",
+      focus: "Wellness Inclusion",
     },
     { name: "@PsychGhana", followers: "65k", focus: "Professional Resources" },
     { name: "@YouthMentalGH", followers: "48k", focus: "Youth Support" },

@@ -104,7 +104,7 @@ export default function VAW() {
   ];
 
   const keyInfluencers = [
-    { name: "@EndVAWGhana", followers: "145k", focus: "Policy Advocacy" },
+    { name: "@EndVAWGhana", followers: "145k", focus: "Policy Support" },
     { name: "@WomenRightsGH", followers: "98k", focus: "Rights Awareness" },
     { name: "@SurvivorsVoicesGH", followers: "76k", focus: "Survivor Support" },
     { name: "@SafeSpacesWomen", followers: "54k", focus: "Safe Services" },
@@ -130,7 +130,7 @@ export default function VAW() {
       description:
         "Network of organizations working to end violence against women",
       contact: "info@wrcghana.org",
-      services: ["Advocacy", "Shelter", "Counseling"],
+      services: ["Inclusion", "Shelter", "Counseling"],
     },
     {
       title: "Legal Aid for Women",

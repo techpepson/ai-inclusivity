@@ -53,7 +53,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 const DEFAULT_HERO: HeroContent = {
   title: "Amplifying Voices for an Inclusive Ghana",
   subTitle:
-    "Using AI and social media analytics to track advocacy trends and drive policy change for marginalized communities.",
+    "Using AI and social media analytics to track inclusion trends and drive policy change for marginalized communities.",
   primaryButtonText: "Explore Analytics",
   secondaryButtonText: "Join Conversation",
 };
@@ -70,7 +70,7 @@ const PLATFORM_FEATURES = [
   {
     title: "Active Campaigns",
     description:
-      "Join data-driven advocacy campaigns making real impact across Ghana.",
+      "Join data-driven inclusion campaigns making real impact across Ghana.",
     icon: Target,
     bgColor: "bg-purple-100",
     iconColor: "text-purple-500",
@@ -179,6 +179,7 @@ export default function Homepage() {
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
   const [joinFormData, setJoinFormData] = useState({
     name: "",
+    alias: "",
     email: "",
     phone: "",
     complement: "",
@@ -197,11 +198,12 @@ export default function Homepage() {
         email: joinFormData.email,
         phone: joinFormData.phone || null,
         subject: "Add Testimony Submission",
-        message: `Complement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
+        message: `Alias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
       });
       setJoinFormSuccess(true);
       setJoinFormData({
         name: "",
+        alias: "",
         email: "",
         phone: "",
         complement: "",
@@ -548,13 +550,13 @@ export default function Homepage() {
             >
               Join Conversation
             </Button>
-            <Link to="/get-involved">
+            <Link to="/analytics">
               <Button
                 size="lg"
                 variant="outline"
                 className="border-white/50 text-white bg-white/10 hover:bg-white/20 text-lg px-8 hover:scale-105 transition-transform duration-300"
               >
-                Explore Campaigns
+                Explore Analytics
               </Button>
             </Link>
           </div>
@@ -570,7 +572,7 @@ export default function Homepage() {
           <DialogHeader>
             <DialogTitle>Add Testimony</DialogTitle>
             <DialogDescription>
-              Share your testimony to support inclusive advocacy in Ghana.
+              Share your testimony to support inclusive inclusion in Ghana.
             </DialogDescription>
           </DialogHeader>
           {joinFormSuccess ? (
@@ -617,6 +619,16 @@ export default function Homepage() {
                     setJoinFormData({ ...joinFormData, email: e.target.value })
                   }
                   placeholder="your@email.com"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Alias (Optional)</label>
+                <Input
+                  value={joinFormData.alias}
+                  onChange={(e) =>
+                    setJoinFormData({ ...joinFormData, alias: e.target.value })
+                  }
+                  placeholder="How you want to be identified"
                 />
               </div>
               <div>

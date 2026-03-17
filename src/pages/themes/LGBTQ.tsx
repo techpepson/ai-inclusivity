@@ -105,7 +105,7 @@ export default function LGBTQ() {
   ];
 
   const keyInfluencers = [
-    { name: "@SGMCGhana", followers: "76k", focus: "Rights Advocacy" },
+    { name: "@SGMCGhana", followers: "76k", focus: "Rights Inclusion" },
     { name: "@PrideAdvocateGH", followers: "58k", focus: "Community Building" },
     {
       name: "@InclusionMattersGH",
@@ -126,9 +126,9 @@ export default function LGBTQ() {
     {
       title: "SGMC Rights Ghana",
       description:
-        "Advocacy organization fighting for Sexual and Gender minority community rights and equality",
+        "Inclusion organization fighting for Sexual and Gender minority community rights and equality",
       contact: "support@sgmcrights.gh",
-      services: ["Legal Support", "Advocacy", "Community Building"],
+      services: ["Legal Support", "Inclusion", "Community Building"],
     },
     {
       title: "Safe Spaces Network",

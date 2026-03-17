@@ -115,7 +115,7 @@ export default function Disabilities() {
     {
       name: "@GhanaDisabilityRights",
       followers: "125k",
-      focus: "Policy Advocacy",
+      focus: "Policy Support",
     },
     { name: "@AccessibleGhana", followers: "89k", focus: "Infrastructure" },
     {
@@ -139,7 +139,7 @@ export default function Disabilities() {
       description:
         "National umbrella organization representing 17 disability groups",
       contact: "info@gfdo.org.gh",
-      services: ["Advocacy", "Policy Reform", "Legal Support"],
+      services: ["Inclusion", "Policy Reform", "Legal Support"],
     },
     {
       title: "Enablement Initiative",
@@ -149,7 +149,7 @@ export default function Disabilities() {
     },
     {
       title: "Centre for Disability & Rehabilitation Studies",
-      description: "Research and advocacy for disability rights in Ghana",
+      description: "Research and inclusion for disability rights in Ghana",
       contact: "cdrs@ug.edu.gh",
       services: ["Research", "Training", "Community Programs"],
     },
@@ -415,7 +415,7 @@ export default function Disabilities() {
               Supporting <span className="text-primary">Organizations</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Connect with organizations providing support and advocacy for
+              Connect with organizations providing support and inclusion for
               persons with disabilities
             </p>
           </div>

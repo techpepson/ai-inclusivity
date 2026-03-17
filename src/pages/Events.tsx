@@ -374,8 +374,8 @@ export default function Events() {
             className="text-lg lg:text-xl text-white/90 max-w-3xl mx-auto animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.3s" }}
           >
-            Join us in creating positive change through workshops, campaigns,
-            conferences, and community gatherings
+            Join us in creating positive change through workshops, conferences,
+            and community gatherings
           </p>
         </div>
       </section>

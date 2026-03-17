@@ -55,7 +55,7 @@ const DEFAULT_TEAM: TeamMember[] = [
   {
     id: "3",
     name: "Efua Asante",
-    role: "Director of Advocacy",
+    role: "Director of Inclusion",
     description:
       "Disability rights activist and policy expert with grassroots organizing experience.",
     profilePicture: "https://picsum.photos/id/1006/400/400",
@@ -117,7 +117,7 @@ const DEFAULT_SPONSORS: Sponsor[] = [
   {
     id: "1",
     name: "Ghana Federation of Disability Organizations",
-    description: "Policy advocacy and disability rights",
+    description: "Policy inclusion and disability rights",
     createdAt: "",
     updatedAt: "",
   },
@@ -131,7 +131,7 @@ const DEFAULT_SPONSORS: Sponsor[] = [
   {
     id: "3",
     name: "Mental Health Ghana",
-    description: "Mental wellness advocacy",
+    description: "Mental wellness inclusion",
     createdAt: "",
     updatedAt: "",
   },
@@ -140,11 +140,11 @@ const DEFAULT_SPONSORS: Sponsor[] = [
 const DEFAULT_ABOUT: AboutSection = {
   id: "",
   description:
-    "AI4InclusiveGh combines artificial intelligence, social media analytics, and community action to amplify voices, track advocacy trends, and drive policy change for marginalized communities across Ghana.",
+    "AI4InclusiveGh combines artificial intelligence, social media analytics, and community action to amplify voices, track inclusion trends, and drive policy change for marginalized communities across Ghana.",
   missionDescription:
-    "To leverage artificial intelligence and data analytics to monitor social conversations, amplify marginalized voices, and drive evidence-based advocacy for inclusive policies in Ghana.",
+    "To leverage artificial intelligence and data analytics to monitor social conversations, amplify marginalized voices, and drive evidence-based inclusion for inclusive policies in Ghana.",
   visionDescription:
-    "A Ghana where every voice is heard, every community is valued, and data-driven advocacy creates lasting social change for persons with disabilities, women, Sexual and Gender minority community individuals, and those affected by mental health stigma.",
+    "A Ghana where every voice is heard, every community is valued, and data-driven inclusion creates lasting social change for persons with disabilities, women, Sexual and Gender minority community individuals, and those affected by mental health stigma.",
   createdAt: "",
   updatedAt: "",
 };
@@ -154,30 +154,30 @@ const CORE_VALUES = [
     icon: Heart,
     title: "Empathy & Inclusion",
     description:
-      "We center the voices and experiences of marginalized communities in all our work.",
+      "We center the voices and experiences of marginalized communities in our research.",
     bgColor: "bg-primary",
   },
   {
     icon: BarChart3,
     title: "Data-Driven Impact",
     description:
-      "We use AI and analytics to measure real impact and drive evidence-based advocacy.",
+      "We use AI and data analytics to measure real impact in our research.",
     bgColor: "bg-secondary",
   },
   {
     icon: Shield,
     title: "Ethical AI",
     description:
-      "We prioritize privacy, transparency, and bias monitoring in all our AI systems.",
+      "We prioritize privacy, transparency, and bias monitoring in our research.",
     bgColor: "bg-primary",
   },
-  {
-    icon: Users,
-    title: "Community First",
-    description:
-      "We believe in grassroots power and community-led social change initiatives.",
-    bgColor: "bg-secondary",
-  },
+  // {
+  //   icon: Users,
+  //   title: "Community First",
+  //   description:
+  //     "We believe in grassroots power and community-led social change initiatives.",
+  //   bgColor: "bg-secondary",
+  // },
 ];
 
 const PILLARS = [
@@ -193,7 +193,7 @@ const PILLARS = [
     icon: Heart,
     title: "Violence Against Women",
     description:
-      "Fighting gender-based violence through awareness and policy advocacy.",
+      "Fighting gender-based violence through awareness and policy support.",
     reach: "2.1M reach",
     bgColor: "bg-secondary",
   },
@@ -219,21 +219,21 @@ const HOW_IT_WORKS = [
     icon: Globe,
     title: "Monitor Conversations",
     description:
-      "Our AI analyzes millions of social media posts to track advocacy trends and public sentiment.",
+      "Our AI dashboard analyzes millions of social media posts to track inclusion trends and public sentiment.",
     bgColor: "bg-primary",
   },
   {
     icon: BarChart3,
     title: "Generate Insights",
     description:
-      "Real-time analytics provide actionable insights on campaign performance and engagement.",
+      "Real-time analytics provide actionable insights on extracted data from social media posts.",
     bgColor: "bg-secondary",
   },
   {
     icon: Zap,
-    title: "Drive Action",
+    title: "Classification",
     description:
-      "Data-driven campaigns mobilize communities and influence policy change at scale.",
+      "Analyze and classify new data  from social media posts into positive, negative, or neutral categories.",
     bgColor: "bg-primary",
   },
 ];
@@ -417,7 +417,7 @@ export default function About() {
             style={{ animationDelay: "0.1s" }}
           >
             Advancing Inclusivity through{" "}
-            <span className="text-yellow-400">AI & Data</span>
+            <span className="text-yellow-400">AI</span>
           </h1>
 
           {/* Description */}
@@ -488,9 +488,9 @@ export default function About() {
                     <value.icon className="h-7 w-7 text-white" />
                   </div>
                   <h3 className="text-lg font-bold mb-3">{value.title}</h3>
-                  <p className="text-muted-foreground text-sm">
+                  {/* <p className="text-muted-foreground text-sm">
                     {value.description}
-                  </p>
+                  </p> */}
                 </CardContent>
               </Card>
             ))}
@@ -506,9 +506,9 @@ export default function About() {
               {pillarsLabel} Pillars of{" "}
               <span className="text-primary">Impact</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our focus areas where AI-powered advocacy creates real change
-            </p>
+            {/* <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our focus areas where AI-powered inclusion creates real change
+            </p> */}
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -525,9 +525,9 @@ export default function About() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold mb-2">{pillar.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-3">
+                    {/* <p className="text-muted-foreground text-sm mb-3">
                       {pillar.description}
-                    </p>
+                    </p> */}
                     <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
                       {pillar.reach}
                     </span>
@@ -642,7 +642,7 @@ export default function About() {
                   <p className="text-muted-foreground text-sm mb-4">
                     {member.description}
                   </p>
-                  <div className="flex justify-center gap-3">
+                  {/* <div className="flex justify-center gap-3">
                     <a
                       href="#"
                       className="text-primary hover:text-primary/80 transition-colors"
@@ -655,7 +655,7 @@ export default function About() {
                     >
                       <Mail className="h-5 w-5" />
                     </a>
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
             ))}

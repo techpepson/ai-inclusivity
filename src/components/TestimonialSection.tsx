@@ -18,7 +18,7 @@ const DEFAULT_TESTIMONIALS: TestimonialDisplay[] = [
     speaker: "Johnson Acquah",
     role: "Director, Ghana Disability Rights Coalition",
     statement:
-      "AI4InclusiveGh has revolutionized how we track and measure advocacy impact. Their analytics help us reach the right audiences with the right message.",
+      "AI4InclusiveGh has revolutionized how we track and measure inclusion impact. Their analytics help us reach the right audiences with the right message.",
     createdAt: "",
     updatedAt: "",
   },
@@ -61,7 +61,7 @@ export function TestimonialSection() {
             Trusted by Leading Organizations
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            See how advocacy organizations across Ghana are using our platform
+            See how community organizations across Ghana are using our platform
             to drive meaningful change.
           </p>
         </div>

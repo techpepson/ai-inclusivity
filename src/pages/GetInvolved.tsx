@@ -79,7 +79,7 @@ const FEATURED_CAMPAIGNS = [
   {
     title: "#EndVAW",
     description:
-      "Fighting violence against women through education, awareness, and advocacy for stronger protective legislation.",
+      "Fighting violence against women through education, awareness, and inclusion for stronger protective legislation.",
     category: "Women's Rights",
     participants: "18.5k",
     reach: "520K+",
@@ -124,7 +124,7 @@ const WAYS_TO_HELP = [
     benefits: [
       "Co-branded campaigns",
       "Data insights",
-      "Joint advocacy",
+      "Joint inclusion",
       "Policy influence",
     ],
     cta: "Become a Partner",
@@ -156,7 +156,7 @@ const SIGNUP_BENEFITS = [
   {
     icon: Check,
     text: "Launch Campaigns",
-    description: "Start your own advocacy initiatives",
+    description: "Start your own inclusion initiatives",
   },
   {
     icon: Check,
@@ -383,7 +383,7 @@ export default function GetInvolved() {
             className="text-lg lg:text-xl text-white/90 mb-10 max-w-3xl mx-auto animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.3s" }}
           >
-            Join our advocacy campaigns using AI-powered insights. Every voice
+            Join our inclusion campaigns using AI-powered insights. Every voice
             matters, every action counts in building a more inclusive Ghana.
           </p>
 

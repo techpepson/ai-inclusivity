@@ -38,7 +38,7 @@ const DEFAULT_THEMES = [
     href: "/themes/vaw",
     image: womenImage,
     description:
-      "Fighting gender-based violence through education, awareness, and advocacy for stronger protective legislation. Our AI monitors reports, support resources, and policy discussions to drive meaningful change.",
+      "Fighting gender-based violence through education, awareness, and inclusion for stronger protective legislation. Our AI monitors reports, support resources, and policy discussions to drive meaningful change.",
     stats: { reach: "2.1M", campaigns: 18, voices: "15.2K" },
   },
   {
@@ -100,6 +100,9 @@ const FOOTER_LINKS = [
 
 export default function Themes() {
   const [themes, setThemes] = useState(DEFAULT_THEMES);
+  const [expandedDescriptions, setExpandedDescriptions] = useState<
+    Record<string, boolean>
+  >({});
 
   useEffect(() => {
     let mounted = true;
@@ -204,7 +207,7 @@ export default function Themes() {
             className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight text-white animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.1s" }}
           >
-            Advocacy <span className="text-yellow-400">Themes</span>
+            Inclusion <span className="text-yellow-400">Themes</span>
           </h1>
 
           {/* Description */}
@@ -212,7 +215,7 @@ export default function Themes() {
             className="text-lg lg:text-xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.3s" }}
           >
-            We focus on {themes.length} critical areas of social advocacy in
+            We focus on {themes.length} critical areas of social inclusion in
             Ghana, using AI-powered analytics to amplify voices and drive
             meaningful change.
           </p>
@@ -231,7 +234,7 @@ export default function Themes() {
               >
                 <div className="grid md:grid-cols-2">
                   {/* Image */}
-                  <div className="relative h-64 md:h-auto overflow-hidden">
+                  <div className="relative h-64 md:h-80 overflow-hidden">
                     <img
                       src={theme.image}
                       alt={theme.label}
@@ -256,9 +259,39 @@ export default function Themes() {
                         <theme.icon className={`h-6 w-6 ${theme.iconColor}`} />
                       </div>
                       <h3 className="text-xl font-bold mb-3">{theme.label}</h3>
-                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                        {theme.description}
-                      </p>
+                      {(() => {
+                        const isExpanded = !!expandedDescriptions[theme.id];
+                        return (
+                          <>
+                            <p
+                              className="text-muted-foreground text-sm mb-2 leading-relaxed overflow-hidden"
+                              style={
+                                isExpanded
+                                  ? undefined
+                                  : {
+                                      display: "-webkit-box",
+                                      WebkitLineClamp: 4,
+                                      WebkitBoxOrient: "vertical",
+                                    }
+                              }
+                            >
+                              {theme.description}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setExpandedDescriptions((prev) => ({
+                                  ...prev,
+                                  [theme.id]: !prev[theme.id],
+                                }))
+                              }
+                              className="text-sm font-medium text-primary hover:text-primary/80"
+                            >
+                              {isExpanded ? "Show less" : "Read more"}
+                            </button>
+                          </>
+                        );
+                      })()}
                     </div>
 
                     {/* Stats */}
@@ -318,7 +351,7 @@ export default function Themes() {
             Ready to Make an Impact?
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-white/90">
-            Join our campaigns and help drive meaningful change across these
+            Join the conversation and help drive meaningful change across these
             critical focus areas in Ghana.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -327,7 +360,7 @@ export default function Themes() {
                 size="lg"
                 className="bg-white text-primary hover:bg-white/90 text-lg px-8 hover:scale-105 transition-transform duration-300"
               >
-                Join Campaigns
+                Explore Analytcs
               </Button>
             </Link>
             <Link to="/community">

@@ -57,7 +57,7 @@ const TRENDING_KEYWORDS = [
   { keyword: "#mental health", count: "12,890", change: "+18%" },
   { keyword: "#safe spaces", count: "10,230", change: "+32%" },
   { keyword: "#equality", count: "8,950", change: "+15%" },
-  { keyword: "#advocacy", count: "7,680", change: "+21%" },
+  { keyword: "#inclusion", count: "7,680", change: "+21%" },
 ];
 
 const AI_INSIGHTS = [

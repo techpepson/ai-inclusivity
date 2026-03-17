@@ -36,10 +36,10 @@ import { SiteFooter } from "@/components/SiteFooter";
 
 const GUIDES = [
   {
-    title: "Digital Advocacy Toolkit",
+    title: "Digital Inclusion Toolkit",
     description:
       "Complete guide for using social media to drive social change and awareness",
-    category: "Advocacy",
+    category: "Inclusion",
     format: "PDF",
     pages: 45,
     downloads: 2341,
@@ -60,7 +60,7 @@ const GUIDES = [
   {
     title: "Community Organizing Handbook",
     description:
-      "Step-by-step guide for building grassroots advocacy movements",
+      "Step-by-step guide for building grassroots inclusion movements",
     category: "Organizing",
     format: "PDF",
     pages: 62,
@@ -71,7 +71,7 @@ const GUIDES = [
   {
     title: "Social Media Analytics for NGOs",
     description:
-      "How to measure and improve your advocacy campaign performance",
+      "How to measure and improve your inclusion campaign performance",
     category: "Analytics",
     format: "PDF",
     pages: 35,
@@ -206,7 +206,7 @@ const EDUCATIONAL = [
     type: "Video Series",
     duration: "6 episodes, 45 min total",
     description:
-      "Educational videos covering the basics of disability rights and advocacy in Ghana.",
+      "Educational videos covering the basics of disability rights and inclusion in Ghana.",
     icon: Video,
     progress: 0,
   },
@@ -292,7 +292,7 @@ export default function Resources() {
             style={{ animationDelay: "0.3s" }}
           >
             Access comprehensive resources, support contacts, and educational
-            materials to support your advocacy work and connect with help when
+            materials to support your inclusion work and connect with help when
             needed.
           </p>
 
@@ -368,7 +368,7 @@ export default function Resources() {
             <TabsContent value="guides" className="space-y-8">
               <div className="text-center mb-12">
                 <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                  Advocacy Guides &{" "}
+                  Inclusion Guides &{" "}
                   <span className="text-primary">Toolkits</span>
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -563,7 +563,7 @@ export default function Resources() {
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                   Interactive learning resources and training materials for
-                  advocacy and allyship.
+                  inclusion and allyship.
                 </p>
               </div>
 
