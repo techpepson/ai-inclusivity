@@ -264,16 +264,14 @@ export default function Themes() {
                         return (
                           <>
                             <p
-                              className="text-muted-foreground text-sm mb-2 leading-relaxed overflow-hidden"
-                              style={
-                                isExpanded
-                                  ? undefined
-                                  : {
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: 4,
-                                      WebkitBoxOrient: "vertical",
-                                    }
-                              }
+                              className={`text-muted-foreground text-sm mb-2 leading-relaxed overflow-hidden ${
+                                isExpanded ? "hidden" : ""
+                              }`}
+                              style={{
+                                display: "-webkit-box",
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: "vertical",
+                              }}
                             >
                               {theme.description}
                             </p>
@@ -322,6 +320,14 @@ export default function Themes() {
                     </div>
                   </CardContent>
                 </div>
+
+                {!!expandedDescriptions[theme.id] && (
+                  <div className="px-6 pb-6 pt-2 border-t border-border/50">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {theme.description}
+                    </p>
+                  </div>
+                )}
               </Card>
             ))}
           </div>

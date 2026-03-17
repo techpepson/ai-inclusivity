@@ -171,13 +171,12 @@ const CORE_VALUES = [
       "We prioritize privacy, transparency, and bias monitoring in our research.",
     bgColor: "bg-primary",
   },
-  // {
-  //   icon: Users,
-  //   title: "Community First",
-  //   description:
-  //     "We believe in grassroots power and community-led social change initiatives.",
-  //   bgColor: "bg-secondary",
-  // },
+  {
+    icon: Users,
+    title: "Community First",
+    description: "We believe in the voice of the community to drive teams.",
+    bgColor: "bg-secondary",
+  },
 ];
 
 const PILLARS = [
@@ -488,9 +487,9 @@ export default function About() {
                     <value.icon className="h-7 w-7 text-white" />
                   </div>
                   <h3 className="text-lg font-bold mb-3">{value.title}</h3>
-                  {/* <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-sm">
                     {value.description}
-                  </p> */}
+                  </p>
                 </CardContent>
               </Card>
             ))}
