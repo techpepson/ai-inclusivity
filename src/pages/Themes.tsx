@@ -23,6 +23,7 @@ import mentalHealthImage from "@/assets/mental-health-support.jpg";
 import lgbtqImage from "@/assets/lgbtq-community.jpg";
 import heroImage from "@/assets/hero-ai-advocacy.jpg";
 import { logo } from "@/images/images";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const DEFAULT_THEMES = [
   {
@@ -247,7 +248,7 @@ export default function Themes() {
                   </div>
 
                   {/* Content */}
-                  <CardContent className="p-6 flex flex-col justify-between">
+                  <CardContent className="p-6 md:pt-0 flex h-full flex-col justify-between">
                     <div>
                       <div
                         className={`inline-flex items-center justify-center w-12 h-12 ${theme.iconBg} rounded-xl mb-4`}
@@ -335,7 +336,7 @@ export default function Themes() {
                 variant="outline"
                 className="border-white/50 text-white bg-white/10 hover:bg-white/20 text-lg px-8 hover:scale-105 transition-transform duration-300"
               >
-                Join Community
+                Join Conversation
               </Button>
             </Link>
           </div>
@@ -343,119 +344,7 @@ export default function Themes() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-800 text-white">
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-            {/* Company Info */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <img
-                  src={logo}
-                  alt="AI4InclusiveGh logo"
-                  className="w-10 h-10 rounded-lg object-cover"
-                />
-                <div>
-                  <h3 className="font-bold text-lg">AI4InclusiveGh</h3>
-                </div>
-              </div>
-              <p className="text-slate-300 mb-6 text-sm">
-                Using artificial intelligence and social media analytics to
-                amplify voices for marginalized communities in Ghana.
-              </p>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 text-slate-300 text-sm">
-                  <Mail className="h-4 w-4 text-primary" />
-                  <span>ai4inclusiveghana@ug.edu.gh</span>
-                </div>
-                <div className="flex items-center gap-3 text-slate-300 text-sm">
-                  <Phone className="h-4 w-4 text-primary" />
-                  <span>+233 (0) 50 123 4567</span>
-                </div>
-                <div className="flex items-center gap-3 text-slate-300 text-sm">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <span>Accra, Ghana</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="font-bold text-lg mb-6">Quick Links</h3>
-              <ul className="space-y-3">
-                {FOOTER_LINKS.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="text-slate-300 hover:text-white transition-colors text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Themes */}
-            <div>
-              <h3 className="font-bold text-lg mb-6">Our Themes</h3>
-              <ul className="space-y-3">
-                {themes.map((theme) => (
-                  <li key={theme.id}>
-                    <Link
-                      to={theme.href}
-                      className="text-slate-300 hover:text-white transition-colors text-sm"
-                    >
-                      {theme.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Newsletter */}
-            <div>
-              <h3 className="font-bold text-lg mb-6">Stay Updated</h3>
-              <p className="text-slate-300 mb-4 text-sm">
-                Subscribe to our newsletter for advocacy updates and impact
-                reports.
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Your email"
-                  className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                />
-                <Button className="bg-primary hover:bg-primary/90">
-                  Subscribe
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Footer */}
-        <div className="border-t border-slate-700">
-          <div className="container mx-auto px-4 py-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400">
-              <p>© 2026 AI4InclusiveGh. All rights reserved.</p>
-              <div className="flex gap-6">
-                <Link
-                  to="/privacy"
-                  className="hover:text-white transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-                <Link
-                  to="/terms"
-                  className="hover:text-white transition-colors"
-                >
-                  Terms of Service
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

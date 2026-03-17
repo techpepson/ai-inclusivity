@@ -148,7 +148,7 @@ export default function FocusAreaDetails() {
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
         {/* Hero */}
-        <div className="text-center mb-16">
+        <div className="mb-16">
           <div className="relative h-80 mb-8 rounded-lg overflow-hidden">
             <img
               src={header.img}
@@ -170,7 +170,7 @@ export default function FocusAreaDetails() {
               ) : null}
             </div>
           </div>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl">
             {focusArea.description}
           </p>
         </div>

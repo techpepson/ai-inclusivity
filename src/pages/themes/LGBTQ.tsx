@@ -20,6 +20,7 @@ import { fetchFocusAreaById, fetchFocusAreas } from "@/lib/api-client";
 import type { FocusArea } from "@/lib/types";
 import lgbtqImage from "@/assets/lgbtq-community.jpg";
 import { logo } from "@/images/images";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const FOOTER_LINKS = [
   { name: "Home", href: "/" },
@@ -479,111 +480,7 @@ export default function LGBTQ() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-800 text-white">
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <img
-                  src={logo}
-                  alt="AI4InclusiveGh logo"
-                  className="w-10 h-10 rounded-lg object-cover"
-                />
-                <div>
-                  <h3 className="font-bold text-lg">AI4InclusiveGh</h3>
-                </div>
-              </div>
-              <p className="text-slate-300 mb-6 text-sm">
-                Using artificial intelligence and social media analytics to
-                amplify voices for marginalized communities in Ghana.
-              </p>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 text-slate-300 text-sm">
-                  <Mail className="h-4 w-4 text-primary" />
-                  <span>ai4inclusiveghana@ug.edu.gh</span>
-                </div>
-                <div className="flex items-center gap-3 text-slate-300 text-sm">
-                  <Phone className="h-4 w-4 text-primary" />
-                  <span>+233 (0) 50 123 4567</span>
-                </div>
-                <div className="flex items-center gap-3 text-slate-300 text-sm">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <span>Accra, Ghana</span>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-lg mb-6">Platform</h3>
-              <ul className="space-y-3">
-                {FOOTER_LINKS.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="text-slate-300 hover:text-primary transition-colors text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-lg mb-6">Get Involved</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link
-                    to="/community"
-                    className="text-slate-300 hover:text-primary transition-colors text-sm"
-                  >
-                    Contact Us
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-lg mb-6">Stay Updated</h3>
-              <p className="text-slate-300 mb-4 text-sm">
-                Subscribe to receive monthly reports on advocacy trends and
-                campaign results.
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400 text-sm"
-                />
-                <button className="bg-primary hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium">
-                  Subscribe
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-slate-700">
-          <div className="container mx-auto px-4 py-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-slate-400 text-sm">
-                © 2026 AI4InclusiveGh. All rights reserved.
-              </p>
-              <div className="flex items-center gap-4 text-sm text-slate-400">
-                <a href="#" className="hover:text-primary transition-colors">
-                  Privacy Policy
-                </a>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Terms of Use
-                </a>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Ethics & AI
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
