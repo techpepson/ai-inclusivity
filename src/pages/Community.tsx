@@ -12,10 +12,7 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,8 +33,6 @@ import type { Event, Social, Testimonial } from "@/lib/types";
 import { Link } from "react-router-dom";
 import communityImage from "@/assets/team-collaboration.jpg";
 import { logo } from "@/images/images";
-
-
 
 const DEFAULT_SOCIALS: Social[] = [
   {
@@ -193,7 +188,6 @@ export default function Community() {
   const [isSubmittingEvent, setIsSubmittingEvent] = useState(false);
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
-
 
   const { data: socialData = DEFAULT_SOCIALS } = useQuery({
     queryKey: ["socials"],
@@ -358,7 +352,7 @@ export default function Community() {
         <div className="container mx-auto px-4 relative z-10 py-20 text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-full px-5 py-2 mb-8 animate-fade-in-down">
-            <span className="text-sm font-medium">Join Our Community</span>
+            <span className="text-sm font-medium">Join Conversation</span>
           </div>
 
           {/* Main Heading */}
@@ -366,7 +360,7 @@ export default function Community() {
             className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight text-white animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.1s" }}
           >
-            Be Part of the <span className="text-yellow-400">Movement</span>
+            Join the <span className="text-yellow-400">Conversation</span>
           </h1>
 
           {/* Description */}
@@ -374,8 +368,8 @@ export default function Community() {
             className="text-lg lg:text-xl text-white/90 mb-10 max-w-3xl mx-auto animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.3s" }}
           >
-            Join thousands of advocates, organizations, and changemakers working
-            together to create a more inclusive Ghana.
+            Join thousands of organizations and changemakers working together to
+            create a more inclusive Ghana.
           </p>
 
           {/* Hero Stats */}
@@ -429,8 +423,6 @@ export default function Community() {
           </div>
         </div>
       </section>
-
-
 
       {/* Testimonials */}
       <section className="py-20 bg-background">
@@ -796,8 +788,6 @@ export default function Community() {
           </form>
         </DialogContent>
       </Dialog>
-
-
     </div>
   );
 }
