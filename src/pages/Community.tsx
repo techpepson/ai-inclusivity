@@ -75,30 +75,27 @@ const HERO_STATS = [
 const MEMBER_BENEFITS = [
   {
     icon: MessageCircle,
-    title: "Join Discussions",
-    description:
-      "Participate in meaningful conversations about social justice issues.",
+    title: "Join Conversations",
+    description: "Participate in meaningful conversations.",
     bgColor: "bg-primary",
   },
   {
     icon: Bell,
-    title: "Campaign Updates",
+    title: "Event Updates",
     description:
-      "Get real-time notifications about campaigns and their impact.",
+      "Get real-time notifications about upcoming and ongoing events.",
     bgColor: "bg-secondary",
   },
   {
     icon: Award,
     title: "Recognition",
-    description:
-      "Earn badges and recognition for your community contributions.",
+    description: "Earn recognition for your testimonies and contributions.",
     bgColor: "bg-primary",
   },
   {
     icon: Zap,
     title: "Make Impact",
-    description:
-      "Your voice matters in driving policy change and social progress.",
+    description: "Add your voice to make an impact.",
     bgColor: "bg-secondary",
   },
 ];
@@ -134,17 +131,17 @@ const TESTIMONIALS = [
   },
   {
     name: "Efua",
-    role: "Engagement Lead",
+    role: "VAW",
     avatar: "E",
     quote:
-      "The AI insights help us understand what messaging works best. We've seen our campaign reach grow by 300% since joining this platform.",
+      "Violence against women is still happening everywhere, and honestly it’s exhausting to keep seeing it treated like it’s normal or inevitable. It’s not. It’s something people choose to ignore, excuse, or stay silent about. Things won’t change unless we actually start calling it out and taking it seriously.",
   },
   {
     name: "Yaw",
-    role: "Insights Analyst",
+    role: "Mental Health",
     avatar: "Y",
     quote:
-      "The data exports and reports are invaluable for our research. This platform bridges the gap between grassroots inclusion and policy change.",
+      "Mental health isn’t something you can just “snap out of,” and it’s frustrating how often people still treat it that way. Everyone’s carrying something you can’t see, and a little more understanding (instead of judgment) would go a long way.",
   },
 ];
 
@@ -472,8 +469,8 @@ export default function Community() {
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">Stay Connected</h3>
                 <p className="text-muted-foreground mb-6">
-                  Subscribe to our newsletter for monthly inclusion insights,
-                  campaign updates, and community highlights.
+                  Subscribe to our newsletter for event updates and community
+                  highlights.
                 </p>
                 <form onSubmit={handleSubscribe} className="flex gap-2">
                   <Input

@@ -68,17 +68,16 @@ const PLATFORM_FEATURES = [
     iconColor: "text-blue-600",
   },
   {
-    title: "Active Campaigns",
+    title: "Event Updates",
     description:
-      "Join data-driven inclusion campaigns making real impact across Ghana.",
+      "Get real-time notifications about upcoming and ongoing events.",
     icon: Target,
     bgColor: "bg-purple-100",
     iconColor: "text-purple-500",
   },
   {
-    title: "Community Network",
-    description:
-      "Connect with 12,500+ advocates and organizations working for change.",
+    title: "Join Conversations",
+    description: "Participate in meaningful conversations.",
     icon: Users,
     bgColor: "bg-pink-100",
     iconColor: "text-pink-500",

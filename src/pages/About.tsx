@@ -216,9 +216,9 @@ const PILLARS = [
 const HOW_IT_WORKS = [
   {
     icon: Globe,
-    title: "Monitor Conversations",
+    title: "Data Extraction",
     description:
-      "Our AI dashboard analyzes millions of social media posts to track inclusion trends and public sentiment.",
+      "Our AI dashboard analyzes millions of social media posts to track public sentiment.",
     bgColor: "bg-primary",
   },
   {
@@ -482,7 +482,7 @@ export default function About() {
               >
                 <CardContent className="pt-8 pb-6">
                   <div
-                    className={`inline-flex items-center justify-center w-14 h-14 ${value.bgColor} rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}
+                    className={`inline-flex items-center justify-center w-14 h-14 ${value.bgColor} rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform duration-300`}
                   >
                     <value.icon className="h-7 w-7 text-white" />
                   </div>
