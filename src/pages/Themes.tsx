@@ -15,7 +15,18 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { fetchFocusAreas as fetchFocusAreasFromApi } from "@/lib/api-client";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  fetchFocusAreas as fetchFocusAreasFromApi,
+  sendContactMessage,
+} from "@/lib/api-client";
 import type { FocusArea } from "@/lib/types";
 import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
 import womenImage from "@/assets/women-empowerment.jpg";
@@ -103,6 +114,50 @@ export default function Themes() {
   const [expandedDescriptions, setExpandedDescriptions] = useState<
     Record<string, boolean>
   >({});
+
+  const [joinDialogOpen, setJoinDialogOpen] = useState(false);
+  const [joinFormData, setJoinFormData] = useState({
+    name: "",
+    alias: "",
+    email: "",
+    phone: "",
+    complement: "",
+    displayUserName: false,
+  });
+  const [joinFormLoading, setJoinFormLoading] = useState(false);
+  const [joinFormSuccess, setJoinFormSuccess] = useState(false);
+
+  const handleJoinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setJoinFormLoading(true);
+
+    try {
+      await sendContactMessage({
+        name: joinFormData.name,
+        email: joinFormData.email,
+        phone: joinFormData.phone || null,
+        subject: "Add Testimony Submission",
+        message: `Alias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
+      });
+      setJoinFormSuccess(true);
+      setJoinFormData({
+        name: "",
+        alias: "",
+        email: "",
+        phone: "",
+        complement: "",
+        displayUserName: false,
+      });
+      setTimeout(() => {
+        setJoinDialogOpen(false);
+        setJoinFormSuccess(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to submit join request:", error);
+    } finally {
+      setJoinFormLoading(false);
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -354,28 +409,27 @@ export default function Themes() {
 
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-white">
-            Ready to Make an Impact?
+            Ready to Make a Difference?
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-white/90">
-            Join the conversation and help drive meaningful change across these
-            critical focus areas in Ghana.
+            Join our community of advocates and help shape a more inclusive
+            future for Ghana through data-driven dashboard.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/get-involved">
-              <Button
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90 text-lg px-8 hover:scale-105 transition-transform duration-300"
-              >
-                Explore Analytcs
-              </Button>
-            </Link>
-            <Link to="/community">
+            <Button
+              size="lg"
+              onClick={() => setJoinDialogOpen(true)}
+              className="bg-white text-primary hover:bg-white/90 text-lg px-8 hover:scale-105 transition-transform duration-300"
+            >
+              Join Conversation
+            </Button>
+            <Link to="/analytics">
               <Button
                 size="lg"
                 variant="outline"
                 className="border-white/50 text-white bg-white/10 hover:bg-white/20 text-lg px-8 hover:scale-105 transition-transform duration-300"
               >
-                Join Conversation
+                Explore Analytics
               </Button>
             </Link>
           </div>
@@ -384,6 +438,129 @@ export default function Themes() {
 
       {/* Footer */}
       <SiteFooter />
+
+      {/* Join Conversation Dialog */}
+      <Dialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add Testimony</DialogTitle>
+            <DialogDescription>
+              Share your testimony to support inclusive inclusion in Ghana.
+            </DialogDescription>
+          </DialogHeader>
+          {joinFormSuccess ? (
+            <div className="py-8 text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg
+                  className="w-8 h-8 text-green-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Request Submitted!</h3>
+              <p className="text-muted-foreground">
+                Your testimony has been submitted successfully.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleJoinSubmit} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Name *</label>
+                <Input
+                  required
+                  value={joinFormData.name}
+                  onChange={(e) =>
+                    setJoinFormData({ ...joinFormData, name: e.target.value })
+                  }
+                  placeholder="Your name"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Email (Optional)</label>
+                <Input
+                  type="email"
+                  value={joinFormData.email}
+                  onChange={(e) =>
+                    setJoinFormData({ ...joinFormData, email: e.target.value })
+                  }
+                  placeholder="your@email.com"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Alias (Optional)</label>
+                <Input
+                  value={joinFormData.alias}
+                  onChange={(e) =>
+                    setJoinFormData({ ...joinFormData, alias: e.target.value })
+                  }
+                  placeholder="How you want to be identified"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Phone (Optional)</label>
+                <Input
+                  value={joinFormData.phone}
+                  onChange={(e) =>
+                    setJoinFormData({ ...joinFormData, phone: e.target.value })
+                  }
+                  placeholder="+233 XX XXX XXXX"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">
+                  Add your complement (Optional)
+                </label>
+                <Textarea
+                  value={joinFormData.complement}
+                  onChange={(e) =>
+                    setJoinFormData({
+                      ...joinFormData,
+                      complement: e.target.value,
+                    })
+                  }
+                  placeholder="Write your complement or testimony"
+                  rows={4}
+                />
+              </div>
+              <div className="flex items-center justify-between rounded-md border border-border p-3">
+                <label
+                  className="text-sm font-medium"
+                  htmlFor="themes-display-user-name"
+                >
+                  Option to display user name
+                </label>
+                <input
+                  id="themes-display-user-name"
+                  type="checkbox"
+                  checked={joinFormData.displayUserName}
+                  onChange={(e) =>
+                    setJoinFormData({
+                      ...joinFormData,
+                      displayUserName: e.target.checked,
+                    })
+                  }
+                  className="h-4 w-4"
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full bg-primary hover:bg-primary/90"
+                disabled={joinFormLoading}
+              >
+                {joinFormLoading ? "Submitting..." : "Submit Testimony"}
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
