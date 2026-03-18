@@ -125,17 +125,6 @@ export function SiteFooter() {
                   </svg>
                 </a>
               </div>
-              <div className="flex items-center gap-4 text-sm text-slate-400">
-                <a href="#" className="hover:text-primary transition-colors">
-                  Privacy Policy
-                </a>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Terms of Use
-                </a>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Ethics & AI
-                </a>
-              </div>
             </div>
           </div>
         </div>

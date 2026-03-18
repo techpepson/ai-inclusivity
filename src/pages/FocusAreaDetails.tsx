@@ -170,7 +170,7 @@ export default function FocusAreaDetails() {
               ) : null}
             </div>
           </div>
-          <p className="text-xl text-muted-foreground max-w-3xl">
+          <p className="text-xl text-muted-foreground w-full">
             {focusArea.description}
           </p>
         </div>
@@ -202,7 +202,7 @@ export default function FocusAreaDetails() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8">
               {focusArea.inspiringStories.map((story) => (
                 <Card key={story.id} className="bg-gradient-card border-0">
                   <CardHeader>
@@ -270,7 +270,7 @@ export default function FocusAreaDetails() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 gap-8">
               {focusArea.supportingOrganizations.map((org) => (
                 <Card key={org.id} className="bg-gradient-card border-0">
                   <CardHeader>

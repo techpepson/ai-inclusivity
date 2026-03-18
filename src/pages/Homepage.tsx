@@ -32,6 +32,9 @@ import mentalHealthImage from "@/assets/mental-health-support.jpg";
 import lgbtqImage from "@/assets/lgbtq-community.jpg";
 import flyer1 from "@/assets/flyer_1.jpeg";
 import flyer2 from "@/assets/flyer_2.jpeg";
+import funder1 from "@/assets/funder-1.jpeg";
+import funder2 from "@/assets/funder-2.jpeg";
+import funder3 from "@/assets/funder-3.jpeg";
 import {
   Carousel,
   CarouselContent,
@@ -130,6 +133,24 @@ const FOOTER_LINKS = [
   { name: "Campaigns", href: "/get-involved" },
   { name: "Events", href: "/events" },
   { name: "Community", href: "/community" },
+];
+
+const FOUNDERS_AND_PARTNERS = [
+  {
+    name: "Founder and Partner 1",
+    logo: funder1,
+    website: "https://example.com",
+  },
+  {
+    name: "Founder and Partner 2",
+    logo: funder2,
+    website: "https://example.org",
+  },
+  {
+    name: "Founder and Partner 3",
+    logo: funder3,
+    website: "https://example.net",
+  },
 ];
 
 export default function Homepage() {
@@ -558,6 +579,39 @@ export default function Homepage() {
                 Explore Analytics
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Founders & Partners */}
+      <section className="py-16 bg-background border-t border-border/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-3">
+              Founders & <span className="text-primary">Partners</span>
+            </h2>
+            <p className="text-muted-foreground">
+              We are proudly supported by our partner organizations.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            {FOUNDERS_AND_PARTNERS.map((item) => (
+              <a
+                key={item.name}
+                href={item.website}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex items-center justify-center rounded-xl border border-transparent hover:border-border/50 hover:bg-muted/40 transition-all duration-300 py-8"
+                aria-label={`Visit ${item.name} website`}
+              >
+                <img
+                  src={item.logo}
+                  alt={item.name}
+                  className="max-h-28 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              </a>
+            ))}
           </div>
         </div>
       </section>
