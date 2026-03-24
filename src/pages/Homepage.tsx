@@ -34,7 +34,8 @@ import flyer1 from "@/assets/flyer_1.jpeg";
 import flyer2 from "@/assets/flyer_2.jpeg";
 import funder1 from "@/assets/funder-1.jpeg";
 import funder2 from "@/assets/funder-2.jpeg";
-import funder3 from "@/assets/funder-3.jpeg";
+import funder3 from "@/assets/idrc-image.png";
+import funder4 from "@/assets/partner4.jpg";
 import {
   Carousel,
   CarouselContent,
@@ -139,17 +140,24 @@ const FOUNDERS_AND_PARTNERS = [
   {
     name: "Founder and Partner 1",
     logo: funder1,
-    website: "https://example.com",
+    website: "https://ai4pep.org/",
   },
   {
     name: "Founder and Partner 2",
     logo: funder2,
-    website: "https://example.org",
+    website:
+      "https://www.gov.uk/government/organisations/foreign-commonwealth-development-office",
   },
   {
     name: "Founder and Partner 3",
     logo: funder3,
-    website: "https://example.net",
+    website: "https://idrc-crdi.ca/en",
+  },
+  {
+    name: "Founder and Partner 4",
+    logo: funder4,
+    website:
+      "https://isealalliance.org/about/how-were-funded/uk-international-development-uk-government",
   },
 ];
 

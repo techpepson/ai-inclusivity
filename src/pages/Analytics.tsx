@@ -3,9 +3,8 @@ import {
   BarChart3,
   TrendingUp,
   Users,
-  RefreshCw,
-  Download,
   ArrowUp,
+  ArrowUpRight,
   Target,
   Flame,
   PieChart,
@@ -15,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import analyticsImage from "@/assets/analytics-dashboard.jpg";
 import { SiteFooter } from "@/components/SiteFooter";
+import { Link } from "react-router-dom";
 
 const SENTIMENT_DATA = [
   { month: "Jan", positive: 65, neutral: 25, negative: 10 },
@@ -40,37 +40,35 @@ const FOCUS_DISTRIBUTION = [
 ];
 
 const TOP_CAMPAIGNS = [
-  { rank: 1, name: "#InclusionMatters", reach: "1.2M", engagement: 94 },
-  { rank: 2, name: "#EndVAW", reach: "2.1M", engagement: 89 },
-  { rank: 3, name: "#BreakTheStigma", reach: "1.0M", engagement: 91 },
-  { rank: 4, name: "#SGMCRights", reach: "0.8M", engagement: 86 },
+  { rank: 2, name: "#EndVAW", engagement: 52.0 },
+  { rank: 1, name: "#PWD", engagement: 34.4 },
+  { rank: 4, name: "#SGMRights", engagement: 4.1 },
+  { rank: 3, name: "#MentalHealth", engagement: 2.2 },
 ];
 
 const TRENDING_KEYWORDS = [
-  { keyword: "#accessibility", count: "15,420", change: "+24%" },
-  { keyword: "#mental health", count: "12,890", change: "+18%" },
-  { keyword: "#safe spaces", count: "10,230", change: "+32%" },
-  { keyword: "#equality", count: "8,950", change: "+15%" },
-  { keyword: "#inclusion", count: "7,680", change: "+21%" },
+  { keyword: "#10ForAbility", count: "9,120" },
+  { keyword: "#16DaysOfActivism", count: "7,870" },
+  { keyword: "#accessibility", count: "5,430" },
+  { keyword: "#equality", count: "4,980" },
+  { keyword: "#inclusion", count: "4,980" },
 ];
 
 const AI_INSIGHTS = [
   {
-    icon: ArrowUp,
-    title: "24%",
-    description: "Positive sentiment increase this month across all campaigns",
+    description: "Neutral sentiments dominate across VAW and SGM.",
     bgColor: "bg-gradient-to-br from-green-400 to-teal-500",
   },
   {
     icon: Target,
     title: "Peak Time",
-    description: "Best engagement: Tuesdays & Thursdays, 6-9 PM GMT",
+    description: "Best engagement: August 2025 & February 2026",
     bgColor: "bg-gradient-to-br from-blue-500 to-cyan-500",
   },
   {
     icon: Flame,
     title: "Trending",
-    description: "#BreakTheStigma seeing 340% spike in mentions this week",
+    description: "#BreakTheStigma seeing about 65% spike in mentions last year.",
     bgColor: "bg-gradient-to-br from-sky-500 to-blue-700",
   },
 ];
@@ -98,11 +96,11 @@ export default function Analytics() {
 
         <div className="container mx-auto px-4 relative z-10 py-16 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 text-white rounded-full px-5 py-2 mb-6 animate-fade-in-down">
+          {/* <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 text-white rounded-full px-5 py-2 mb-6 animate-fade-in-down">
             <span className="text-sm font-medium">
               Real-Time Analytics Dashboard
             </span>
-          </div>
+          </div> */}
 
           {/* Main Heading */}
           <h1
@@ -118,7 +116,7 @@ export default function Analytics() {
             style={{ animationDelay: "0.3s" }}
           >
             Our AI engine analyzes millions of social media conversations to
-            track sentiment, engagement, and campaign performance in real-time.
+            track sentiment and engagement in real-time.
           </p>
 
           {/* Action Buttons */}
@@ -127,19 +125,27 @@ export default function Analytics() {
             style={{ animationDelay: "0.5s" }}
           >
             <Button
-              variant="outline"
-              className="gap-2 border-white/60 bg-white/10 text-white hover:bg-white/20"
-              onClick={handleRefresh}
+              asChild
+              className="group relative inline-flex items-center overflow-hidden rounded-full border border-white/50 bg-white/5 px-8 py-3 text-base font-semibold text-white shadow-[0_8px_30px_rgba(14,165,233,0.45)] backdrop-blur transition-all duration-300 hover:scale-[1.02] hover:border-cyan-200/80 hover:bg-white/10 hover:shadow-[0_18px_60px_rgba(14,165,233,0.55)] focus-visible:ring-white/80"
             >
-              <RefreshCw
-                className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
-              />
-              Refresh
+              <Link
+                to="https://analytics.ai4inclusiveghana.org/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Visit the live AI analytics dashboard"
+                className="relative flex items-center gap-3"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-cyan-400/30 via-sky-500/30 to-blue-700/40 opacity-60 transition-opacity duration-300 group-hover:opacity-90" />
+                <span className="relative z-10 flex items-center gap-2">
+                  Visit Analytics Dashboard
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
+                <span
+                  className="absolute -inset-x-10 inset-y-full translate-y-0 bg-gradient-to-r from-white/0 via-white/60 to-white/0 opacity-80 blur-2xl transition-all duration-500 group-hover:-inset-y-10"
+                  aria-hidden="true"
+                />
+              </Link>
             </Button>
-            {/* <Button className="bg-cyan-300 text-blue-950 hover:bg-cyan-200 gap-2">
-              <Download className="h-4 w-4" />
-              Export Report
-            </Button> */}
           </div>
         </div>
       </section>
@@ -151,33 +157,33 @@ export default function Analytics() {
             <Card className="border-blue-100/80 shadow-sm">
               <CardContent className="p-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
-                  Total Reach
+                  Total Tweets
                 </p>
-                <p className="text-2xl font-bold text-blue-900">5.0M+</p>
+                <p className="text-2xl font-bold text-blue-900"> &gt;26.6K</p>
               </CardContent>
             </Card>
             <Card className="border-blue-100/80 shadow-sm">
               <CardContent className="p-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
-                  Policy Wins
+                  Hashtag Usage
                 </p>
-                <p className="text-2xl font-bold text-blue-900">12</p>
+                <p className="text-2xl font-bold text-blue-900"> &get;3.5K</p>
               </CardContent>
             </Card>
             <Card className="border-blue-100/80 shadow-sm">
               <CardContent className="p-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
-                  Active Campaigns
+                  Influencers
                 </p>
-                <p className="text-2xl font-bold text-blue-900">24</p>
+                <p className="text-2xl font-bold text-blue-900"> &gt;20</p>
               </CardContent>
             </Card>
             <Card className="border-blue-100/80 shadow-sm">
               <CardContent className="p-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
-                  Community Voices
+                  Engagements
                 </p>
-                <p className="text-2xl font-bold text-blue-900">12,500+</p>
+                <p className="text-2xl font-bold text-blue-900"> &gt;500</p>
               </CardContent>
             </Card>
           </div>
@@ -406,7 +412,7 @@ export default function Analytics() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-blue-700" />
-                  Top Campaigns
+                  Key Themes
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
                   Performance overview
@@ -425,9 +431,6 @@ export default function Analytics() {
                       <div className="flex-1">
                         <div className="font-medium text-blue-800">
                           {campaign.name}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Reach: {campaign.reach}
                         </div>
                       </div>
                       <div className="text-right">
@@ -452,7 +455,7 @@ export default function Analytics() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-blue-700" />
-                  Trending Keywords This Week
+                  Top Trending Hashtags
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -465,14 +468,6 @@ export default function Analytics() {
                       <span className="text-blue-800 font-medium">
                         {keyword.keyword}
                       </span>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm text-muted-foreground">
-                          {keyword.count}
-                        </span>
-                        <span className="text-sm font-medium text-blue-700">
-                          {keyword.change}
-                        </span>
-                      </div>
                     </div>
                   ))}
                 </div>
@@ -498,7 +493,6 @@ export default function Analytics() {
                       className={`${insight.bgColor} p-4 rounded-lg text-white`}
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        <insight.icon className="h-4 w-4" />
                         <span className="font-bold">{insight.title}</span>
                       </div>
                       <p className="text-sm opacity-90">
