@@ -89,7 +89,11 @@ export function SiteFooter() {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-4">
                 <a
-                  href="#"
+                  href="https://x.com/Ai4_InclusiveGH"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="X (Twitter): @Ai4_InclusiveGH"
+                  title="X (Twitter): @Ai4_InclusiveGH"
                   className="text-slate-400 hover:text-primary transition-colors"
                 >
                   <svg
@@ -101,7 +105,11 @@ export function SiteFooter() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/ai4inclusiveghana/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram: @ai4inclusiveghana"
+                  title="Instagram: @ai4inclusiveghana"
                   className="text-slate-400 hover:text-primary transition-colors"
                 >
                   <svg
@@ -113,7 +121,11 @@ export function SiteFooter() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/ai-4-inclusive-ghana-41334936a/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn: AI 4 Inclusive Ghana"
+                  title="LinkedIn: AI 4 Inclusive Ghana"
                   className="text-slate-400 hover:text-primary transition-colors"
                 >
                   <svg
