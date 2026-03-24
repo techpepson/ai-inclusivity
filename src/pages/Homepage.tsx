@@ -33,7 +33,7 @@ import lgbtqImage from "@/assets/lgbtq-community.jpg";
 import flyer1 from "@/assets/flyer_1.jpeg";
 import flyer2 from "@/assets/flyer_2.jpeg";
 import funder1 from "@/assets/funder-1.jpeg";
-import funder2 from "@/assets/funder-2.jpeg";
+import funder2 from "@/assets/funder2.jpg";
 import funder3 from "@/assets/idrc-image.png";
 import funder4 from "@/assets/partner4.jpg";
 import {

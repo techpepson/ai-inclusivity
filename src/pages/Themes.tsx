@@ -50,7 +50,6 @@ const DEFAULT_THEMES = [
     image: womenImage,
     description:
       "Fighting gender-based violence through education, awareness, and inclusion for stronger protective legislation. Our AI monitors reports, support resources, and policy discussions to drive meaningful change.",
-    stats: { reach: "2.1M", campaigns: 18, voices: "15.2K" },
   },
   {
     id: "disabilities",
@@ -65,7 +64,6 @@ const DEFAULT_THEMES = [
     image: disabilityImage,
     description:
       "Advocating for accessibility, equal opportunities, and inclusive policies for persons with disabilities across Ghana. We track conversations around workplace inclusion, accessible infrastructure, and assistive technologies.",
-    stats: { reach: "1.2M", campaigns: 12, voices: "8.5K" },
   },
   {
     id: "mental-health",
@@ -80,7 +78,6 @@ const DEFAULT_THEMES = [
     image: mentalHealthImage,
     description:
       "Breaking stigma and promoting accessible mental healthcare for all Ghanaians. We track wellness conversations, crisis resources, and advocate for better mental health policies and support systems.",
-    stats: { reach: "1.8M", campaigns: 15, voices: "12.8K" },
   },
   {
     id: "lgbtq",
@@ -95,7 +92,6 @@ const DEFAULT_THEMES = [
     image: lgbtqImage,
     description:
       "Supporting rights, safety, and dignity for Sexual and Gender minority community individuals in Ghana. We monitor conversations around equality, document challenges, and connect communities with resources and support networks.",
-    stats: { reach: "950K", campaigns: 8, voices: "6.2K" },
   },
 ];
 
@@ -217,12 +213,6 @@ export default function Themes() {
           image,
           description:
             row.description || match?.description || fallback.description,
-          stats: {
-            reach:
-              row.statsValue || match?.stats?.reach || fallback.stats.reach,
-            campaigns: match?.stats?.campaigns || fallback.stats.campaigns,
-            voices: match?.stats?.voices || fallback.stats.voices,
-          },
         };
       });
 
@@ -349,22 +339,7 @@ export default function Themes() {
 
                     {/* Stats */}
                     <div className="space-y-4">
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-1.5">
-                          <TrendingUp className="h-4 w-4 text-primary" />
-                          <span className="font-medium">
-                            {theme.stats.reach}
-                          </span>
-                          <span className="text-muted-foreground">reach</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <MessageCircle className="h-4 w-4 text-primary" />
-                          <span className="font-medium">
-                            {theme.stats.voices}
-                          </span>
-                          <span className="text-muted-foreground">voices</span>
-                        </div>
-                      </div>
+                      <div className="flex items-center gap-4 text-sm"></div>
 
                       <Link to={theme.href}>
                         <Button className="w-full bg-primary hover:bg-primary/90 group">
