@@ -54,9 +54,9 @@ const ENGAGEMENT_METRICS: {
   label: string;
   color: string;
 }[] = [
-  { key: "likes", label: "Likes", color: "#0ea5e9" },
-  { key: "shares", label: "Shares", color: "#f97316" },
-  { key: "comments", label: "Comments", color: "#475569" },
+  { key: "likes", label: "Neutral", color: "#0ea5e9" },
+  { key: "shares", label: "Positive", color: "#f97316" },
+  { key: "comments", label: "Negative", color: "#475569" },
 ];
 
 type EngagementHover = {
@@ -386,7 +386,7 @@ export default function Analytics() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-blue-700" />
-                  Engagement Growth
+                  Forecasting Analysis
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
                   12-month interaction trend across the network
@@ -568,7 +568,7 @@ export default function Analytics() {
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-4">
-                    <div>
+                    {/* <div>
                       <p className="text-xs uppercase tracking-wide text-muted-foreground">
                         Active data point
                       </p>
@@ -582,7 +582,7 @@ export default function Analytics() {
                         {engagementHighlight.metric} ·{" "}
                         {engagementHighlight.month}
                       </p>
-                    </div>
+                    </div> */}
                     <div className="flex flex-wrap gap-4">
                       {ENGAGEMENT_METRICS.map((metric) => (
                         <div
