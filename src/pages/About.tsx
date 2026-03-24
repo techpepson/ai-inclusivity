@@ -527,9 +527,9 @@ export default function About() {
                     {/* <p className="text-muted-foreground text-sm mb-3">
                       {pillar.description}
                     </p> */}
-                    <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+                    {/* <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
                       {pillar.reach}
-                    </span>
+                    </span> */}
                   </div>
                 </CardContent>
               </Card>
