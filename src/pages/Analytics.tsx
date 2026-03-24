@@ -68,7 +68,8 @@ const AI_INSIGHTS = [
   {
     icon: Flame,
     title: "Trending",
-    description: "#BreakTheStigma seeing about 65% spike in mentions last year.",
+    description:
+      "#BreakTheStigma seeing about 65% spike in mentions last year.",
     bgColor: "bg-gradient-to-br from-sky-500 to-blue-700",
   },
 ];
@@ -167,7 +168,7 @@ export default function Analytics() {
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
                   Hashtag Usage
                 </p>
-                <p className="text-2xl font-bold text-blue-900"> &get;3.5K</p>
+                <p className="text-2xl font-bold text-blue-900"> &gt;3.5K</p>
               </CardContent>
             </Card>
             <Card className="border-blue-100/80 shadow-sm">
