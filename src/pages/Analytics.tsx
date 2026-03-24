@@ -389,7 +389,7 @@ export default function Analytics() {
                   Forecasting Analysis
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  12-month interaction trend across the network
+                  12-month interaction trend analysis
                 </p>
               </CardHeader>
               <CardContent>
