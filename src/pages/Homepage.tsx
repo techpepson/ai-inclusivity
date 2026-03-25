@@ -90,6 +90,7 @@ const PLATFORM_FEATURES = [
 
 const DEFAULT_FOCUS_AREAS = [
   {
+    id: "disabilities",
     label: "Persons with Disabilities",
     hashtag: "#InclusionMatters",
     hashtagColor: "text-blue-500",
@@ -99,6 +100,7 @@ const DEFAULT_FOCUS_AREAS = [
     image: disabilityImage,
   },
   {
+    id: "vaw",
     label: "Violence Against Women",
     hashtag: "#EndVAW",
     hashtagColor: "text-red-500",
@@ -108,6 +110,7 @@ const DEFAULT_FOCUS_AREAS = [
     image: womenImage,
   },
   {
+    id: "mental-health",
     label: "Mental Health",
     hashtag: "#BreakTheStigma",
     hashtagColor: "text-teal-500",
@@ -117,6 +120,7 @@ const DEFAULT_FOCUS_AREAS = [
     image: mentalHealthImage,
   },
   {
+    id: "lgbtq",
     label: "Sexual and Gender Minority Community",
     hashtag: "#SGMCRights",
     hashtagColor: "text-orange-500",
@@ -211,6 +215,7 @@ export default function Homepage() {
     email: "",
     phone: "",
     complement: "",
+    themeId: "",
     displayUserName: false,
   });
   const [joinFormLoading, setJoinFormLoading] = useState(false);
@@ -226,7 +231,7 @@ export default function Homepage() {
         email: joinFormData.email,
         phone: joinFormData.phone || null,
         subject: "Add Testimony Submission",
-        message: `Alias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
+        message: `Theme: ${focusAreas.find((area) => area.id === joinFormData.themeId)?.label || "Not provided"}\nAlias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
       });
       setJoinFormSuccess(true);
       setJoinFormData({
@@ -235,6 +240,7 @@ export default function Homepage() {
         email: "",
         phone: "",
         complement: "",
+        themeId: "",
         displayUserName: false,
       });
       setTimeout(() => {
@@ -329,6 +335,7 @@ export default function Homepage() {
         const image = imageRaw || defaultImage;
 
         validated.push({
+          id: row.id || label.toLowerCase().replace(/\s+/g, "-"),
           label,
           hashtag,
           hashtagColor,
@@ -660,6 +667,27 @@ export default function Homepage() {
             </div>
           ) : (
             <form onSubmit={handleJoinSubmit} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Theme *</label>
+                <select
+                  required
+                  value={joinFormData.themeId}
+                  onChange={(e) =>
+                    setJoinFormData({
+                      ...joinFormData,
+                      themeId: e.target.value,
+                    })
+                  }
+                  className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                >
+                  <option value="">Select a theme</option>
+                  {focusAreas.map((area) => (
+                    <option key={area.id} value={area.id}>
+                      {area.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div>
                 <label className="text-sm font-medium">Name *</label>
                 <Input

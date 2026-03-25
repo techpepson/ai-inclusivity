@@ -118,6 +118,7 @@ export default function Themes() {
     email: "",
     phone: "",
     complement: "",
+    themeId: "",
     displayUserName: false,
   });
   const [joinFormLoading, setJoinFormLoading] = useState(false);
@@ -133,7 +134,7 @@ export default function Themes() {
         email: joinFormData.email,
         phone: joinFormData.phone || null,
         subject: "Add Testimony Submission",
-        message: `Alias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
+        message: `Theme: ${themes.find((theme) => theme.id === joinFormData.themeId)?.label || "Not provided"}\nAlias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
       });
       setJoinFormSuccess(true);
       setJoinFormData({
@@ -142,6 +143,7 @@ export default function Themes() {
         email: "",
         phone: "",
         complement: "",
+        themeId: "",
         displayUserName: false,
       });
       setTimeout(() => {
@@ -447,6 +449,27 @@ export default function Themes() {
             </div>
           ) : (
             <form onSubmit={handleJoinSubmit} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Theme *</label>
+                <select
+                  required
+                  value={joinFormData.themeId}
+                  onChange={(e) =>
+                    setJoinFormData({
+                      ...joinFormData,
+                      themeId: e.target.value,
+                    })
+                  }
+                  className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                >
+                  <option value="">Select a theme</option>
+                  {themes.map((theme) => (
+                    <option key={theme.id} value={theme.id}>
+                      {theme.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div>
                 <label className="text-sm font-medium">Name *</label>
                 <Input
