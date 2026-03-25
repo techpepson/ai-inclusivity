@@ -239,6 +239,12 @@ const HOW_IT_WORKS = [
 
 const TIMELINE = [
   {
+    year: "202",
+    title: "Data Recovery & Groundwork",
+    description:
+      "Recovered and organized historical social media data from 2018-2023 to establish a baseline for stigma analysis across key themes.",
+  },
+  {
     year: "2026",
     title: "Project Launch & Data Collection",
     description:
