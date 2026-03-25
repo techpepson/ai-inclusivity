@@ -239,7 +239,7 @@ const HOW_IT_WORKS = [
 
 const TIMELINE = [
   {
-    year: "2025",
+    year: "2026",
     title: "Project Launch & Data Collection",
     description:
       "Began large-scale data extraction and groundwork for building an AI-based tool to understand stigma across themes.",
@@ -252,7 +252,7 @@ const TIMELINE = [
   },
   {
     year: "2027",
-    title: "Anticipated Policy Influence",
+    title: "Policy Planning",
     description:
       "Project findings are positioned to support policy reforms and strengthen protections for marginalized groups.",
   },
