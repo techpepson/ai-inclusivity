@@ -262,7 +262,7 @@ export default function Analytics() {
               className="group relative inline-flex items-center overflow-hidden rounded-full border border-white/50 bg-white/5 px-8 py-3 text-base font-semibold text-white shadow-[0_8px_30px_rgba(14,165,233,0.45)] backdrop-blur transition-all duration-300 hover:scale-[1.02] hover:border-cyan-200/80 hover:bg-white/10 hover:shadow-[0_18px_60px_rgba(14,165,233,0.55)] focus-visible:ring-white/80"
             >
               <Link
-                to="http://187.77.180.160/"
+                to="https://ai4inclusiveghanalytics.ug.edu.gh"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Visit the live AI analytics dashboard"
