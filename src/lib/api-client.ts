@@ -9,6 +9,7 @@ import type {
   Event,
   Social,
   FocusArea,
+  Resource,
 } from "./types";
 
 // Build a base URL that respects dev/prod environments.
@@ -1046,3 +1047,63 @@ export async function sendContactMessage(payload: ContactMessagePayload) {
 
   throw new Error("Failed to send contact message");
 }
+
+export async function fetchResources(): Promise<Resource[]> {
+  const paths = ["/resources/all"];
+
+  for (const base of baseCandidates) {
+    for (const path of paths) {
+      const url = toUrl(base, path);
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            ...(apiKey ? { "x-api-key": apiKey } : {}),
+          },
+        });
+
+        if (!res.ok) continue;
+
+        const json = await safeJson<Resource[]>(res);
+        if (Array.isArray(json)) {
+          return json;
+        }
+      } catch (_) {
+        continue;
+      }
+    }
+  }
+
+  return [];
+}
+
+export async function submitTestimonial(speaker: string, role: string, statement: string) {
+  const paths = ["/testimonials/submit"];
+
+  for (const base of baseCandidates) {
+    for (const path of paths) {
+      const url = toUrl(base, path);
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(apiKey ? { "x-api-key": apiKey } : {}),
+          },
+          body: JSON.stringify({ speaker, role, statement }),
+        });
+
+        if (!res.ok) continue;
+
+        return await safeJson<unknown>(res);
+      } catch (_) {
+        continue;
+      }
+    }
+  }
+
+  throw new Error("Failed to submit testimonial");
+}
+

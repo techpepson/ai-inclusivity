@@ -124,3 +124,13 @@ export type FocusArea = {
   createdAt?: string;
   updatedAt?: string;
 };
+
+export type Resource = {
+  id: string;
+  title: string;
+  description: string;
+  type: string; // 'IMAGE' | 'FILE' | 'VIDEO'
+  url: string;
+  createdAt: string;
+  updatedAt: string;
+};

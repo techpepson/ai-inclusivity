@@ -181,7 +181,7 @@ export default function Login() {
 
               <div className="text-center text-sm text-muted-foreground">
                 Need access?{" "}
-                <Link to="/community" className="text-primary hover:underline">
+                <Link to="/about" className="text-primary hover:underline">
                   Contact us
                 </Link>
               </div>

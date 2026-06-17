@@ -26,6 +26,7 @@ import {
 import {
   fetchFocusAreas as fetchFocusAreasFromApi,
   sendContactMessage,
+  submitTestimonial,
 } from "@/lib/api-client";
 import type { FocusArea } from "@/lib/types";
 import disabilityImage from "@/assets/disability-tech-inclusion.jpg";
@@ -102,7 +103,7 @@ const FOOTER_LINKS = [
   { name: "Analytics", href: "/analytics" },
   { name: "Campaigns", href: "/get-involved" },
   { name: "Events", href: "/events" },
-  { name: "Community", href: "/community" },
+  { name: "Resources", href: "/resources" },
 ];
 
 export default function Themes() {
@@ -129,13 +130,14 @@ export default function Themes() {
     setJoinFormLoading(true);
 
     try {
-      await sendContactMessage({
-        name: joinFormData.name,
-        email: joinFormData.email,
-        phone: joinFormData.phone || null,
-        subject: "Add Testimony Submission",
-        message: `Theme: ${themes.find((theme) => theme.id === joinFormData.themeId)?.label || "Not provided"}\nAlias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
-      });
+      const speakerName = joinFormData.alias.trim() || joinFormData.name.trim();
+      const themeLabel =
+        themes.find((theme) => theme.id === joinFormData.themeId)?.label ||
+        "Community Member";
+      const statement =
+        joinFormData.complement.trim() || "No statement provided";
+
+      await submitTestimonial(speakerName, themeLabel, statement);
       setJoinFormSuccess(true);
       setJoinFormData({
         name: "",
@@ -151,7 +153,7 @@ export default function Themes() {
         setJoinFormSuccess(false);
       }, 2000);
     } catch (error) {
-      console.error("Failed to submit join request:", error);
+      console.error("Failed to submit testimony request:", error);
     } finally {
       setJoinFormLoading(false);
     }

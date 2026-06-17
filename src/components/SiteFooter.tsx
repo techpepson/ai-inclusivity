@@ -9,7 +9,7 @@ const FOOTER_LINKS = [
   { name: "Themes", href: "/themes" },
   { name: "Analytics", href: "/analytics" },
   { name: "Events", href: "/events" },
-  { name: "Community", href: "/community" },
+  { name: "Resources", href: "/resources" },
 ];
 
 export function SiteFooter() {

@@ -49,10 +49,12 @@ import {
   fetchHeroContent,
   fetchEvents,
   sendContactMessage,
+  submitTestimonial,
 } from "@/lib/api-client";
 import type { FocusArea, HeroContent, Event } from "@/lib/types";
 import { logo } from "@/images/images";
 import { SiteFooter } from "@/components/SiteFooter";
+import { TestimonialSection } from "@/components/TestimonialSection";
 
 const DEFAULT_HERO: HeroContent = {
   title: "Amplifying Voices for an Inclusive Ghana",
@@ -226,13 +228,14 @@ export default function Homepage() {
     setJoinFormLoading(true);
 
     try {
-      await sendContactMessage({
-        name: joinFormData.name,
-        email: joinFormData.email,
-        phone: joinFormData.phone || null,
-        subject: "Add Testimony Submission",
-        message: `Theme: ${focusAreas.find((area) => area.id === joinFormData.themeId)?.label || "Not provided"}\nAlias: ${joinFormData.alias || "Not provided"}\nComplement: ${joinFormData.complement || "Not provided"}\nDisplay user name: ${joinFormData.displayUserName ? "Yes" : "No"}`,
-      });
+      const speakerName = joinFormData.alias.trim() || joinFormData.name.trim();
+      const themeLabel =
+        focusAreas.find((area) => area.id === joinFormData.themeId)?.label ||
+        "Community Member";
+      const statement =
+        joinFormData.complement.trim() || "No statement provided";
+
+      await submitTestimonial(speakerName, themeLabel, statement);
       setJoinFormSuccess(true);
       setJoinFormData({
         name: "",
@@ -248,7 +251,7 @@ export default function Homepage() {
         setJoinFormSuccess(false);
       }, 2000);
     } catch (error) {
-      console.error("Failed to submit join request:", error);
+      console.error("Failed to submit testimony request:", error);
     } finally {
       setJoinFormLoading(false);
     }
@@ -547,6 +550,9 @@ export default function Homepage() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials */}
+      <TestimonialSection />
 
       {/* CTA Section */}
       <section className="py-20 bg-primary relative overflow-hidden">

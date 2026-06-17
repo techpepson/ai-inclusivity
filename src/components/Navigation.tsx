@@ -113,7 +113,7 @@ export function Navigation() {
     { name: "Analytics", href: "/analytics" },
     // { name: "Campaigns", href: "/get-involved" },
     { name: "Events", href: "/events" },
-    { name: "Community", href: "/community" },
+    { name: "Resources", href: "/resources" },
   ];
 
   const isActive = (path: string) => {
